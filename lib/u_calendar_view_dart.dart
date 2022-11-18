@@ -1,16 +1,14 @@
 import 'dart:core';
 
 import 'package:flutter/material.dart';
+import 'generated/l10n.dart';
 import 'u_calendar_view_dart_platform_interface.dart';
 
-enum Alignment {
-  leading,
-  trailing
-}
+enum Alignment { leading, trailing }
 
 class UCEntry {
   String applicationTag = "";
-  DateTime date = DateTime(2022,1,1,0,0,0,0,0);
+  DateTime date = DateTime(2022, 1, 1, 0, 0, 0, 0, 0);
   String leftLabel = "";
   Color leftLabelColor = const Color(0xFFFFFFFF);
   String middleLabel = "";
@@ -34,7 +32,8 @@ class EntryList {
 EntryList entryList = EntryList();
 
 class UCDate extends StatefulWidget {
-  DateTime date = DateTime(2022,1,1,0,0,0,0,0);
+  DateTime date = DateTime(2022, 1, 1, 0, 0, 0, 0, 0);
+
   UCDate(this.date, {super.key});
 
   @override
@@ -42,7 +41,7 @@ class UCDate extends StatefulWidget {
 }
 
 class _UCDateState extends State<UCDate> {
-  DateTime date = DateTime(2022,1,1,0,0,0,0,0);
+  DateTime date = DateTime(2022, 1, 1, 0, 0, 0, 0, 0);
 
   @override
   initState() {
@@ -62,12 +61,16 @@ class _UCDateState extends State<UCDate> {
 
   @override
   Widget build(BuildContext context) {
-    return Text('${date.day}', textAlign: TextAlign.left);
+    return Container(
+      width: double.infinity,
+      child: Text('${date.day}', textAlign: TextAlign.start),
+    );
   }
 }
 
 class UCDayEntry extends StatefulWidget {
   String dayEntry = "";
+
   UCDayEntry(this.dayEntry, {super.key});
 
   @override
@@ -100,7 +103,8 @@ class _UCDayEntryState extends State<UCDayEntry> {
 }
 
 class UCDay extends StatefulWidget {
-  DateTime date = DateTime(2022,1,1,0,0,0,0,0);
+  DateTime date = DateTime(2022, 1, 1, 0, 0, 0, 0, 0);
+
   UCDay(this.date, {super.key});
 
   @override
@@ -108,7 +112,7 @@ class UCDay extends StatefulWidget {
 }
 
 class _UCDayState extends State<UCDay> {
-  DateTime date = DateTime(2022,1,1,0,0,0,0,0);
+  DateTime date = DateTime(2022, 1, 1, 0, 0, 0, 0, 0);
   List<UCEntry> entriesOfTheDay = List.empty(growable: true);
 
   @override
@@ -122,12 +126,8 @@ class _UCDayState extends State<UCDay> {
     List<UCEntry> retVal = List.empty(growable: true);
     UCEntry element;
     for (element in entryList.entries) {
-      DateTime resetTime = DateTime(
-          element.date.year,
-          element.date.month,
-          element.date.day,
-          0,0,0,0,0
-      );
+      DateTime resetTime = DateTime(element.date.year, element.date.month,
+          element.date.day, 0, 0, 0, 0, 0);
       if (resetTime == date) {
         retVal.add(element);
       }
@@ -138,27 +138,45 @@ class _UCDayState extends State<UCDay> {
   @override
   Widget build(BuildContext context) {
     int i;
-    return
-        Expanded(
-          child: Container(
+    return Expanded(
+        child: Container(
             decoration: BoxDecoration(
-              border: Border.all(
-                color: Colors.grey
-              ),
+              border: Border.all(color: Colors.grey),
             ),
-            child: Column(
-                children: <Widget>[
-                  UCDate(date),
-                  for (i=0; i<entryList.maxLinesInDay && i<entriesOfTheDay.length; i++) ... {
-                    UCDayEntry(entriesOfTheDay[i].value)
-                  },
-                  for (int j=i; j<entryList.maxLinesInDay; j++) ... {
-                    UCDayEntry("        ")
-                  }
-                ]
-            )
-        )
-    );
+            child: Column(children: <Widget>[
+              UCDate(date),
+              for (i = 0;
+                  i < entryList.maxLinesInDay && i < entriesOfTheDay.length;
+                  i++) ...{UCDayEntry(entriesOfTheDay[i].value)},
+              for (int j = i; j < entryList.maxLinesInDay; j++) ...{
+                UCDayEntry("        ")
+              }
+            ])));
+  }
+}
+
+class WeekLabel extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    List<String> weekLabels = [
+      S.of(context).sun,
+      S.of(context).mon,
+      S.of(context).tue,
+      S.of(context).wed,
+      S.of(context).thu,
+      S.of(context).fri,
+      S.of(context).sat
+    ];
+    return Row(children: <Widget>[
+      for (String label in weekLabels) ...{
+        Expanded(
+            child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                ),
+                child: Text(label, textAlign: TextAlign.center)))
+      }
+    ]);
   }
 }
 
@@ -176,20 +194,12 @@ extension DateTimeExtension on DateTime {
 }
 
 int normalCalcOfWeekOfMonth(int thisMonth, DateTime day) {
-  int minus = DateTime
-      .now()
-      .day - 1;
+  int minus = DateTime.now().day - 1;
   DateTime previousMonth = day.add(Duration(days: minus));
-  DateTime day1st = DateTime(
-      previousMonth.year,
-      previousMonth.month,
-      1,
-      0,0,0,0,0
-  );
-  DateTime lastDay = DateTime(
-      day1st.year,
-      day1st.month + 1,
-      1).add(const Duration(days: -1));
+  DateTime day1st =
+      DateTime(previousMonth.year, previousMonth.month, 1, 0, 0, 0, 0, 0);
+  DateTime lastDay =
+      DateTime(day1st.year, day1st.month + 1, 1).add(const Duration(days: -1));
   int weekOfLastDay = lastDay.weekOfMonth;
   int weekOfDay = day.weekOfMonth;
   int weekdayOfLastDay = lastDay.weekOfMonth;
@@ -220,7 +230,7 @@ int getWeekOfMonth(int thisMonth, DateTime day) {
     }
   } else {
     if (monthOfDay < thisMonth) {
-    return 1;
+      return 1;
     } else if (thisMonth < monthOfDay) {
       return normalCalcOfWeekOfMonth(thisMonth, day);
     } else {
@@ -230,22 +240,19 @@ int getWeekOfMonth(int thisMonth, DateTime day) {
 }
 
 DateTime startDateInMonth(DateTime month) {
-  DateTime startDate = DateTime(
-      DateTime.now().year,
-      DateTime.now().month,
-      1,
-      0,0,0,0,0
-  );
+  DateTime startDate =
+      DateTime(DateTime.now().year, DateTime.now().month, 1, 0, 0, 0, 0, 0);
   return startDate.add(Duration(days: -(startDate.weekday % 7)));
 }
 
 DateTime endDateInMonth(DateTime month) {
   DateTime startDate = startDateInMonth(month);
-  return startDate.add(const Duration(days: 7*6));
+  return startDate.add(const Duration(days: 7 * 6));
 }
 
 class UCMonth extends StatefulWidget {
-  DateTime month = DateTime(2022,1,1,0,0,0,0,0);
+  DateTime month = DateTime(2022, 1, 1, 0, 0, 0, 0, 0);
+
   UCMonth(this.month, {super.key});
 
   @override
@@ -253,12 +260,7 @@ class UCMonth extends StatefulWidget {
 }
 
 class _UCMonthState extends State<UCMonth> {
-  DateTime month = DateTime(
-      2022,
-      1,
-      1,
-      0,0,0,0,0
-  );
+  DateTime month = DateTime(2022, 1, 1, 0, 0, 0, 0, 0);
 
   @override
   initState() {
@@ -269,19 +271,16 @@ class _UCMonthState extends State<UCMonth> {
   @override
   Widget build(BuildContext context) {
     DateTime startDate = startDateInMonth(month);
-    return Column(
-        children: <Widget>[
-          for (int i = 0; i < 6; i++) ... {
-            Row(
-                children: <Widget>[
-                  for (int j = 0; j < 7; j++) ... {
-                    UCDay(startDate.add(Duration(days: i * 7 + j)))
-                  }
-                ]
-            )
+    return Column(children: <Widget>[
+      WeekLabel(),
+      for (int i = 0; i < 6; i++) ...{
+        Row(children: <Widget>[
+          for (int j = 0; j < 7; j++) ...{
+            UCDay(startDate.add(Duration(days: i * 7 + j)))
           }
-        ]
-    );
+        ])
+      }
+    ]);
   }
 }
 

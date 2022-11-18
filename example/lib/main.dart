@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:flutter/services.dart';
+import 'package:u_calendar_view_dart/generated/l10n.dart';
 import 'package:u_calendar_view_dart/u_calendar_view_dart.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
   runApp(const MyApp());
@@ -64,6 +66,13 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      localizationsDelegates: const [
+        S.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate
+      ],
+      supportedLocales: S.delegate.supportedLocales,
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Plugin example app'),
