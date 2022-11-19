@@ -119,6 +119,216 @@ class S {
       args: [],
     );
   }
+
+  /// ``
+  String get ganjitsu {
+    return Intl.message(
+      '',
+      name: 'ganjitsu',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get seijin_no_hi {
+    return Intl.message(
+      '',
+      name: 'seijin_no_hi',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get kenkokukinen_no_hi {
+    return Intl.message(
+      '',
+      name: 'kenkokukinen_no_hi',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get syunbun_no_hi {
+    return Intl.message(
+      '',
+      name: 'syunbun_no_hi',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get showa_no_hi {
+    return Intl.message(
+      '',
+      name: 'showa_no_hi',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get sokui_no_hi {
+    return Intl.message(
+      '',
+      name: 'sokui_no_hi',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get kenpokinenbi {
+    return Intl.message(
+      '',
+      name: 'kenpokinenbi',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get midori_no_hi {
+    return Intl.message(
+      '',
+      name: 'midori_no_hi',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get kodomo_no_hi {
+    return Intl.message(
+      '',
+      name: 'kodomo_no_hi',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get umi_no_hi {
+    return Intl.message(
+      '',
+      name: 'umi_no_hi',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get yama_no_hi {
+    return Intl.message(
+      '',
+      name: 'yama_no_hi',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get keiro_no_hi {
+    return Intl.message(
+      '',
+      name: 'keiro_no_hi',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get syubun_no_hi {
+    return Intl.message(
+      '',
+      name: 'syubun_no_hi',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get taiiku_no_hi {
+    return Intl.message(
+      '',
+      name: 'taiiku_no_hi',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get sport_no_hi {
+    return Intl.message(
+      '',
+      name: 'sport_no_hi',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get sokui_reiseiden_no_hi {
+    return Intl.message(
+      '',
+      name: 'sokui_reiseiden_no_hi',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get bunka_no_hi {
+    return Intl.message(
+      '',
+      name: 'bunka_no_hi',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get kinrokansya_no_hi {
+    return Intl.message(
+      '',
+      name: 'kinrokansya_no_hi',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get tennotanjobi {
+    return Intl.message(
+      '',
+      name: 'tennotanjobi',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get furikae_kyujitsu {
+    return Intl.message(
+      '',
+      name: 'furikae_kyujitsu',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get kokumin_no_kyujitsu {
+    return Intl.message(
+      '',
+      name: 'kokumin_no_kyujitsu',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

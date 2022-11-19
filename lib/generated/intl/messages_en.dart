@@ -22,12 +22,33 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "bunka_no_hi": MessageLookupByLibrary.simpleMessage(""),
         "fri": MessageLookupByLibrary.simpleMessage("FR"),
+        "furikae_kyujitsu": MessageLookupByLibrary.simpleMessage(""),
+        "ganjitsu": MessageLookupByLibrary.simpleMessage(""),
+        "keiro_no_hi": MessageLookupByLibrary.simpleMessage(""),
+        "kenkokukinen_no_hi": MessageLookupByLibrary.simpleMessage(""),
+        "kenpokinenbi": MessageLookupByLibrary.simpleMessage(""),
+        "kinrokansya_no_hi": MessageLookupByLibrary.simpleMessage(""),
+        "kodomo_no_hi": MessageLookupByLibrary.simpleMessage(""),
+        "kokumin_no_kyujitsu": MessageLookupByLibrary.simpleMessage(""),
+        "midori_no_hi": MessageLookupByLibrary.simpleMessage(""),
         "mon": MessageLookupByLibrary.simpleMessage("MO"),
         "sat": MessageLookupByLibrary.simpleMessage("SA"),
+        "seijin_no_hi": MessageLookupByLibrary.simpleMessage(""),
+        "showa_no_hi": MessageLookupByLibrary.simpleMessage(""),
+        "sokui_no_hi": MessageLookupByLibrary.simpleMessage(""),
+        "sokui_reiseiden_no_hi": MessageLookupByLibrary.simpleMessage(""),
+        "sport_no_hi": MessageLookupByLibrary.simpleMessage(""),
         "sun": MessageLookupByLibrary.simpleMessage("SU"),
+        "syubun_no_hi": MessageLookupByLibrary.simpleMessage(""),
+        "syunbun_no_hi": MessageLookupByLibrary.simpleMessage(""),
+        "taiiku_no_hi": MessageLookupByLibrary.simpleMessage(""),
+        "tennotanjobi": MessageLookupByLibrary.simpleMessage(""),
         "thu": MessageLookupByLibrary.simpleMessage("TH"),
         "tue": MessageLookupByLibrary.simpleMessage("TU"),
-        "wed": MessageLookupByLibrary.simpleMessage("WE")
+        "umi_no_hi": MessageLookupByLibrary.simpleMessage(""),
+        "wed": MessageLookupByLibrary.simpleMessage("WE"),
+        "yama_no_hi": MessageLookupByLibrary.simpleMessage("")
       };
 }

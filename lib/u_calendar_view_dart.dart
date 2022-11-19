@@ -1,27 +1,28 @@
 import 'dart:core';
 
 import 'package:flutter/material.dart';
+import 'package:u_calendar_view_dart/japanese_national_holiday.dart';
 import 'generated/l10n.dart';
 import 'u_calendar_view_dart_platform_interface.dart';
 
-enum Alignment { leading, trailing }
+const double defaultFontSize = 14.0;
 
 class UCEntry {
   String applicationTag = "";
   DateTime date = DateTime(2022, 1, 1, 0, 0, 0, 0, 0);
   String leftLabel = "";
-  Color leftLabelColor = const Color(0xFFFFFFFF);
+  Color leftLabelColor = const Color(0xFF000000);
   String middleLabel = "";
-  Color middleLabelColor = const Color(0xFFFFFFFF);
-  String value = "";
-  Color valueColor = const Color(0xFFFFFFFF);
+  Color middleLabelColor = const Color(0xFF000000);
+  String value = "          ";
+  Color valueColor = const Color(0xFF000000);
   String unit = "";
-  Color unitColor = const Color(0xFFFFFFFF);
+  Color unitColor = const Color(0xFF000000);
   String rightLabel = "";
-  Color rightLabelColor = const Color(0xFFFFFFFF);
-  double tableFontSize = 10.0;
-  double listFontSize = 12.0;
-  Alignment tableAlignment = Alignment.leading;
+  Color rightLabelColor = const Color(0xFF000000);
+  double tableFontSize = 14.0;
+  double listFontSize = 18.0;
+  Alignment tableAlignment = Alignment.centerLeft;
 }
 
 class EntryList {
@@ -33,8 +34,9 @@ EntryList entryList = EntryList();
 
 class UCDate extends StatefulWidget {
   DateTime date = DateTime(2022, 1, 1, 0, 0, 0, 0, 0);
+  Holiday holiday = Holiday();
 
-  UCDate(this.date, {super.key});
+  UCDate(this.date, this.holiday, {super.key});
 
   @override
   _UCDateState createState() => _UCDateState();
@@ -42,11 +44,13 @@ class UCDate extends StatefulWidget {
 
 class _UCDateState extends State<UCDate> {
   DateTime date = DateTime(2022, 1, 1, 0, 0, 0, 0, 0);
+  Holiday holiday = Holiday();
 
   @override
   initState() {
     super.initState();
     date = widget.date;
+    holiday = widget.holiday;
   }
 
   void setDate(DateTime date) {
@@ -59,17 +63,49 @@ class _UCDateState extends State<UCDate> {
     return date;
   }
 
+  Widget setDateAndWeekOfMonth(DateTime date, Holiday holiday) {
+    Widget retVal;
+    if (holiday.isHoliday || date.weekday == DateTime.sunday) {
+      retVal = Text('${date.day}',
+          textAlign: TextAlign.start,
+          style: const TextStyle(color: Colors.red, fontSize: defaultFontSize));
+    } else if (date.weekday == DateTime.saturday) {
+      retVal = Text('${date.day}',
+          textAlign: TextAlign.start,
+          style:
+              const TextStyle(color: Colors.blue, fontSize: defaultFontSize));
+    } else {
+      retVal = Text('${date.day}',
+          textAlign: TextAlign.start,
+          style:
+              const TextStyle(color: Colors.black, fontSize: defaultFontSize));
+    }
+    return retVal;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      child: Text('${date.day}', textAlign: TextAlign.start),
-    );
+    return setDateAndWeekOfMonth(date, holiday);
+  }
+}
+
+class UCHoliday extends StatelessWidget {
+  Holiday holiday = Holiday();
+
+  UCHoliday(this.holiday, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+        child: Text(holiday.holidayName,
+        maxLines: 1,
+        overflow: TextOverflow.clip,
+        style: const TextStyle(fontSize: defaultFontSize - 3.0)));
   }
 }
 
 class UCDayEntry extends StatefulWidget {
-  String dayEntry = "";
+  UCEntry dayEntry = UCEntry();
 
   UCDayEntry(this.dayEntry, {super.key});
 
@@ -78,7 +114,7 @@ class UCDayEntry extends StatefulWidget {
 }
 
 class _UCDayEntryState extends State<UCDayEntry> {
-  String dayEntry = "";
+  UCEntry dayEntry = UCEntry();
 
   @override
   initState() {
@@ -86,19 +122,25 @@ class _UCDayEntryState extends State<UCDayEntry> {
     dayEntry = widget.dayEntry;
   }
 
-  void setDayEntry(String dayEntry) {
+  void setDayEntry(UCEntry dayEntry) {
     setState(() {
       this.dayEntry = dayEntry;
     });
   }
 
-  String getDayEntry() {
+  UCEntry getDayEntry() {
     return dayEntry;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Text(dayEntry, maxLines: 1);
+    return Container(
+      alignment: dayEntry.tableAlignment,
+      child: Text(dayEntry.value,
+          maxLines: 1,
+          style: TextStyle(
+              fontSize: dayEntry.tableFontSize, color: dayEntry.valueColor)),
+    );
   }
 }
 
@@ -138,21 +180,44 @@ class _UCDayState extends State<UCDay> {
   @override
   Widget build(BuildContext context) {
     int i;
+    JapaneseNationalHoliday japaneseNationalHoliday =
+        JapaneseNationalHoliday(context);
+    Holiday holiday = japaneseNationalHoliday.getHoliday(date);
     return Expanded(
         child: Container(
             decoration: BoxDecoration(
               border: Border.all(color: Colors.grey),
             ),
             child: Column(children: <Widget>[
-              UCDate(date),
+              Row(children: <Widget>[
+                UCDate(date, holiday),
+                UCHoliday(holiday)
+              ]),
               for (i = 0;
                   i < entryList.maxLinesInDay && i < entriesOfTheDay.length;
-                  i++) ...{UCDayEntry(entriesOfTheDay[i].value)},
+                  i++) ...{UCDayEntry(entriesOfTheDay[i])},
               for (int j = i; j < entryList.maxLinesInDay; j++) ...{
-                UCDayEntry("        ")
+                UCDayEntry(UCEntry())
               }
             ])));
   }
+}
+
+Widget setWeekLabels(BuildContext context, String label) {
+  Widget retVal;
+  if (label == S.of(context).sun) {
+    retVal = Text(label,
+        textAlign: TextAlign.center, style: const TextStyle(color: Colors.red));
+  } else if (label == S.of(context).sat) {
+    retVal = Text(label,
+        textAlign: TextAlign.center,
+        style: const TextStyle(color: Colors.blue));
+  } else {
+    retVal = Text(label,
+        textAlign: TextAlign.center,
+        style: const TextStyle(color: Colors.black));
+  }
+  return retVal;
 }
 
 class WeekLabel extends StatelessWidget {
@@ -174,7 +239,7 @@ class WeekLabel extends StatelessWidget {
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.grey),
                 ),
-                child: Text(label, textAlign: TextAlign.center)))
+                child: setWeekLabels(context, label)))
       }
     ]);
   }
