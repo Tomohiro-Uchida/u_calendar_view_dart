@@ -31,87 +31,6 @@ class EntryList {
 }
 
 EntryList entryList = EntryList();
-// DateTime displayedMonth = DateTime.now();
-
-/*
-class MonthBelt extends StatefulWidget {
-  @override
-  _UCMonthBeltState createState() => _UCMonthBeltState();
-}
-
-class _UCMonthBeltState extends State<MonthBelt> {
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        Row(children: <Widget>[
-          const Spacer(),
-          Expanded(
-              flex: 1,
-              child: IconButton(
-                onPressed: () {},
-                // 表示アイコン
-                icon: const Icon(Icons.arrow_back_ios_new_rounded),
-                // アイコン色
-                color: Colors.blue,
-                // サイズ
-                // iconSize: 64,
-              )),
-          Expanded(
-              flex: 2,
-              child: GestureDetector(
-                  onTap: () async {
-                    DateTime newMonth = (await showDatePicker(
-                      context: context,
-                      //初期値を設定
-                      initialDate: displayedMonth,
-                      //選択できる日付の上限
-                      firstDate: DateTime(DateTime.now().year - 2),
-                      lastDate: DateTime(DateTime.now().year + 2),
-                    ))!;
-                    newMonth = DateTime(
-                        newMonth.year,
-                        newMonth.month,
-                        1,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0
-                    );
-                    setState(() {
-                      displayedMonth = newMonth;
-                    });
-                  },
-                  child: Text("${displayedMonth.year}-${displayedMonth.month}",
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                          color: Colors.blue, fontSize: 25.0)))),
-          Expanded(
-              flex: 1,
-              child: IconButton(
-                onPressed: () {},
-                // 表示アイコン
-                icon: const Icon(Icons.arrow_forward_ios_rounded),
-                // アイコン色
-                color: Colors.blue,
-                // サイズ
-                // iconSize: 64,
-              )),
-          const Spacer()
-        ]),
-        Container(
-            alignment: Alignment.centerRight,
-            child: IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.calendar_today_rounded),
-              color: Colors.blue,
-            )),
-      ],
-    );
-  }
-}
- */
 
 class UCDate extends StatefulWidget {
   DateTime date = DateTime(2022, 1, 1, 0, 0, 0, 0, 0);
@@ -222,65 +141,6 @@ class _UCDayEntryState extends State<UCDayEntry> {
           style: TextStyle(
               fontSize: dayEntry.tableFontSize, color: dayEntry.valueColor)),
     );
-  }
-}
-
-class UCDay extends StatefulWidget {
-  DateTime date = DateTime(2022, 1, 1, 0, 0, 0, 0, 0);
-
-  UCDay(this.date, {super.key});
-
-  @override
-  _UCDayState createState() => _UCDayState();
-}
-
-class _UCDayState extends State<UCDay> {
-  DateTime date = DateTime(2022, 1, 1, 0, 0, 0, 0, 0);
-  List<UCEntry> entriesOfTheDay = List.empty(growable: true);
-
-  @override
-  initState() {
-    super.initState();
-    date = widget.date;
-    entriesOfTheDay = getEntriesOfTheDay(date, entryList.maxLinesInDay);
-  }
-
-  List<UCEntry> getEntriesOfTheDay(DateTime date, int max) {
-    List<UCEntry> retVal = List.empty(growable: true);
-    UCEntry element;
-    for (element in entryList.entries) {
-      DateTime resetTime = DateTime(element.date.year, element.date.month,
-          element.date.day, 0, 0, 0, 0, 0);
-      if (resetTime == date) {
-        retVal.add(element);
-      }
-    }
-    return retVal;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    int i;
-    JapaneseNationalHoliday japaneseNationalHoliday =
-        JapaneseNationalHoliday(context);
-    Holiday holiday = japaneseNationalHoliday.getHoliday(date);
-    return Expanded(
-        child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey),
-            ),
-            child: Column(children: <Widget>[
-              Row(children: <Widget>[
-                UCDate(date, holiday),
-                UCHoliday(holiday)
-              ]),
-              for (i = 0;
-                  i < entryList.maxLinesInDay && i < entriesOfTheDay.length;
-                  i++) ...{UCDayEntry(entriesOfTheDay[i])},
-              for (int j = i; j < entryList.maxLinesInDay; j++) ...{
-                UCDayEntry(UCEntry())
-              }
-            ])));
   }
 }
 
@@ -407,18 +267,50 @@ class UCMonth extends StatefulWidget {
 
 class _UCMonthState extends State<UCMonth> {
   DateTime month = DateTime.now();
+  DateTime date = DateTime.now();
   late DateTime startDate;
+  DateTime selectedDate = DateTime.now();
+  Holiday selectedHoliday = Holiday();
+  List<List<UCEntry>> entriesOfTheDay = List.empty(growable: true);
 
   @override
   initState() {
     super.initState();
     month = widget.month;
+    date = DateTime.now();
     startDate = startDateInMonth(month);
+    selectedDate = DateTime.now();
+    selectedHoliday = Holiday();
+    entriesOfTheDay = List.empty(growable: true);
+  }
+
+  List<UCEntry> getEntriesOfTheDay(DateTime date, int max) {
+    List<UCEntry> retVal = List.empty(growable: true);
+    UCEntry element;
+    for (element in entryList.entries) {
+      DateTime resetTime = DateTime(element.date.year, element.date.month,
+          element.date.day, 0, 0, 0, 0, 0);
+      if (resetTime == date) {
+        retVal.add(element);
+      }
+    }
+    return retVal;
   }
 
   @override
   Widget build(BuildContext context) {
-    // DateTime startDate = startDateInMonth(month);
+    JapaneseNationalHoliday japaneseNationalHoliday = JapaneseNationalHoliday(context);
+    List<Holiday> holidays = List.empty(growable: true);
+    entriesOfTheDay.clear();
+    for (int week = 0; week < 6; week++) {
+      for (int weekday = 0; weekday < 7; weekday++) {
+        date = startDate.add(Duration(days: week * 7 + weekday));
+        holidays.add(japaneseNationalHoliday
+            .getHoliday(date));
+        entriesOfTheDay.add(getEntriesOfTheDay(date, entryList.maxLinesInDay));
+      }
+    }
+    int lineToWrite = 0;
     return Column(children: <Widget>[
       Stack(
         children: <Widget>[
@@ -531,13 +423,82 @@ class _UCMonthState extends State<UCMonth> {
         ],
       ),
       WeekLabel(),
-      for (int i = 0; i < 6; i++) ...{
+      for (int week = 0; week < 6; week++) ...{
         Row(children: <Widget>[
-          for (int j = 0; j < 7; j++) ...{
-            UCDay(startDate.add(Duration(days: i * 7 + j)), key: UniqueKey())
+          for (int weekday = 0; weekday < 7; weekday++) ...{
+            Expanded(
+                child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                    ),
+                    child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            selectedDate =
+                                startDate.add(
+                                    Duration(days: week * 7 + weekday));
+                            selectedHoliday = japaneseNationalHoliday.getHoliday(selectedDate);
+                          });
+                        },
+                        child: Column(children: <Widget>[
+                          Row(children: <Widget>[
+                            UCDate(
+                              startDate.add(Duration(days: week * 7 + weekday)),
+                              holidays[week * 7 + weekday],
+                              key: UniqueKey()
+                            ),
+                            UCHoliday(holidays[week * 7 + weekday],
+                                key: UniqueKey())
+                          ]),
+                          for (lineToWrite = 0;
+                          lineToWrite < entryList.maxLinesInDay &&
+                              lineToWrite < entriesOfTheDay[week * 7 + weekday].length;
+                          lineToWrite++) ...{
+                            UCDayEntry(
+                                entriesOfTheDay[week * 7 + weekday]
+                                    [lineToWrite],
+                                key: UniqueKey())
+                          },
+                          for (int lineWhite = lineToWrite;
+                              lineWhite < entryList.maxLinesInDay;
+                              lineWhite++) ...{
+                            UCDayEntry(
+                              UCEntry(),
+                              key: UniqueKey()
+                            )
+                          }
+                        ]
+                        )
+                    ))
+            )
           }
         ])
-      }
+      },
+      Container(
+        color: const Color.fromARGB(0xFF, 0xC0, 0xC0, 0xC0),
+        child: Row(
+          children: <Widget>[
+            Expanded(
+                child: Container(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                        "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}",
+                        style: const TextStyle(fontSize: 18.0)))),
+            Expanded(child: Container(
+                alignment: Alignment.center,
+                child: IconButton(
+                    onPressed: () {},
+                    icon: const Icon(Icons.add),
+                    color: Colors.blue
+                )
+            )),
+            Expanded(child: Container(
+                alignment: Alignment.centerRight,
+                child: Text(selectedHoliday.holidayName)
+            ))
+          ]
+        )
+      )
     ]);
   }
 }
