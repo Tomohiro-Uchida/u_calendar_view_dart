@@ -14,6 +14,24 @@ class JapaneseNationalHoliday {
 
   JapaneseNationalHoliday(this.context);
 
+  int getWeekOfMonth(DateTime date) {
+    int originalWeekOfMonth = date.weekOfMonth;
+    if (date.month == DateTime(
+        date.year,
+        date.month,
+        date.day-(originalWeekOfMonth-1)*7,
+        date.hour,
+        date.minute,
+        date.second,
+        date.microsecond,
+        date.microsecond
+    ).month) {
+      return originalWeekOfMonth;
+    } else {
+      return originalWeekOfMonth - 1;
+    }
+  }
+
   Holiday getGanjitsu(DateTime date) {
     Holiday holiday = Holiday();
     if ((date.year >= 2014) &&
@@ -32,7 +50,7 @@ class JapaneseNationalHoliday {
     Holiday holiday = Holiday();
     if ((date.year >= 2014) &&
         (date.month == DateTime.january) &&
-        (date.weekOfMonth == 2) &&
+        (getWeekOfMonth(date) == 2) &&
         (date.weekday == DateTime.monday)) {
       holiday.isHoliday = true;
       holiday.holidayName = S.of(context).seijin_no_hi;
@@ -165,7 +183,7 @@ class JapaneseNationalHoliday {
         (date.year != 2021) && // 2020/12/4追記
         (date.year != 2020) && // 2018/10/22追記
         (date.month == DateTime.july) &&
-        (date.weekOfMonth == 3) &&
+        (getWeekOfMonth(date) == 3) &&
         (date.weekday == DateTime.monday)) {
       holiday.isHoliday = true;
       holiday.holidayName = S.of(context).umi_no_hi;
@@ -210,7 +228,7 @@ class JapaneseNationalHoliday {
     Holiday holiday = Holiday();
     if ((date.year >= 2014) &&
         (date.month == DateTime.september) &&
-        (date.weekOfMonth == 3) &&
+        (getWeekOfMonth(date) == 3) &&
         (date.weekday == DateTime.monday)) {
       holiday.isHoliday = true;
       holiday.holidayName = S.of(context).keiro_no_hi;
@@ -240,12 +258,12 @@ class JapaneseNationalHoliday {
     int year = date.year;
     return (23.09 + ((year - 2000) * 0.242194) - (year - 2000) ~/ 4).toInt();
   }
-
+  
   Holiday getSport_no_hi(DateTime date) {
     Holiday holiday = Holiday();
     if (2022 <= (date.year) && // 2020/12/4追記
         (date.month == DateTime.october) &&
-        (date.weekOfMonth == 2) &&
+        (getWeekOfMonth(date) == 2) &&
         (date.weekday == DateTime.monday)) {
       holiday.isHoliday = true;
       holiday.holidayName = S.of(context).sport_no_hi;
@@ -266,7 +284,7 @@ class JapaneseNationalHoliday {
     if (2014 <= (date.year) &&
         (date.year <= 2019) && // 2018/10/22追記
         (date.month == DateTime.october) &&
-        (date.weekOfMonth == 2) &&
+        (getWeekOfMonth(date) == 2) &&
         (date.weekday == DateTime.monday)) {
       holiday.isHoliday = true;
       holiday.holidayName = S.of(context).taiiku_no_hi;

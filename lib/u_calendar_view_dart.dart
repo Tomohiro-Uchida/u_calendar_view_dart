@@ -31,6 +31,87 @@ class EntryList {
 }
 
 EntryList entryList = EntryList();
+// DateTime displayedMonth = DateTime.now();
+
+/*
+class MonthBelt extends StatefulWidget {
+  @override
+  _UCMonthBeltState createState() => _UCMonthBeltState();
+}
+
+class _UCMonthBeltState extends State<MonthBelt> {
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: <Widget>[
+        Row(children: <Widget>[
+          const Spacer(),
+          Expanded(
+              flex: 1,
+              child: IconButton(
+                onPressed: () {},
+                // 表示アイコン
+                icon: const Icon(Icons.arrow_back_ios_new_rounded),
+                // アイコン色
+                color: Colors.blue,
+                // サイズ
+                // iconSize: 64,
+              )),
+          Expanded(
+              flex: 2,
+              child: GestureDetector(
+                  onTap: () async {
+                    DateTime newMonth = (await showDatePicker(
+                      context: context,
+                      //初期値を設定
+                      initialDate: displayedMonth,
+                      //選択できる日付の上限
+                      firstDate: DateTime(DateTime.now().year - 2),
+                      lastDate: DateTime(DateTime.now().year + 2),
+                    ))!;
+                    newMonth = DateTime(
+                        newMonth.year,
+                        newMonth.month,
+                        1,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0
+                    );
+                    setState(() {
+                      displayedMonth = newMonth;
+                    });
+                  },
+                  child: Text("${displayedMonth.year}-${displayedMonth.month}",
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                          color: Colors.blue, fontSize: 25.0)))),
+          Expanded(
+              flex: 1,
+              child: IconButton(
+                onPressed: () {},
+                // 表示アイコン
+                icon: const Icon(Icons.arrow_forward_ios_rounded),
+                // アイコン色
+                color: Colors.blue,
+                // サイズ
+                // iconSize: 64,
+              )),
+          const Spacer()
+        ]),
+        Container(
+            alignment: Alignment.centerRight,
+            child: IconButton(
+              onPressed: () {},
+              icon: const Icon(Icons.calendar_today_rounded),
+              color: Colors.blue,
+            )),
+      ],
+    );
+  }
+}
+ */
 
 class UCDate extends StatefulWidget {
   DateTime date = DateTime(2022, 1, 1, 0, 0, 0, 0, 0);
@@ -98,9 +179,9 @@ class UCHoliday extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
         child: Text(holiday.holidayName,
-        maxLines: 1,
-        overflow: TextOverflow.clip,
-        style: const TextStyle(fontSize: defaultFontSize - 3.0)));
+            maxLines: 1,
+            overflow: TextOverflow.clip,
+            style: const TextStyle(fontSize: defaultFontSize - 3.0)));
   }
 }
 
@@ -306,7 +387,7 @@ int getWeekOfMonth(int thisMonth, DateTime day) {
 
 DateTime startDateInMonth(DateTime month) {
   DateTime startDate =
-      DateTime(DateTime.now().year, DateTime.now().month, 1, 0, 0, 0, 0, 0);
+      DateTime(month.year, month.month, 1, 0, 0, 0, 0, 0);
   return startDate.add(Duration(days: -(startDate.weekday % 7)));
 }
 
@@ -325,23 +406,135 @@ class UCMonth extends StatefulWidget {
 }
 
 class _UCMonthState extends State<UCMonth> {
-  DateTime month = DateTime(2022, 1, 1, 0, 0, 0, 0, 0);
+  DateTime month = DateTime.now();
+  late DateTime startDate;
 
   @override
   initState() {
     super.initState();
     month = widget.month;
+    startDate = startDateInMonth(month);
   }
 
   @override
   Widget build(BuildContext context) {
-    DateTime startDate = startDateInMonth(month);
+    // DateTime startDate = startDateInMonth(month);
     return Column(children: <Widget>[
+      Stack(
+        children: <Widget>[
+          Row(children: <Widget>[
+            const Spacer(),
+            Expanded(
+                flex: 1,
+                child: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      month = DateTime(
+                          month.year,
+                          month.month - 1,
+                          1,
+                          0,
+                          0,
+                          0,
+                          0,
+                          0
+                      );
+                      startDate = startDateInMonth(month);
+                    });
+                  },
+                  // 表示アイコン
+                  icon: const Icon(Icons.arrow_back_ios_new_rounded),
+                  // アイコン色
+                  color: Colors.blue,
+                  // サイズ
+                  // iconSize: 64,
+                )),
+            Expanded(
+                flex: 2,
+                child: GestureDetector(
+                    onTap: () async {
+                      DateTime newMonth = (await showDatePicker(
+                        context: context,
+                        //初期値を設定
+                        initialDate: month,
+                        //選択できる日付の上限
+                        firstDate: DateTime(DateTime.now().year - 2),
+                        lastDate: DateTime(DateTime.now().year + 2),
+                      ))!;
+                      newMonth = DateTime(
+                          newMonth.year,
+                          newMonth.month,
+                          1,
+                          0,
+                          0,
+                          0,
+                          0,
+                          0
+                      );
+                      setState(() {
+                        month = newMonth;
+                        startDate = startDateInMonth(month);
+                      });
+                    },
+                    child: Text("${month.year}-${month.month}",
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                            color: Colors.blue, fontSize: 25.0)))),
+            Expanded(
+                flex: 1,
+                child: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      month = DateTime(
+                          month.year,
+                          month.month + 1,
+                          1,
+                          0,
+                          0,
+                          0,
+                          0,
+                          0
+                      );
+                      startDate = startDateInMonth(month);
+                    });
+                  },
+                  // 表示アイコン
+                  icon: const Icon(Icons.arrow_forward_ios_rounded),
+                  // アイコン色
+                  color: Colors.blue,
+                  // サイズ
+                  // iconSize: 64,
+                )),
+            const Spacer()
+          ]),
+          Container(
+              alignment: Alignment.centerRight,
+              child: IconButton(
+                onPressed: () {
+                  setState(() {
+                    month = DateTime(
+                        DateTime.now().year,
+                        DateTime.now().month,
+                        1,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0
+                    );
+                    startDate = startDateInMonth(month);
+                  });
+                },
+                icon: const Icon(Icons.calendar_today_rounded),
+                color: Colors.blue,
+              )),
+        ],
+      ),
       WeekLabel(),
       for (int i = 0; i < 6; i++) ...{
         Row(children: <Widget>[
           for (int j = 0; j < 7; j++) ...{
-            UCDay(startDate.add(Duration(days: i * 7 + j)))
+            UCDay(startDate.add(Duration(days: i * 7 + j)), key: UniqueKey())
           }
         ])
       }
