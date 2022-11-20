@@ -57,7 +57,18 @@ class _MyAppState extends State<MyApp> {
       for (int j=0; j<3; j++) {
         UCEntry entry = UCEntry();
         entry.date = DateTime.now().add(Duration(days: i));
+        entry.leftLabel ="Left";
+        entry.leftLabelColor = Colors.amber;
+        entry.middleLabel ="Middle";
+        entry.middleLabelColor = Colors.green;
+        entry.unitStart ="\$";
+        entry.unitStartColor = Colors.indigo;
         entry.value = "VAL$i-$j";
+        entry.valueColor = Colors.grey;
+        entry.unitEnd ="pcs";
+        entry.unitEndColor = Colors.red;
+        entry.rightLabel ="Right";
+        entry.rightLabelColor = Colors.yellow;
         ucEntries.add(entry);
       }
     }

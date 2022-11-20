@@ -14,10 +14,12 @@ class UCEntry {
   Color leftLabelColor = const Color(0xFF000000);
   String middleLabel = "";
   Color middleLabelColor = const Color(0xFF000000);
+  String unitStart = "";
+  Color unitStartColor = const Color(0xFF000000);
   String value = "          ";
   Color valueColor = const Color(0xFF000000);
-  String unit = "";
-  Color unitColor = const Color(0xFF000000);
+  String unitEnd = "";
+  Color unitEndColor = const Color(0xFF000000);
   String rightLabel = "";
   Color rightLabelColor = const Color(0xFF000000);
   double tableFontSize = 14.0;
@@ -217,27 +219,28 @@ int normalCalcOfWeekOfMonth(int thisMonth, DateTime day) {
 }
 
 int getWeekOfMonth(int thisMonth, DateTime day) {
-  int monthOfDay = day.day;
+  // int monthOfTheDay = day.day;
+  int monthOfTheDay = day.month;
   if (thisMonth == 12) {
-    if (monthOfDay == 11) {
+    if (monthOfTheDay == 11) {
       return 1;
-    } else if (monthOfDay == 1) {
+    } else if (monthOfTheDay == 1) {
       return normalCalcOfWeekOfMonth(thisMonth, day);
     } else {
       return day.weekOfMonth;
     }
   } else if (thisMonth == 1) {
-    if (monthOfDay == 12) {
+    if (monthOfTheDay == 12) {
       return 1;
-    } else if (monthOfDay == 2) {
+    } else if (monthOfTheDay == 2) {
       return normalCalcOfWeekOfMonth(thisMonth, day);
     } else {
       return day.weekOfMonth;
     }
   } else {
-    if (monthOfDay < thisMonth) {
+    if (monthOfTheDay < thisMonth) {
       return 1;
-    } else if (thisMonth < monthOfDay) {
+    } else if (thisMonth < monthOfTheDay) {
       return normalCalcOfWeekOfMonth(thisMonth, day);
     } else {
       return day.weekOfMonth;
@@ -246,8 +249,7 @@ int getWeekOfMonth(int thisMonth, DateTime day) {
 }
 
 DateTime startDateInMonth(DateTime month) {
-  DateTime startDate =
-      DateTime(month.year, month.month, 1, 0, 0, 0, 0, 0);
+  DateTime startDate = DateTime(month.year, month.month, 1, 0, 0, 0, 0, 0);
   return startDate.add(Duration(days: -(startDate.weekday % 7)));
 }
 
@@ -299,14 +301,14 @@ class _UCMonthState extends State<UCMonth> {
 
   @override
   Widget build(BuildContext context) {
-    JapaneseNationalHoliday japaneseNationalHoliday = JapaneseNationalHoliday(context);
+    JapaneseNationalHoliday japaneseNationalHoliday =
+        JapaneseNationalHoliday(context);
     List<Holiday> holidays = List.empty(growable: true);
     entriesOfTheDay.clear();
     for (int week = 0; week < 6; week++) {
       for (int weekday = 0; weekday < 7; weekday++) {
         date = startDate.add(Duration(days: week * 7 + weekday));
-        holidays.add(japaneseNationalHoliday
-            .getHoliday(date));
+        holidays.add(japaneseNationalHoliday.getHoliday(date));
         entriesOfTheDay.add(getEntriesOfTheDay(date, entryList.maxLinesInDay));
       }
     }
@@ -322,15 +324,7 @@ class _UCMonthState extends State<UCMonth> {
                   onPressed: () {
                     setState(() {
                       month = DateTime(
-                          month.year,
-                          month.month - 1,
-                          1,
-                          0,
-                          0,
-                          0,
-                          0,
-                          0
-                      );
+                          month.year, month.month - 1, 1, 0, 0, 0, 0, 0);
                       startDate = startDateInMonth(month);
                     });
                   },
@@ -354,15 +348,7 @@ class _UCMonthState extends State<UCMonth> {
                         lastDate: DateTime(DateTime.now().year + 2),
                       ))!;
                       newMonth = DateTime(
-                          newMonth.year,
-                          newMonth.month,
-                          1,
-                          0,
-                          0,
-                          0,
-                          0,
-                          0
-                      );
+                          newMonth.year, newMonth.month, 1, 0, 0, 0, 0, 0);
                       setState(() {
                         month = newMonth;
                         startDate = startDateInMonth(month);
@@ -378,15 +364,7 @@ class _UCMonthState extends State<UCMonth> {
                   onPressed: () {
                     setState(() {
                       month = DateTime(
-                          month.year,
-                          month.month + 1,
-                          1,
-                          0,
-                          0,
-                          0,
-                          0,
-                          0
-                      );
+                          month.year, month.month + 1, 1, 0, 0, 0, 0, 0);
                       startDate = startDateInMonth(month);
                     });
                   },
@@ -404,16 +382,8 @@ class _UCMonthState extends State<UCMonth> {
               child: IconButton(
                 onPressed: () {
                   setState(() {
-                    month = DateTime(
-                        DateTime.now().year,
-                        DateTime.now().month,
-                        1,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0
-                    );
+                    month = DateTime(DateTime.now().year, DateTime.now().month,
+                        1, 0, 0, 0, 0, 0);
                     startDate = startDateInMonth(month);
                   });
                 },
@@ -434,26 +404,28 @@ class _UCMonthState extends State<UCMonth> {
                     child: GestureDetector(
                         onTap: () {
                           setState(() {
-                            selectedDate =
-                                startDate.add(
-                                    Duration(days: week * 7 + weekday));
-                            selectedHoliday = japaneseNationalHoliday.getHoliday(selectedDate);
+                            selectedDate = startDate
+                                .add(Duration(days: week * 7 + weekday));
+                            selectedHoliday = japaneseNationalHoliday
+                                .getHoliday(selectedDate);
                           });
                         },
                         child: Column(children: <Widget>[
                           Row(children: <Widget>[
                             UCDate(
-                              startDate.add(Duration(days: week * 7 + weekday)),
-                              holidays[week * 7 + weekday],
-                              key: UniqueKey()
-                            ),
+                                startDate
+                                    .add(Duration(days: week * 7 + weekday)),
+                                holidays[week * 7 + weekday],
+                                key: UniqueKey()),
                             UCHoliday(holidays[week * 7 + weekday],
                                 key: UniqueKey())
                           ]),
                           for (lineToWrite = 0;
-                          lineToWrite < entryList.maxLinesInDay &&
-                              lineToWrite < entriesOfTheDay[week * 7 + weekday].length;
-                          lineToWrite++) ...{
+                              lineToWrite < entryList.maxLinesInDay &&
+                                  lineToWrite <
+                                      entriesOfTheDay[week * 7 + weekday]
+                                          .length;
+                              lineToWrite++) ...{
                             UCDayEntry(
                                 entriesOfTheDay[week * 7 + weekday]
                                     [lineToWrite],
@@ -462,43 +434,143 @@ class _UCMonthState extends State<UCMonth> {
                           for (int lineWhite = lineToWrite;
                               lineWhite < entryList.maxLinesInDay;
                               lineWhite++) ...{
-                            UCDayEntry(
-                              UCEntry(),
-                              key: UniqueKey()
-                            )
+                            UCDayEntry(UCEntry(), key: UniqueKey())
                           }
-                        ]
-                        )
-                    ))
-            )
+                        ]))))
           }
         ])
       },
       Container(
-        color: const Color.fromARGB(0xFF, 0xC0, 0xC0, 0xC0),
-        child: Row(
-          children: <Widget>[
+          color: const Color.fromARGB(0xFF, 0xC0, 0xC0, 0xC0),
+          child: Row(children: <Widget>[
             Expanded(
                 child: Container(
                     alignment: Alignment.centerLeft,
                     child: Text(
                         "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}",
                         style: const TextStyle(fontSize: 18.0)))),
-            Expanded(child: Container(
-                alignment: Alignment.center,
-                child: IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.add),
-                    color: Colors.blue
-                )
-            )),
-            Expanded(child: Container(
-                alignment: Alignment.centerRight,
-                child: Text(selectedHoliday.holidayName)
-            ))
-          ]
-        )
-      )
+            Expanded(
+                child: Container(
+                    alignment: Alignment.center,
+                    child: IconButton(
+                        onPressed: () {},
+                        icon: const Icon(Icons.add),
+                        color: Colors.blue))),
+            Expanded(
+                child: Container(
+                    alignment: Alignment.centerRight,
+                    child: Text(selectedHoliday.holidayName)))
+          ])),
+      Expanded(
+          child: ListView.builder(
+              itemCount:
+                  entriesOfTheDay[selectedDate.difference(startDate).inDays]
+                      .length,
+              itemBuilder: (context, index) {
+                return Stack(children: <Widget>[
+                    Container(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                            entriesOfTheDay[selectedDate
+                                .difference(startDate)
+                                .inDays][index]
+                                .leftLabel,
+                            style: TextStyle(
+                                color: entriesOfTheDay[selectedDate
+                                    .difference(startDate)
+                                    .inDays][index]
+                                    .leftLabelColor,
+                                fontSize: entriesOfTheDay[selectedDate
+                                    .difference(startDate)
+                                    .inDays][index]
+                                    .listFontSize))),
+                    Container(
+                        alignment: Alignment.center,
+                        child: Text(
+                            entriesOfTheDay[selectedDate
+                                .difference(startDate)
+                                .inDays][index]
+                                .middleLabel,
+                            style: TextStyle(
+                                color: entriesOfTheDay[selectedDate
+                                    .difference(startDate)
+                                    .inDays][index]
+                                    .middleLabelColor,
+                                fontSize: entriesOfTheDay[selectedDate
+                                    .difference(startDate)
+                                    .inDays][index]
+                                    .listFontSize))),
+                  Row(
+                      children: <Widget>[
+                        const Spacer(),
+                        Container(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                                entriesOfTheDay[selectedDate
+                                    .difference(startDate)
+                                    .inDays][index]
+                                    .unitStart,
+                                style: TextStyle(
+                                    color: entriesOfTheDay[selectedDate
+                                        .difference(startDate)
+                                        .inDays][index]
+                                        .unitStartColor,
+                                    fontSize: entriesOfTheDay[selectedDate
+                                        .difference(startDate)
+                                        .inDays][index]
+                                        .listFontSize))),
+                        Container(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                                entriesOfTheDay[selectedDate
+                                    .difference(startDate)
+                                    .inDays][index]
+                                    .value,
+                                style: TextStyle(
+                                    color: entriesOfTheDay[selectedDate
+                                        .difference(startDate)
+                                        .inDays][index]
+                                        .valueColor,
+                                    fontSize: entriesOfTheDay[selectedDate
+                                        .difference(startDate)
+                                        .inDays][index]
+                                        .listFontSize))),
+                        Container(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                                entriesOfTheDay[selectedDate
+                                    .difference(startDate)
+                                    .inDays][index]
+                                    .unitEnd,
+                                style: TextStyle(
+                                    color: entriesOfTheDay[selectedDate
+                                        .difference(startDate)
+                                        .inDays][index]
+                                        .unitEndColor,
+                                    fontSize: entriesOfTheDay[selectedDate
+                                        .difference(startDate)
+                                        .inDays][index]
+                                        .listFontSize))),
+                        Container(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                                entriesOfTheDay[selectedDate
+                                    .difference(startDate)
+                                    .inDays][index]
+                                    .rightLabel,
+                                style: TextStyle(
+                                    color: entriesOfTheDay[selectedDate
+                                        .difference(startDate)
+                                        .inDays][index]
+                                        .rightLabelColor,
+                                    fontSize: entriesOfTheDay[selectedDate
+                                        .difference(startDate)
+                                        .inDays][index]
+                                        .listFontSize)))
+                      ]
+                  )
+                ]);
+              }))
     ]);
   }
 }
