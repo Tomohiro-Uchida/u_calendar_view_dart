@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:u_calendar_view_dart/generated/l10n.dart';
 import 'package:u_calendar_view_dart/u_calendar_view_dart.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:uuid/uuid.dart';
 
 void main() {
   runApp(const MyApp());
@@ -56,6 +57,7 @@ class _MyAppState extends State<MyApp> {
     for (int i=0; i<7*6; i++) {
       for (int j=0; j<3; j++) {
         UCEntry entry = UCEntry();
+        entry.applicationTag = Uuid().v1.toString();
         entry.date = DateTime.now().add(Duration(days: i));
         entry.leftLabel ="Left";
         entry.leftLabelColor = Colors.amber;
@@ -69,6 +71,9 @@ class _MyAppState extends State<MyApp> {
         entry.unitEndColor = Colors.red;
         entry.rightLabel ="Right";
         entry.rightLabelColor = Colors.yellow;
+        entry.tableFontSize = 14.0;
+        entry.listFontSize = 18.0;
+        entry.tableAlignment = Alignment.centerRight;
         ucEntries.add(entry);
       }
     }
