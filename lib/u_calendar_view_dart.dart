@@ -468,25 +468,7 @@ class _UCMonthState extends State<UCMonth> {
                   entriesOfTheDay[selectedDate.difference(startDate).inDays]
                       .length,
               itemBuilder: (context, index) {
-                return Dismissible(
-                    key: UniqueKey(),
-                    direction: DismissDirection.endToStart,
-                    background: Container(
-                      alignment: AlignmentDirectional.centerEnd,
-                      color: Colors.red,
-                      child: const Icon(
-                        Icons.delete,
-                        color: Colors.white,
-                      ),
-                    ),
-                    onDismissed: (direction) {
-                      if (direction == DismissDirection.endToStart) {
-                        // 右から左にスワイプされた時
-                      } else {
-                        // それ以外
-                      }
-                    },
-                    child: Stack(children: <Widget>[
+                return Stack(children: <Widget>[
                       Container(
                           alignment: Alignment.centerLeft,
                           child: Text(
@@ -586,7 +568,7 @@ class _UCMonthState extends State<UCMonth> {
                                             .inDays][index]
                                         .listFontSize)))
                       ])
-                    ]));
+                    ]);
               }))
     ]);
   }
