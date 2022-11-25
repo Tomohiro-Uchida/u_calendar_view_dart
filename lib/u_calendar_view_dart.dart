@@ -32,7 +32,7 @@ class EntryList {
   List<UCEntry> entries = List.empty(growable: true);
 }
 
-EntryList entryList = EntryList();
+// EntryList entryList = EntryList();
 
 class UCDate extends StatefulWidget {
   DateTime date = DateTime(2022, 1, 1, 0, 0, 0, 0, 0);
@@ -259,37 +259,62 @@ DateTime endDateInMonth(DateTime month) {
 }
 
 class UCMonth extends StatefulWidget {
+  int maxLinesInDay = 1;
+  List<UCEntry> ucEntries = List.empty(growable: true);
   DateTime month = DateTime(2022, 1, 1, 0, 0, 0, 0, 0);
 
-  UCMonth(this.month, {super.key});
+  final Future<UCEntry?> Function(BuildContext context) ucOnAddEntry;
+  final Function(BuildContext context, UCEntry ucEntry) ucOnTapEntry;
+  final Function(BuildContext context, int prevYear, int prevMonth, int setYear,
+      int setMonth) ucOnMonthChanged;
+
+  UCMonth(
+      {super.key,
+      required this.month,
+      required this.maxLinesInDay,
+      required this.ucEntries,
+      required this.ucOnAddEntry,
+      required this.ucOnTapEntry,
+      required this.ucOnMonthChanged});
 
   @override
   _UCMonthState createState() => _UCMonthState();
 }
 
 class _UCMonthState extends State<UCMonth> {
+  int maxLinesInDay = 1;
+  List<UCEntry> ucEntries = List.empty(growable: true);
   DateTime month = DateTime.now();
   DateTime date = DateTime.now();
   late DateTime startDate;
   DateTime selectedDate = DateTime.now();
   Holiday selectedHoliday = Holiday();
   List<List<UCEntry>> entriesOfTheDay = List.empty(growable: true);
+  late final Future<UCEntry?> Function(BuildContext context) ucOnAddEntry;
+  late final Function(BuildContext context, UCEntry ucEntry) ucOnTapEntry;
+  late final Function(BuildContext context, int prevYear, int prevMonth,
+      int setYear, int setMonth) ucOnMonthChanged;
 
   @override
   initState() {
     super.initState();
+    maxLinesInDay = widget.maxLinesInDay;
+    ucEntries = widget.ucEntries;
     month = widget.month;
     date = DateTime.now();
     startDate = startDateInMonth(month);
     selectedDate = DateTime.now();
     selectedHoliday = Holiday();
     entriesOfTheDay = List.empty(growable: true);
+    ucOnAddEntry = widget.ucOnAddEntry;
+    ucOnTapEntry = widget.ucOnTapEntry;
+    ucOnMonthChanged = widget.ucOnMonthChanged;
   }
 
   List<UCEntry> getEntriesOfTheDay(DateTime date, int max) {
     List<UCEntry> retVal = List.empty(growable: true);
     UCEntry element;
-    for (element in entryList.entries) {
+    for (element in ucEntries) {
       DateTime resetTime = DateTime(element.date.year, element.date.month,
           element.date.day, 0, 0, 0, 0, 0);
       if (resetTime == date) {
@@ -309,7 +334,7 @@ class _UCMonthState extends State<UCMonth> {
       for (int weekday = 0; weekday < 7; weekday++) {
         date = startDate.add(Duration(days: week * 7 + weekday));
         holidays.add(japaneseNationalHoliday.getHoliday(date));
-        entriesOfTheDay.add(getEntriesOfTheDay(date, entryList.maxLinesInDay));
+        entriesOfTheDay.add(getEntriesOfTheDay(date, maxLinesInDay));
       }
     }
     int lineToWrite = 0;
@@ -421,7 +446,7 @@ class _UCMonthState extends State<UCMonth> {
                                 key: UniqueKey())
                           ]),
                           for (lineToWrite = 0;
-                              lineToWrite < entryList.maxLinesInDay &&
+                              lineToWrite < maxLinesInDay &&
                                   lineToWrite <
                                       entriesOfTheDay[week * 7 + weekday]
                                           .length;
@@ -432,7 +457,7 @@ class _UCMonthState extends State<UCMonth> {
                                 key: UniqueKey())
                           },
                           for (int lineWhite = lineToWrite;
-                              lineWhite < entryList.maxLinesInDay;
+                              lineWhite < maxLinesInDay;
                               lineWhite++) ...{
                             UCDayEntry(UCEntry(), key: UniqueKey())
                           }
@@ -453,7 +478,16 @@ class _UCMonthState extends State<UCMonth> {
                 child: Container(
                     alignment: Alignment.center,
                     child: IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Future<UCEntry?> newEntry = ucOnAddEntry(context);
+                          if (newEntry != null) {
+                            newEntry.then((value) {
+                              setState(() {
+                                ucEntries.add(value!);
+                              });
+                            });
+                          }
+                        },
                         icon: const Icon(Icons.add),
                         color: Colors.blue))),
             Expanded(
@@ -469,106 +503,106 @@ class _UCMonthState extends State<UCMonth> {
                       .length,
               itemBuilder: (context, index) {
                 return Stack(children: <Widget>[
-                      Container(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                              entriesOfTheDay[selectedDate
+                  Container(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                          entriesOfTheDay[selectedDate
+                                  .difference(startDate)
+                                  .inDays][index]
+                              .leftLabel,
+                          style: TextStyle(
+                              color: entriesOfTheDay[selectedDate
                                       .difference(startDate)
                                       .inDays][index]
-                                  .leftLabel,
-                              style: TextStyle(
-                                  color: entriesOfTheDay[selectedDate
-                                          .difference(startDate)
-                                          .inDays][index]
-                                      .leftLabelColor,
-                                  fontSize: entriesOfTheDay[selectedDate
-                                          .difference(startDate)
-                                          .inDays][index]
-                                      .listFontSize))),
-                      Container(
-                          alignment: Alignment.center,
-                          child: Text(
-                              entriesOfTheDay[selectedDate
+                                  .leftLabelColor,
+                              fontSize: entriesOfTheDay[selectedDate
                                       .difference(startDate)
                                       .inDays][index]
-                                  .middleLabel,
-                              style: TextStyle(
-                                  color: entriesOfTheDay[selectedDate
-                                          .difference(startDate)
-                                          .inDays][index]
-                                      .middleLabelColor,
-                                  fontSize: entriesOfTheDay[selectedDate
-                                          .difference(startDate)
-                                          .inDays][index]
-                                      .listFontSize))),
-                      Row(children: <Widget>[
-                        const Spacer(),
-                        Container(
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                                entriesOfTheDay[selectedDate
+                                  .listFontSize))),
+                  Container(
+                      alignment: Alignment.center,
+                      child: Text(
+                          entriesOfTheDay[selectedDate
+                                  .difference(startDate)
+                                  .inDays][index]
+                              .middleLabel,
+                          style: TextStyle(
+                              color: entriesOfTheDay[selectedDate
+                                      .difference(startDate)
+                                      .inDays][index]
+                                  .middleLabelColor,
+                              fontSize: entriesOfTheDay[selectedDate
+                                      .difference(startDate)
+                                      .inDays][index]
+                                  .listFontSize))),
+                  Row(children: <Widget>[
+                    const Spacer(),
+                    Container(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                            entriesOfTheDay[selectedDate
+                                    .difference(startDate)
+                                    .inDays][index]
+                                .unitStart,
+                            style: TextStyle(
+                                color: entriesOfTheDay[selectedDate
                                         .difference(startDate)
                                         .inDays][index]
-                                    .unitStart,
-                                style: TextStyle(
-                                    color: entriesOfTheDay[selectedDate
-                                            .difference(startDate)
-                                            .inDays][index]
-                                        .unitStartColor,
-                                    fontSize: entriesOfTheDay[selectedDate
-                                            .difference(startDate)
-                                            .inDays][index]
-                                        .listFontSize))),
-                        Container(
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                                entriesOfTheDay[selectedDate
+                                    .unitStartColor,
+                                fontSize: entriesOfTheDay[selectedDate
                                         .difference(startDate)
                                         .inDays][index]
-                                    .value,
-                                style: TextStyle(
-                                    color: entriesOfTheDay[selectedDate
-                                            .difference(startDate)
-                                            .inDays][index]
-                                        .valueColor,
-                                    fontSize: entriesOfTheDay[selectedDate
-                                            .difference(startDate)
-                                            .inDays][index]
-                                        .listFontSize))),
-                        Container(
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                                entriesOfTheDay[selectedDate
+                                    .listFontSize))),
+                    Container(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                            entriesOfTheDay[selectedDate
+                                    .difference(startDate)
+                                    .inDays][index]
+                                .value,
+                            style: TextStyle(
+                                color: entriesOfTheDay[selectedDate
                                         .difference(startDate)
                                         .inDays][index]
-                                    .unitEnd,
-                                style: TextStyle(
-                                    color: entriesOfTheDay[selectedDate
-                                            .difference(startDate)
-                                            .inDays][index]
-                                        .unitEndColor,
-                                    fontSize: entriesOfTheDay[selectedDate
-                                            .difference(startDate)
-                                            .inDays][index]
-                                        .listFontSize))),
-                        Container(
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                                entriesOfTheDay[selectedDate
+                                    .valueColor,
+                                fontSize: entriesOfTheDay[selectedDate
                                         .difference(startDate)
                                         .inDays][index]
-                                    .rightLabel,
-                                style: TextStyle(
-                                    color: entriesOfTheDay[selectedDate
-                                            .difference(startDate)
-                                            .inDays][index]
-                                        .rightLabelColor,
-                                    fontSize: entriesOfTheDay[selectedDate
-                                            .difference(startDate)
-                                            .inDays][index]
-                                        .listFontSize)))
-                      ])
-                    ]);
+                                    .listFontSize))),
+                    Container(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                            entriesOfTheDay[selectedDate
+                                    .difference(startDate)
+                                    .inDays][index]
+                                .unitEnd,
+                            style: TextStyle(
+                                color: entriesOfTheDay[selectedDate
+                                        .difference(startDate)
+                                        .inDays][index]
+                                    .unitEndColor,
+                                fontSize: entriesOfTheDay[selectedDate
+                                        .difference(startDate)
+                                        .inDays][index]
+                                    .listFontSize))),
+                    Container(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                            entriesOfTheDay[selectedDate
+                                    .difference(startDate)
+                                    .inDays][index]
+                                .rightLabel,
+                            style: TextStyle(
+                                color: entriesOfTheDay[selectedDate
+                                        .difference(startDate)
+                                        .inDays][index]
+                                    .rightLabelColor,
+                                fontSize: entriesOfTheDay[selectedDate
+                                        .difference(startDate)
+                                        .inDays][index]
+                                    .listFontSize)))
+                  ])
+                ]);
               }))
     ]);
   }
@@ -579,9 +613,21 @@ class UCalendarViewDart {
     return UCalendarViewDartPlatform.instance.getPlatformVersion();
   }
 
-  Widget getView(DateTime month, int maxLinesInDay, List<UCEntry> ucEntries) {
-    entryList.maxLinesInDay = maxLinesInDay;
-    entryList.entries = ucEntries;
-    return UCMonth(month);
+  Widget getView(
+      DateTime month,
+      int maxLinesInDay,
+      List<UCEntry> ucEntries,
+      Future<UCEntry?> Function(BuildContext context) ucOnAddEntry,
+      Function(BuildContext context, UCEntry ucEntry) ucOnTapEntry,
+      Function(BuildContext context, int prevYear, int prevMonth, int setYear,
+              int setMonth)
+          ucOnMonthChanged) {
+    return UCMonth(
+        month: month,
+        maxLinesInDay: maxLinesInDay,
+        ucEntries: ucEntries,
+        ucOnAddEntry: ucOnAddEntry,
+        ucOnTapEntry: ucOnTapEntry,
+        ucOnMonthChanged: ucOnMonthChanged);
   }
 }
