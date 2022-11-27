@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 
-import 'package:flutter/services.dart';
 import 'package:u_calendar_view_dart/generated/l10n.dart';
 import 'package:u_calendar_view_dart/u_calendar_view_dart.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -80,7 +79,11 @@ Future<UCEntry?> ucOnAddEntry(BuildContext context) async {
       context, MaterialPageRoute(builder: (context) => const ValueAddPage()));
 }
 
-void ucOnTapEntry(BuildContext context, UCEntry ucEntry) {}
+void ucOnTapEntry(BuildContext context, UCEntry ucEntry) {
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    content: Text(ucEntry.value),
+  ));
+}
 
 void ucOnMonthChanged(BuildContext context, int prevYear, int prevMonth,
     int setYear, int setMonth) {}
@@ -93,7 +96,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
   final _uCalendarViewDartPlugin = UCalendarViewDart();
 
   @override

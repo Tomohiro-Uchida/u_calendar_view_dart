@@ -502,107 +502,115 @@ class _UCMonthState extends State<UCMonth> {
                   entriesOfTheDay[selectedDate.difference(startDate).inDays]
                       .length,
               itemBuilder: (context, index) {
-                return Stack(children: <Widget>[
-                  Container(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
+                return GestureDetector(
+                    onTap: () {
+                      ucOnTapEntry(
+                          context,
                           entriesOfTheDay[selectedDate
-                                  .difference(startDate)
-                                  .inDays][index]
-                              .leftLabel,
-                          style: TextStyle(
-                              color: entriesOfTheDay[selectedDate
+                              .difference(startDate)
+                              .inDays][index]);
+                    },
+                    child: Stack(children: <Widget>[
+                      Container(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                              entriesOfTheDay[selectedDate
                                       .difference(startDate)
                                       .inDays][index]
-                                  .leftLabelColor,
-                              fontSize: entriesOfTheDay[selectedDate
+                                  .leftLabel,
+                              style: TextStyle(
+                                  color: entriesOfTheDay[selectedDate
+                                          .difference(startDate)
+                                          .inDays][index]
+                                      .leftLabelColor,
+                                  fontSize: entriesOfTheDay[selectedDate
+                                          .difference(startDate)
+                                          .inDays][index]
+                                      .listFontSize))),
+                      Container(
+                          alignment: Alignment.center,
+                          child: Text(
+                              entriesOfTheDay[selectedDate
                                       .difference(startDate)
                                       .inDays][index]
-                                  .listFontSize))),
-                  Container(
-                      alignment: Alignment.center,
-                      child: Text(
-                          entriesOfTheDay[selectedDate
-                                  .difference(startDate)
-                                  .inDays][index]
-                              .middleLabel,
-                          style: TextStyle(
-                              color: entriesOfTheDay[selectedDate
-                                      .difference(startDate)
-                                      .inDays][index]
-                                  .middleLabelColor,
-                              fontSize: entriesOfTheDay[selectedDate
-                                      .difference(startDate)
-                                      .inDays][index]
-                                  .listFontSize))),
-                  Row(children: <Widget>[
-                    const Spacer(),
-                    Container(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                            entriesOfTheDay[selectedDate
-                                    .difference(startDate)
-                                    .inDays][index]
-                                .unitStart,
-                            style: TextStyle(
-                                color: entriesOfTheDay[selectedDate
+                                  .middleLabel,
+                              style: TextStyle(
+                                  color: entriesOfTheDay[selectedDate
+                                          .difference(startDate)
+                                          .inDays][index]
+                                      .middleLabelColor,
+                                  fontSize: entriesOfTheDay[selectedDate
+                                          .difference(startDate)
+                                          .inDays][index]
+                                      .listFontSize))),
+                      Row(children: <Widget>[
+                        const Spacer(),
+                        Container(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                                entriesOfTheDay[selectedDate
                                         .difference(startDate)
                                         .inDays][index]
-                                    .unitStartColor,
-                                fontSize: entriesOfTheDay[selectedDate
+                                    .unitStart,
+                                style: TextStyle(
+                                    color: entriesOfTheDay[selectedDate
+                                            .difference(startDate)
+                                            .inDays][index]
+                                        .unitStartColor,
+                                    fontSize: entriesOfTheDay[selectedDate
+                                            .difference(startDate)
+                                            .inDays][index]
+                                        .listFontSize))),
+                        Container(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                                entriesOfTheDay[selectedDate
                                         .difference(startDate)
                                         .inDays][index]
-                                    .listFontSize))),
-                    Container(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                            entriesOfTheDay[selectedDate
-                                    .difference(startDate)
-                                    .inDays][index]
-                                .value,
-                            style: TextStyle(
-                                color: entriesOfTheDay[selectedDate
+                                    .value,
+                                style: TextStyle(
+                                    color: entriesOfTheDay[selectedDate
+                                            .difference(startDate)
+                                            .inDays][index]
+                                        .valueColor,
+                                    fontSize: entriesOfTheDay[selectedDate
+                                            .difference(startDate)
+                                            .inDays][index]
+                                        .listFontSize))),
+                        Container(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                                entriesOfTheDay[selectedDate
                                         .difference(startDate)
                                         .inDays][index]
-                                    .valueColor,
-                                fontSize: entriesOfTheDay[selectedDate
+                                    .unitEnd,
+                                style: TextStyle(
+                                    color: entriesOfTheDay[selectedDate
+                                            .difference(startDate)
+                                            .inDays][index]
+                                        .unitEndColor,
+                                    fontSize: entriesOfTheDay[selectedDate
+                                            .difference(startDate)
+                                            .inDays][index]
+                                        .listFontSize))),
+                        Container(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                                entriesOfTheDay[selectedDate
                                         .difference(startDate)
                                         .inDays][index]
-                                    .listFontSize))),
-                    Container(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                            entriesOfTheDay[selectedDate
-                                    .difference(startDate)
-                                    .inDays][index]
-                                .unitEnd,
-                            style: TextStyle(
-                                color: entriesOfTheDay[selectedDate
-                                        .difference(startDate)
-                                        .inDays][index]
-                                    .unitEndColor,
-                                fontSize: entriesOfTheDay[selectedDate
-                                        .difference(startDate)
-                                        .inDays][index]
-                                    .listFontSize))),
-                    Container(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                            entriesOfTheDay[selectedDate
-                                    .difference(startDate)
-                                    .inDays][index]
-                                .rightLabel,
-                            style: TextStyle(
-                                color: entriesOfTheDay[selectedDate
-                                        .difference(startDate)
-                                        .inDays][index]
-                                    .rightLabelColor,
-                                fontSize: entriesOfTheDay[selectedDate
-                                        .difference(startDate)
-                                        .inDays][index]
-                                    .listFontSize)))
-                  ])
-                ]);
+                                    .rightLabel,
+                                style: TextStyle(
+                                    color: entriesOfTheDay[selectedDate
+                                            .difference(startDate)
+                                            .inDays][index]
+                                        .rightLabelColor,
+                                    fontSize: entriesOfTheDay[selectedDate
+                                            .difference(startDate)
+                                            .inDays][index]
+                                        .listFontSize)))
+                      ])
+                    ]));
               }))
     ]);
   }
