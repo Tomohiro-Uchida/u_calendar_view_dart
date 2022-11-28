@@ -372,8 +372,6 @@ class _UCMonthState extends State<UCMonth> {
                   icon: const Icon(Icons.arrow_back_ios_new_rounded),
                   // アイコン色
                   color: Colors.blue,
-                  // サイズ
-                  // iconSize: 64,
                 )),
             Expanded(
                 flex: 2,
