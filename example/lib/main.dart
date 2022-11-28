@@ -42,7 +42,7 @@ class _ValueAddPageState extends State<ValueAddPage> {
     ucEntry.tableFontSize = 14.0;
     ucEntry.listFontSize = 18.0;
     ucEntry.tableAlignment = Alignment.centerRight;
-    Navigator.pop(context, ucEntry);
+    Navigator.of(context).pop(ucEntry);
   }
 
   @override
@@ -67,16 +67,17 @@ class _ValueAddPageState extends State<ValueAddPage> {
                       color: Colors.blue,
                     ),
                   ),
-                ), onSubmitted: _handleText
-            ),
-          ),
+                ),
+              onSubmitted: _handleText
+            )
+          )
         );
   }
 }
 
 Future<UCEntry?> ucOnAddEntry(BuildContext context) async {
-  return await Navigator.push(
-      context, MaterialPageRoute(builder: (context) => const ValueAddPage()));
+  return await Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => const ValueAddPage()));
 }
 
 void ucOnTapEntry(BuildContext context, UCEntry ucEntry) {
