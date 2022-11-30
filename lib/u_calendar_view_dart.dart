@@ -258,6 +258,134 @@ DateTime endDateInMonth(DateTime month) {
   return startDate.add(const Duration(days: 7 * 6));
 }
 
+List<List<UCEntry>> entriesOfTheDay = List.empty(growable: true);
+DateTime selectedDate = DateTime.now();
+Holiday selectedHoliday = Holiday();
+
+List<UCEntry> getEntriesOfTheDay(
+    DateTime date, int max, List<UCEntry> ucEntries) {
+  List<UCEntry> retVal = List.empty(growable: true);
+  UCEntry element;
+  for (element in ucEntries) {
+    DateTime resetTime = DateTime(
+        element.date.year, element.date.month, element.date.day, 0, 0, 0, 0, 0);
+    if (resetTime == date) {
+      retVal.add(element);
+    }
+  }
+  return retVal;
+}
+
+class UCCoreTable extends StatefulWidget {
+  int maxLinesInDay;
+  List<UCEntry> ucEntries;
+  DateTime month;
+  DateTime startDate;
+
+  UCCoreTable(
+      {super.key,
+      required this.month,
+      required this.startDate,
+      required this.maxLinesInDay,
+      required this.ucEntries});
+
+  @override
+  _UCCoreTable createState() => _UCCoreTable();
+}
+
+class _UCCoreTable extends State<UCCoreTable> {
+  int maxLinesInDay = 1;
+  List<UCEntry> ucEntries = List.empty(growable: true);
+  DateTime month = DateTime.now();
+  DateTime date = DateTime.now();
+  late DateTime startDate;
+  int lineToWrite = 0;
+
+  @override
+  initState() {
+    super.initState();
+    maxLinesInDay = widget.maxLinesInDay;
+    ucEntries = widget.ucEntries;
+    month = widget.month;
+    date = DateTime.now();
+    startDate = widget.startDate;
+  }
+
+  Color getSelectedColor(int week, int weekday) {
+    DateTime pointedDate = startDate.add(Duration(days: week * 7 + weekday));
+    if (selectedDate.year == pointedDate.year &&
+        selectedDate.month == pointedDate.month &&
+        selectedDate.day == pointedDate.day) {
+      return const Color(0xffb2ebf2);
+    } else {
+      return const Color(0x00ffffff);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    JapaneseNationalHoliday japaneseNationalHoliday =
+        JapaneseNationalHoliday(context);
+    List<Holiday> holidays = List.empty(growable: true);
+    for (int week = 0; week < 6; week++) {
+      for (int weekday = 0; weekday < 7; weekday++) {
+        date = startDate.add(Duration(days: week * 7 + weekday));
+        holidays.add(japaneseNationalHoliday.getHoliday(date));
+      }
+    }
+    return Column(children: <Widget>[
+      for (int week = 0; week < 6; week++) ...{
+        Row(children: <Widget>[
+          for (int weekday = 0; weekday < 7; weekday++) ...{
+            Expanded(
+                child: Container(
+                    decoration: BoxDecoration(
+                      color: getSelectedColor(week, weekday),
+                      border: Border.all(color: Colors.grey),
+                    ),
+                    child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            selectedDate = startDate
+                                .add(Duration(days: week * 7 + weekday));
+                            selectedHoliday = japaneseNationalHoliday
+                                .getHoliday(selectedDate);
+                          });
+                        },
+                        child: Column(children: <Widget>[
+                          Row(children: <Widget>[
+                            UCDate(
+                                startDate
+                                    .add(Duration(days: week * 7 + weekday)),
+                                holidays[week * 7 + weekday],
+                                key: UniqueKey()),
+                            UCHoliday(holidays[week * 7 + weekday],
+                                key: UniqueKey())
+                          ]),
+                          for (lineToWrite = 0;
+                              lineToWrite < maxLinesInDay &&
+                                  lineToWrite <
+                                      entriesOfTheDay[week * 7 + weekday]
+                                          .length;
+                              lineToWrite++) ...{
+                            UCDayEntry(
+                                entriesOfTheDay[week * 7 + weekday]
+                                    [lineToWrite],
+                                key: UniqueKey())
+                          },
+                          for (int lineWhite = lineToWrite;
+                              lineWhite < maxLinesInDay;
+                              lineWhite++) ...{
+                            UCDayEntry(UCEntry(), key: UniqueKey())
+                          }
+                        ]))))
+          }
+        ])
+      }
+    ]);
+  }
+}
+
 class UCMonth extends StatefulWidget {
   int maxLinesInDay = 1;
   List<UCEntry> ucEntries = List.empty(growable: true);
@@ -287,9 +415,7 @@ class _UCMonthState extends State<UCMonth> {
   DateTime month = DateTime.now();
   DateTime date = DateTime.now();
   late DateTime startDate;
-  DateTime selectedDate = DateTime.now();
-  Holiday selectedHoliday = Holiday();
-  List<List<UCEntry>> entriesOfTheDay = List.empty(growable: true);
+
   late final Future<UCEntry?> Function(BuildContext context) ucOnAddEntry;
   late final Function(BuildContext context, UCEntry ucEntry) ucOnTapEntry;
   late final Function(BuildContext context, int prevYear, int prevMonth,
@@ -303,53 +429,20 @@ class _UCMonthState extends State<UCMonth> {
     month = widget.month;
     date = DateTime.now();
     startDate = startDateInMonth(month);
-    selectedDate = DateTime.now();
-    selectedHoliday = Holiday();
-    entriesOfTheDay = List.empty(growable: true);
     ucOnAddEntry = widget.ucOnAddEntry;
     ucOnTapEntry = widget.ucOnTapEntry;
     ucOnMonthChanged = widget.ucOnMonthChanged;
   }
 
-  List<UCEntry> getEntriesOfTheDay(DateTime date, int max) {
-    List<UCEntry> retVal = List.empty(growable: true);
-    UCEntry element;
-    for (element in ucEntries) {
-      DateTime resetTime = DateTime(element.date.year, element.date.month,
-          element.date.day, 0, 0, 0, 0, 0);
-      if (resetTime == date) {
-        retVal.add(element);
-      }
-    }
-    return retVal;
-  }
-
-  Color getSelectedColor(int week, int weekday) {
-    DateTime pointedDate = startDate.add(Duration(days: week * 7 + weekday));
-    if (selectedDate.year == pointedDate.year &&
-        selectedDate.month == pointedDate.month &&
-        selectedDate.day == pointedDate.day
-    ) {
-      return const Color(0xffb2ebf2);
-    } else {
-      return const Color(0x00ffffff);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    JapaneseNationalHoliday japaneseNationalHoliday =
-        JapaneseNationalHoliday(context);
-    List<Holiday> holidays = List.empty(growable: true);
     entriesOfTheDay.clear();
     for (int week = 0; week < 6; week++) {
       for (int weekday = 0; weekday < 7; weekday++) {
         date = startDate.add(Duration(days: week * 7 + weekday));
-        holidays.add(japaneseNationalHoliday.getHoliday(date));
-        entriesOfTheDay.add(getEntriesOfTheDay(date, maxLinesInDay));
+        entriesOfTheDay.add(getEntriesOfTheDay(date, maxLinesInDay, ucEntries));
       }
     }
-    int lineToWrite = 0;
     return Column(children: <Widget>[
       Stack(
         children: <Widget>[
@@ -444,54 +537,12 @@ class _UCMonthState extends State<UCMonth> {
         ],
       ),
       WeekLabel(),
-      for (int week = 0; week < 6; week++) ...{
-        Row(children: <Widget>[
-          for (int weekday = 0; weekday < 7; weekday++) ...{
-            Expanded(
-                child: Container(
-                    decoration: BoxDecoration(
-                      color: getSelectedColor(week, weekday),
-                      border: Border.all(color: Colors.grey),
-                    ),
-                    child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            selectedDate = startDate
-                                .add(Duration(days: week * 7 + weekday));
-                            selectedHoliday = japaneseNationalHoliday
-                                .getHoliday(selectedDate);
-                          });
-                        },
-                        child: Column(children: <Widget>[
-                          Row(children: <Widget>[
-                            UCDate(
-                                startDate
-                                    .add(Duration(days: week * 7 + weekday)),
-                                holidays[week * 7 + weekday],
-                                key: UniqueKey()),
-                            UCHoliday(holidays[week * 7 + weekday],
-                                key: UniqueKey())
-                          ]),
-                          for (lineToWrite = 0;
-                              lineToWrite < maxLinesInDay &&
-                                  lineToWrite <
-                                      entriesOfTheDay[week * 7 + weekday]
-                                          .length;
-                              lineToWrite++) ...{
-                            UCDayEntry(
-                                entriesOfTheDay[week * 7 + weekday]
-                                    [lineToWrite],
-                                key: UniqueKey())
-                          },
-                          for (int lineWhite = lineToWrite;
-                              lineWhite < maxLinesInDay;
-                              lineWhite++) ...{
-                            UCDayEntry(UCEntry(), key: UniqueKey())
-                          }
-                        ]))))
-          }
-        ])
-      },
+      UCCoreTable(
+          month: month,
+          startDate: startDate,
+          maxLinesInDay: maxLinesInDay,
+          ucEntries: ucEntries,
+          key: UniqueKey()),
       Container(
           color: const Color.fromARGB(0xFF, 0xC0, 0xC0, 0xC0),
           child: Row(children: <Widget>[
