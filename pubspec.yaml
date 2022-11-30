@@ -13,6 +13,7 @@ dependencies:
   plugin_platform_interface: ^2.0.2
   flutter_localizations:
     sdk: flutter
+  flutter_riverpod: ^2.1.1
 
 dev_dependencies:
   flutter_test:

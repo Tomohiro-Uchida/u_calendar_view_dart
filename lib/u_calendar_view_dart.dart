@@ -3,6 +3,7 @@ import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:u_calendar_view_dart/japanese_national_holiday.dart';
 import 'generated/l10n.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'u_calendar_view_dart_platform_interface.dart';
 
 const double defaultFontSize = 14.0;
@@ -258,10 +259,6 @@ DateTime endDateInMonth(DateTime month) {
   return startDate.add(const Duration(days: 7 * 6));
 }
 
-List<List<UCEntry>> entriesOfTheDay = List.empty(growable: true);
-DateTime selectedDate = DateTime.now();
-Holiday selectedHoliday = Holiday();
-
 List<UCEntry> getEntriesOfTheDay(
     DateTime date, int max, List<UCEntry> ucEntries) {
   List<UCEntry> retVal = List.empty(growable: true);
@@ -275,43 +272,169 @@ List<UCEntry> getEntriesOfTheDay(
   }
   return retVal;
 }
-
-class UCCoreTable extends StatefulWidget {
-  int maxLinesInDay;
-  List<UCEntry> ucEntries;
+/*
+class DateManager {
   DateTime month;
   DateTime startDate;
+  DateTime selectedDate;
+  Holiday selectedHoliday;
 
-  UCCoreTable(
-      {super.key,
-      required this.month,
+  DateManager(
+      {required this.month,
       required this.startDate,
-      required this.maxLinesInDay,
-      required this.ucEntries});
-
-  @override
-  _UCCoreTable createState() => _UCCoreTable();
+      required this.selectedDate,
+      required this.selectedHoliday});
 }
 
-class _UCCoreTable extends State<UCCoreTable> {
-  int maxLinesInDay = 1;
-  List<UCEntry> ucEntries = List.empty(growable: true);
-  DateTime month = DateTime.now();
-  DateTime date = DateTime.now();
-  late DateTime startDate;
-  int lineToWrite = 0;
+class DateManagerNotifier extends StateNotifier<DateManager> {
+  DateManagerNotifier()
+      : super(DateManager(
+            month: DateTime(
+                DateTime.now().year, DateTime.now().month, 1, 0, 0, 0, 0, 0),
+            startDate: startDateInMonth(DateTime.now()),
+            selectedDate: DateTime.now(),
+            selectedHoliday: Holiday()));
 
-  @override
-  initState() {
-    super.initState();
-    maxLinesInDay = widget.maxLinesInDay;
-    ucEntries = widget.ucEntries;
-    month = widget.month;
-    date = DateTime.now();
-    startDate = widget.startDate;
+  DateManager get() {
+    return state;
   }
 
-  Color getSelectedColor(int week, int weekday) {
+  void setMonth(DateTime month) {
+    state = DateManager(
+        month: month,
+        startDate: state.startDate,
+        selectedDate: state.selectedDate,
+        selectedHoliday: state.selectedHoliday);
+  }
+
+  void setStartDate(DateTime startDate) {
+    state = DateManager(
+        month: state.month,
+        startDate: startDate,
+        selectedDate: state.selectedDate,
+        selectedHoliday: state.selectedHoliday);
+  }
+
+  void setSelectedDate(DateTime selectedDate) {
+    state = DateManager(
+        month: state.month,
+        startDate: state.startDate,
+        selectedDate: selectedDate,
+        selectedHoliday: state.selectedHoliday);
+  }
+
+  void setSelectedHoliday(Holiday selectedHoliday) {
+    state = DateManager(
+        month: state.month,
+        startDate: state.startDate,
+        selectedDate: state.selectedDate,
+        selectedHoliday: selectedHoliday);
+  }
+}
+
+final dateManagerProvider =
+    StateNotifierProvider<DateManagerNotifier, DateManager>((ref) {
+  return DateManagerNotifier();
+});
+ */
+
+class MonthNotifier extends StateNotifier<DateTime> {
+  MonthNotifier()
+      : super(DateTime(
+            DateTime.now().year, DateTime.now().month, 1, 0, 0, 0, 0, 0));
+
+  DateTime get() {
+    return state;
+  }
+
+  void set(DateTime month) {
+    state = month;
+  }
+}
+
+final monthProvider = StateNotifierProvider<MonthNotifier, DateTime>((ref) {
+  return MonthNotifier();
+});
+
+class StartDateNotifier extends StateNotifier<DateTime> {
+  StartDateNotifier() : super(startDateInMonth(DateTime.now()));
+
+  DateTime get() {
+    return state;
+  }
+
+  void set(DateTime startDate) {
+    state = startDate;
+  }
+}
+
+final startDateProvider =
+    StateNotifierProvider<StartDateNotifier, DateTime>((ref) {
+  return StartDateNotifier();
+});
+
+class SelectedDateNotifier extends StateNotifier<DateTime> {
+  SelectedDateNotifier() : super(DateTime.now());
+
+  DateTime get() {
+    return state;
+  }
+
+  void set(DateTime selectedDate) {
+    state = selectedDate;
+  }
+}
+
+final selectedDateProvider =
+    StateNotifierProvider<SelectedDateNotifier, DateTime>((ref) {
+  return SelectedDateNotifier();
+});
+
+class SelectedHolidayNotifier extends StateNotifier<Holiday> {
+  SelectedHolidayNotifier() : super(Holiday());
+
+  Holiday get() {
+    return state;
+  }
+
+  void set(Holiday selectedHoliday) {
+    state = selectedHoliday;
+  }
+}
+
+final selectedHolidayProvider =
+    StateNotifierProvider<SelectedHolidayNotifier, Holiday>((ref) {
+  return SelectedHolidayNotifier();
+});
+
+class UCEntryManagerNotifier extends StateNotifier<List<UCEntry>> {
+  UCEntryManagerNotifier() : super([]);
+
+  List<UCEntry> get() {
+    return state;
+  }
+
+  void add(UCEntry ucEntry) {
+    state = [...state, ucEntry];
+  }
+}
+
+final ucEntryManagerProvider =
+    StateNotifierProvider<UCEntryManagerNotifier, List<UCEntry>>((ref) {
+  return UCEntryManagerNotifier();
+});
+
+class UCCoreTable extends ConsumerWidget {
+  int maxLinesInDay;
+  List<List<UCEntry>> entriesOfTheDay;
+  DateTime date = DateTime.now();
+  int lineToWrite = 0;
+
+  UCCoreTable(
+      {super.key, required this.maxLinesInDay, required this.entriesOfTheDay});
+
+  Color getSelectedColor(
+      DateTime startDate, DateTime selectedDate, int week, int weekday) {
     DateTime pointedDate = startDate.add(Duration(days: week * 7 + weekday));
     if (selectedDate.year == pointedDate.year &&
         selectedDate.month == pointedDate.month &&
@@ -323,7 +446,9 @@ class _UCCoreTable extends State<UCCoreTable> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    DateTime startDate = ref.watch(startDateProvider);
+    DateTime selectedDate = ref.watch(selectedDateProvider);
     JapaneseNationalHoliday japaneseNationalHoliday =
         JapaneseNationalHoliday(context);
     List<Holiday> holidays = List.empty(growable: true);
@@ -340,17 +465,16 @@ class _UCCoreTable extends State<UCCoreTable> {
             Expanded(
                 child: Container(
                     decoration: BoxDecoration(
-                      color: getSelectedColor(week, weekday),
+                      color: getSelectedColor(
+                          startDate, selectedDate, week, weekday),
                       border: Border.all(color: Colors.grey),
                     ),
                     child: GestureDetector(
                         onTap: () {
-                          setState(() {
-                            selectedDate = startDate
-                                .add(Duration(days: week * 7 + weekday));
-                            selectedHoliday = japaneseNationalHoliday
-                                .getHoliday(selectedDate);
-                          });
+                          ref.read(selectedDateProvider.notifier).set(startDate
+                              .add(Duration(days: week * 7 + weekday)));
+                          ref.read(selectedHolidayProvider.notifier).set(
+                              japaneseNationalHoliday.getHoliday(selectedDate));
                         },
                         child: Column(children: <Widget>[
                           Row(children: <Widget>[
@@ -386,10 +510,10 @@ class _UCCoreTable extends State<UCCoreTable> {
   }
 }
 
-class UCMonth extends StatefulWidget {
-  int maxLinesInDay = 1;
-  List<UCEntry> ucEntries = List.empty(growable: true);
-  DateTime month = DateTime(2022, 1, 1, 0, 0, 0, 0, 0);
+class UCMonth extends ConsumerWidget {
+  int maxLinesInDay;
+  List<UCEntry> ucEntries;
+  List<List<UCEntry>> entriesOfTheDay = List.empty(growable: true);
 
   final Future<UCEntry?> Function(BuildContext context) ucOnAddEntry;
   final Function(BuildContext context, UCEntry ucEntry) ucOnTapEntry;
@@ -398,49 +522,36 @@ class UCMonth extends StatefulWidget {
 
   UCMonth(
       {super.key,
-      required this.month,
       required this.maxLinesInDay,
       required this.ucEntries,
       required this.ucOnAddEntry,
       required this.ucOnTapEntry,
       required this.ucOnMonthChanged});
 
-  @override
-  _UCMonthState createState() => _UCMonthState();
-}
-
-class _UCMonthState extends State<UCMonth> {
-  int maxLinesInDay = 1;
-  List<UCEntry> ucEntries = List.empty(growable: true);
-  DateTime month = DateTime.now();
-  DateTime date = DateTime.now();
-  late DateTime startDate;
-
-  late final Future<UCEntry?> Function(BuildContext context) ucOnAddEntry;
-  late final Function(BuildContext context, UCEntry ucEntry) ucOnTapEntry;
-  late final Function(BuildContext context, int prevYear, int prevMonth,
-      int setYear, int setMonth) ucOnMonthChanged;
-
-  @override
-  initState() {
-    super.initState();
-    maxLinesInDay = widget.maxLinesInDay;
-    ucEntries = widget.ucEntries;
-    month = widget.month;
-    date = DateTime.now();
-    startDate = startDateInMonth(month);
-    ucOnAddEntry = widget.ucOnAddEntry;
-    ucOnTapEntry = widget.ucOnTapEntry;
-    ucOnMonthChanged = widget.ucOnMonthChanged;
+  List<UCEntry> getEntriesOfTheDay(WidgetRef ref, DateTime date, int max) {
+    List<UCEntry> retVal = List.empty(growable: true);
+    UCEntry element;
+    for (element in ucEntries) {
+      DateTime resetTime = DateTime(element.date.year, element.date.month,
+          element.date.day, 0, 0, 0, 0, 0);
+      if (resetTime == date) {
+        retVal.add(element);
+      }
+    }
+    return retVal;
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    DateTime thisMonth = ref.watch(monthProvider);
+    DateTime startDate = ref.watch(startDateProvider);
+    DateTime selectedDate = ref.watch(selectedDateProvider);
+    Holiday selectedHoliday = ref.watch(selectedHolidayProvider);
     entriesOfTheDay.clear();
     for (int week = 0; week < 6; week++) {
       for (int weekday = 0; weekday < 7; weekday++) {
-        date = startDate.add(Duration(days: week * 7 + weekday));
-        entriesOfTheDay.add(getEntriesOfTheDay(date, maxLinesInDay, ucEntries));
+        DateTime date = startDate.add(Duration(days: week * 7 + weekday));
+        entriesOfTheDay.add(getEntriesOfTheDay(ref, date, maxLinesInDay));
       }
     }
     return Column(children: <Widget>[
@@ -452,17 +563,18 @@ class _UCMonthState extends State<UCMonth> {
                 flex: 1,
                 child: IconButton(
                   onPressed: () {
-                    DateTime previousDate = month;
-                    setState(() {
-                      month = DateTime(
-                          month.year, month.month - 1, 1, 0, 0, 0, 0, 0);
-                      startDate = startDateInMonth(month);
-                    });
-                    ucOnMonthChanged(context, previousDate.year,
-                        previousDate.month, month.year, month.month);
+                    DateTime previousMonth = thisMonth;
+                    DateTime newMonth = DateTime(previousMonth.year,
+                        previousMonth.month - 1, 1, 0, 0, 0, 0, 0);
+                    ucOnMonthChanged(context, previousMonth.year,
+                        previousMonth.month, newMonth.year, newMonth.month);
+                    ref.read(monthProvider.notifier).set(newMonth);
+                    ref
+                        .read(startDateProvider.notifier)
+                        .set(startDateInMonth(newMonth));
                   },
                   // 表示アイコン
-                  icon: const Icon(Icons.arrow_back_ios_new_rounded),
+                  icon: const Icon(Icons.arrow_back_ios_rounded),
                   // アイコン色
                   color: Colors.blue,
                 )),
@@ -473,26 +585,30 @@ class _UCMonthState extends State<UCMonth> {
                       Future<DateTime?> futureNewMonth = showDatePicker(
                         context: context,
                         //初期値を設定
-                        initialDate: month,
+                        initialDate: thisMonth,
                         //選択できる日付の上限
                         firstDate: DateTime(DateTime.now().year - 10),
                         lastDate: DateTime(DateTime.now().year + 10),
                       );
                       futureNewMonth.then((value) {
-                        DateTime previousDate = month;
+                        DateTime previousMonth = thisMonth;
                         if (value != null) {
                           DateTime newMonth = DateTime(
                               value.year, value.month, 1, 0, 0, 0, 0, 0);
-                          setState(() {
-                            month = newMonth;
-                            startDate = startDateInMonth(month);
-                          });
-                          ucOnMonthChanged(context, previousDate.year,
-                              previousDate.month, month.year, month.month);
+                          ucOnMonthChanged(
+                              context,
+                              previousMonth.year,
+                              previousMonth.month,
+                              newMonth.year,
+                              newMonth.month);
+                          ref.read(monthProvider.notifier).set(newMonth);
+                          ref
+                              .read(startDateProvider.notifier)
+                              .set(startDateInMonth(newMonth));
                         }
                       });
                     },
-                    child: Text("${month.year}-${month.month}",
+                    child: Text("${thisMonth.year}-${thisMonth.month}",
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                             color: Colors.blue, fontSize: 25.0)))),
@@ -500,21 +616,20 @@ class _UCMonthState extends State<UCMonth> {
                 flex: 1,
                 child: IconButton(
                   onPressed: () {
-                    DateTime previousDate = month;
-                    setState(() {
-                      month = DateTime(
-                          month.year, month.month + 1, 1, 0, 0, 0, 0, 0);
-                      startDate = startDateInMonth(month);
-                    });
-                    ucOnMonthChanged(context, previousDate.year,
-                        previousDate.month, month.year, month.month);
+                    DateTime previousMonth = thisMonth;
+                    DateTime newMonth = DateTime(previousMonth.year,
+                        previousMonth.month + 1, 1, 0, 0, 0, 0, 0);
+                    ucOnMonthChanged(context, previousMonth.year,
+                        previousMonth.month, newMonth.year, newMonth.month);
+                    ref.read(monthProvider.notifier).set(newMonth);
+                    ref
+                        .read(startDateProvider.notifier)
+                        .set(startDateInMonth(newMonth));
                   },
                   // 表示アイコン
                   icon: const Icon(Icons.arrow_forward_ios_rounded),
                   // アイコン色
                   color: Colors.blue,
-                  // サイズ
-                  // iconSize: 64,
                 )),
             const Spacer()
           ]),
@@ -522,14 +637,15 @@ class _UCMonthState extends State<UCMonth> {
               alignment: Alignment.centerRight,
               child: IconButton(
                 onPressed: () {
-                  DateTime previousDate = month;
-                  setState(() {
-                    month = DateTime(DateTime.now().year, DateTime.now().month,
-                        1, 0, 0, 0, 0, 0);
-                    startDate = startDateInMonth(month);
-                  });
-                  ucOnMonthChanged(context, previousDate.year,
-                      previousDate.month, month.year, month.month);
+                  DateTime previousMonth = thisMonth;
+                  DateTime newMonth = DateTime(DateTime.now().year,
+                      DateTime.now().month, 1, 0, 0, 0, 0, 0);
+                  ucOnMonthChanged(context, previousMonth.year,
+                      previousMonth.month, newMonth.year, newMonth.month);
+                  ref.read(monthProvider.notifier).set(newMonth);
+                  ref
+                      .read(startDateProvider.notifier)
+                      .set(startDateInMonth(newMonth));
                 },
                 icon: const Icon(Icons.calendar_today_rounded),
                 color: Colors.blue,
@@ -538,10 +654,8 @@ class _UCMonthState extends State<UCMonth> {
       ),
       WeekLabel(),
       UCCoreTable(
-          month: month,
-          startDate: startDate,
           maxLinesInDay: maxLinesInDay,
-          ucEntries: ucEntries,
+          entriesOfTheDay: entriesOfTheDay,
           key: UniqueKey()),
       Container(
           color: const Color.fromARGB(0xFF, 0xC0, 0xC0, 0xC0),
@@ -559,11 +673,11 @@ class _UCMonthState extends State<UCMonth> {
                         onPressed: () {
                           Future<UCEntry?> newEntry = ucOnAddEntry(context);
                           newEntry.then((value) {
-                            setState(() {
-                              if (value != null) {
-                                ucEntries.add(value);
-                              }
-                            });
+                            if (value != null) {
+                              ref
+                                  .read(ucEntryManagerProvider.notifier)
+                                  .add(value);
+                            }
                           });
                         },
                         icon: const Icon(Icons.add),
@@ -573,130 +687,75 @@ class _UCMonthState extends State<UCMonth> {
                     alignment: Alignment.centerRight,
                     child: Text(selectedHoliday.holidayName)))
           ])),
-      Expanded(child: makeListView(month, startDate, selectedDate))
+      Expanded(child: makeListView(thisMonth, startDate, selectedDate))
     ]);
   }
 
   Widget makeListView(
       DateTime thisMonth, DateTime startDate, DateTime selectedDate) {
-    if (thisMonth.month == selectedDate.month) {
-      return ListView.builder(
-          itemExtent: 30.0,
-          itemCount:
-              entriesOfTheDay[selectedDate.difference(startDate).inDays].length,
-          itemBuilder: (context, index) {
-            return GestureDetector(
-                onTap: () {
-                  ucOnTapEntry(
-                      context,
-                      entriesOfTheDay[selectedDate.difference(startDate).inDays]
-                          [index]);
-                },
-                child: Stack(children: <Widget>[
+    int diffDays = selectedDate.difference(startDate).inDays;
+    return ListView.builder(
+        itemExtent: 30.0,
+        itemCount: entriesOfTheDay[diffDays].length,
+        itemBuilder: (context, index) {
+          return GestureDetector(
+              onTap: () {
+                ucOnTapEntry(context, entriesOfTheDay[diffDays][index]);
+              },
+              child: Stack(children: <Widget>[
+                Container(
+                    alignment: Alignment.centerLeft,
+                    child: Text(entriesOfTheDay[diffDays][index].leftLabel,
+                        style: TextStyle(
+                            color:
+                                entriesOfTheDay[diffDays][index].leftLabelColor,
+                            fontSize: entriesOfTheDay[diffDays][index]
+                                .listFontSize))),
+                Container(
+                    alignment: Alignment.center,
+                    child: Text(entriesOfTheDay[diffDays][index].middleLabel,
+                        style: TextStyle(
+                            color: entriesOfTheDay[diffDays][index]
+                                .middleLabelColor,
+                            fontSize: entriesOfTheDay[diffDays][index]
+                                .listFontSize))),
+                Row(children: <Widget>[
+                  const Spacer(),
                   Container(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                          entriesOfTheDay[selectedDate
-                                  .difference(startDate)
-                                  .inDays][index]
-                              .leftLabel,
+                      alignment: Alignment.centerRight,
+                      child: Text(entriesOfTheDay[diffDays][index].unitStart,
                           style: TextStyle(
-                              color: entriesOfTheDay[selectedDate
-                                      .difference(startDate)
-                                      .inDays][index]
-                                  .leftLabelColor,
-                              fontSize: entriesOfTheDay[selectedDate
-                                      .difference(startDate)
-                                      .inDays][index]
+                              color: entriesOfTheDay[diffDays][index]
+                                  .unitStartColor,
+                              fontSize: entriesOfTheDay[diffDays][index]
                                   .listFontSize))),
                   Container(
-                      alignment: Alignment.center,
-                      child: Text(
-                          entriesOfTheDay[selectedDate
-                                  .difference(startDate)
-                                  .inDays][index]
-                              .middleLabel,
+                      alignment: Alignment.centerRight,
+                      child: Text(entriesOfTheDay[diffDays][index].value,
                           style: TextStyle(
-                              color: entriesOfTheDay[selectedDate
-                                      .difference(startDate)
-                                      .inDays][index]
-                                  .middleLabelColor,
-                              fontSize: entriesOfTheDay[selectedDate
-                                      .difference(startDate)
-                                      .inDays][index]
+                              color:
+                                  entriesOfTheDay[diffDays][index].valueColor,
+                              fontSize: entriesOfTheDay[diffDays][index]
                                   .listFontSize))),
-                  Row(children: <Widget>[
-                    const Spacer(),
-                    Container(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                            entriesOfTheDay[selectedDate
-                                    .difference(startDate)
-                                    .inDays][index]
-                                .unitStart,
-                            style: TextStyle(
-                                color: entriesOfTheDay[selectedDate
-                                        .difference(startDate)
-                                        .inDays][index]
-                                    .unitStartColor,
-                                fontSize: entriesOfTheDay[selectedDate
-                                        .difference(startDate)
-                                        .inDays][index]
-                                    .listFontSize))),
-                    Container(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                            entriesOfTheDay[selectedDate
-                                    .difference(startDate)
-                                    .inDays][index]
-                                .value,
-                            style: TextStyle(
-                                color: entriesOfTheDay[selectedDate
-                                        .difference(startDate)
-                                        .inDays][index]
-                                    .valueColor,
-                                fontSize: entriesOfTheDay[selectedDate
-                                        .difference(startDate)
-                                        .inDays][index]
-                                    .listFontSize))),
-                    Container(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                            entriesOfTheDay[selectedDate
-                                    .difference(startDate)
-                                    .inDays][index]
-                                .unitEnd,
-                            style: TextStyle(
-                                color: entriesOfTheDay[selectedDate
-                                        .difference(startDate)
-                                        .inDays][index]
-                                    .unitEndColor,
-                                fontSize: entriesOfTheDay[selectedDate
-                                        .difference(startDate)
-                                        .inDays][index]
-                                    .listFontSize))),
-                    Container(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                            entriesOfTheDay[selectedDate
-                                    .difference(startDate)
-                                    .inDays][index]
-                                .rightLabel,
-                            style: TextStyle(
-                                color: entriesOfTheDay[selectedDate
-                                        .difference(startDate)
-                                        .inDays][index]
-                                    .rightLabelColor,
-                                fontSize: entriesOfTheDay[selectedDate
-                                        .difference(startDate)
-                                        .inDays][index]
-                                    .listFontSize)))
-                  ])
-                ]));
-          });
-    } else {
-      return const Text("");
-    }
+                  Container(
+                      alignment: Alignment.centerRight,
+                      child: Text(entriesOfTheDay[diffDays][index].unitEnd,
+                          style: TextStyle(
+                              color:
+                                  entriesOfTheDay[diffDays][index].unitEndColor,
+                              fontSize: entriesOfTheDay[diffDays][index]
+                                  .listFontSize))),
+                  Container(
+                      alignment: Alignment.centerRight,
+                      child: Text(entriesOfTheDay[diffDays][index].rightLabel,
+                          style: TextStyle(
+                              color: entriesOfTheDay[diffDays][index]
+                                  .rightLabelColor,
+                              fontSize: entriesOfTheDay[diffDays][index]
+                                  .listFontSize)))
+                ])
+              ]));
+        });
   }
 }
 
@@ -714,12 +773,12 @@ class UCalendarViewDart {
       Function(BuildContext context, int prevYear, int prevMonth, int setYear,
               int setMonth)
           ucOnMonthChanged) {
-    return UCMonth(
-        month: month,
-        maxLinesInDay: maxLinesInDay,
-        ucEntries: ucEntries,
-        ucOnAddEntry: ucOnAddEntry,
-        ucOnTapEntry: ucOnTapEntry,
-        ucOnMonthChanged: ucOnMonthChanged);
+    return ProviderScope(
+        child: UCMonth(
+            maxLinesInDay: maxLinesInDay,
+            ucEntries: ucEntries,
+            ucOnAddEntry: ucOnAddEntry,
+            ucOnTapEntry: ucOnTapEntry,
+            ucOnMonthChanged: ucOnMonthChanged));
   }
 }
