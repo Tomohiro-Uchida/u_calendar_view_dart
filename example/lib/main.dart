@@ -62,7 +62,7 @@ class _ValueAddPageState extends State<ValueAddPage> {
             child: TextField(
                 decoration: const InputDecoration(
                   //paddingの設定
-                  contentPadding: EdgeInsets.all(10),//任意の値を入れてpaddingを調節
+                  contentPadding: EdgeInsets.all(10), //任意の値を入れてpaddingを調節
                   //フォーカスしてないときの枠の設定
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(
@@ -76,17 +76,14 @@ class _ValueAddPageState extends State<ValueAddPage> {
                     ),
                   ),
                 ),
-              onSubmitted: _handleText
-            )
-          )
-        );
+                onSubmitted: _handleText)));
   }
 }
 
-Future<UCEntry?> ucOnAddEntry(BuildContext context, DateTime date) async {
-  return await Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => const ValueAddPage(date)));
-}
+Future<UCEntry?> ucOnAddEntry(BuildContext context, DateTime? date) async => date != null
+      ? Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => ValueAddPage(date)))
+      : null;
 
 void ucOnTapEntry(BuildContext context, UCEntry ucEntry) {
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -96,10 +93,8 @@ void ucOnTapEntry(BuildContext context, UCEntry ucEntry) {
 
 void ucOnMonthChanged(BuildContext context, int prevYear, int prevMonth,
     int setYear, int setMonth) {
-  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-    content: Text("--> $setYear-$setMonth")
-  ));
-
+  ScaffoldMessenger.of(context)
+      .showSnackBar(SnackBar(content: Text("--> $setYear-$setMonth")));
 }
 
 class MyApp extends StatefulWidget {

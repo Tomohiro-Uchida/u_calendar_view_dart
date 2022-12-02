@@ -456,11 +456,11 @@ class JapaneseNationalHoliday {
     return holiday;
   }
 
-  Holiday getHoliday(DateTime date) {
+  Holiday getHoliday(DateTime? date) {
     Holiday holiday;
 
     Locale locale = Localizations.localeOf(context);;
-    if (locale.languageCode != "ja") {
+    if (locale.languageCode != "ja" || date == null) {
       holiday = Holiday();
       holiday.isHoliday = false;
       holiday.holidayName = " ";

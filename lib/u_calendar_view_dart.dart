@@ -360,9 +360,10 @@ class UCCoreTable extends ConsumerWidget {
       {super.key, required this.maxLinesInDay, required this.entriesOfTheDay});
 
   Color getSelectedColor(
-      DateTime startDate, DateTime selectedDate, int week, int weekday) {
+      DateTime startDate, DateTime? selectedDate, int week, int weekday) {
     DateTime pointedDate = startDate.add(Duration(days: week * 7 + weekday));
-    if (selectedDate.year == pointedDate.year &&
+    if (selectedDate != null &&
+        selectedDate.year == pointedDate.year &&
         selectedDate.month == pointedDate.month &&
         selectedDate.day == pointedDate.day) {
       return const Color(0xffb2ebf2);
@@ -374,7 +375,7 @@ class UCCoreTable extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     DateTime startDate = ref.watch(startDateProvider);
-    DateTime selectedDate = ref.watch(selectedDateProvider);
+    DateTime? selectedDate = ref.watch(selectedDateProvider);
     JapaneseNationalHoliday japaneseNationalHoliday =
         JapaneseNationalHoliday(context);
     List<Holiday> holidays = List.empty(growable: true);
@@ -441,7 +442,8 @@ class UCMonth extends ConsumerWidget {
   List<List<UCEntry>> entriesOfTheDay = List.empty(growable: true);
   List<UCEntry> ucEntries;
 
-  final Future<UCEntry?> Function(BuildContext context, DateTime date) ucOnAddEntry;
+  final Future<UCEntry?> Function(BuildContext context, DateTime? date)
+      ucOnAddEntry;
   final Function(BuildContext context, UCEntry ucEntry) ucOnTapEntry;
   final Function(BuildContext context, int prevYear, int prevMonth, int setYear,
       int setMonth) ucOnMonthChanged;
@@ -472,7 +474,7 @@ class UCMonth extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     DateTime thisMonth = ref.watch(monthProvider);
     DateTime startDate = ref.watch(startDateProvider);
-    DateTime selectedDate = ref.watch(selectedDateProvider);
+    DateTime? selectedDate = ref.watch(selectedDateProvider);
     Holiday selectedHoliday = ref.watch(selectedHolidayProvider);
     List<UCEntry> ucEntries = ref.watch(ucEntryManagerProvider);
     WidgetsBinding.instance.addPostFrameCallback(
@@ -576,6 +578,7 @@ class UCMonth extends ConsumerWidget {
                   ref
                       .read(startDateProvider.notifier)
                       .set(startDateInMonth(newMonth));
+                  ref.read(selectedDateProvider.notifier).set(DateTime.now());
                 },
                 icon: const Icon(Icons.calendar_today_rounded),
                 color: Colors.blue,
@@ -593,20 +596,24 @@ class UCMonth extends ConsumerWidget {
             Expanded(
                 child: Container(
                     alignment: Alignment.centerLeft,
-                    child: Text(
-                        "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}",
-                        style: const TextStyle(fontSize: 18.0)))),
+                    child: selectedDate != null
+                        ? Text(
+                            "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}",
+                            style: const TextStyle(fontSize: 18.0))
+                        : const Text(""))),
             Expanded(
                 child: Container(
                     alignment: Alignment.center,
                     child: IconButton(
                         onPressed: () {
-                          Future<UCEntry?> newEntry = ucOnAddEntry(context, selectedDate);
+                          Future<UCEntry?> newEntry =
+                              ucOnAddEntry(context, selectedDate);
                           newEntry.then((value) {
                             if (value != null) {
                               ref
                                   .read(ucEntryManagerProvider.notifier)
                                   .add(value);
+                              ucEntries = ref.refresh(ucEntryManagerProvider);
                             }
                           });
                         },
@@ -622,70 +629,83 @@ class UCMonth extends ConsumerWidget {
   }
 
   Widget makeListView(
-      DateTime thisMonth, DateTime startDate, DateTime selectedDate) {
-    int diffDays = selectedDate.difference(startDate).inDays;
-    return ListView.builder(
-        itemExtent: 30.0,
-        itemCount: entriesOfTheDay[diffDays].length,
-        itemBuilder: (context, index) {
-          return GestureDetector(
-              onTap: () {
-                ucOnTapEntry(context, entriesOfTheDay[diffDays][index]);
-              },
-              child: Stack(children: <Widget>[
-                Container(
-                    alignment: Alignment.centerLeft,
-                    child: Text(entriesOfTheDay[diffDays][index].leftLabel,
-                        style: TextStyle(
-                            color:
-                                entriesOfTheDay[diffDays][index].leftLabelColor,
-                            fontSize: entriesOfTheDay[diffDays][index]
-                                .listFontSize))),
-                Container(
-                    alignment: Alignment.center,
-                    child: Text(entriesOfTheDay[diffDays][index].middleLabel,
-                        style: TextStyle(
-                            color: entriesOfTheDay[diffDays][index]
-                                .middleLabelColor,
-                            fontSize: entriesOfTheDay[diffDays][index]
-                                .listFontSize))),
-                Row(children: <Widget>[
-                  const Spacer(),
-                  Container(
-                      alignment: Alignment.centerRight,
-                      child: Text(entriesOfTheDay[diffDays][index].unitStart,
-                          style: TextStyle(
-                              color: entriesOfTheDay[diffDays][index]
-                                  .unitStartColor,
-                              fontSize: entriesOfTheDay[diffDays][index]
-                                  .listFontSize))),
-                  Container(
-                      alignment: Alignment.centerRight,
-                      child: Text(entriesOfTheDay[diffDays][index].value,
-                          style: TextStyle(
-                              color:
-                                  entriesOfTheDay[diffDays][index].valueColor,
-                              fontSize: entriesOfTheDay[diffDays][index]
-                                  .listFontSize))),
-                  Container(
-                      alignment: Alignment.centerRight,
-                      child: Text(entriesOfTheDay[diffDays][index].unitEnd,
-                          style: TextStyle(
-                              color:
-                                  entriesOfTheDay[diffDays][index].unitEndColor,
-                              fontSize: entriesOfTheDay[diffDays][index]
-                                  .listFontSize))),
-                  Container(
-                      alignment: Alignment.centerRight,
-                      child: Text(entriesOfTheDay[diffDays][index].rightLabel,
-                          style: TextStyle(
-                              color: entriesOfTheDay[diffDays][index]
-                                  .rightLabelColor,
-                              fontSize: entriesOfTheDay[diffDays][index]
-                                  .listFontSize)))
-                ])
-              ]));
-        });
+      DateTime thisMonth, DateTime startDate, DateTime? selectedDate) {
+    if (selectedDate != null) {
+      int diffDays = selectedDate.difference(startDate).inDays;
+      int diffDaysEnd =
+          endDateInMonth(thisMonth).difference(selectedDate).inDays;
+      if (diffDays >= 0 && diffDaysEnd >= 0) {
+        return ListView.builder(
+            itemExtent: 30.0,
+            itemCount: entriesOfTheDay[diffDays].length,
+            itemBuilder: (context, index) {
+              return GestureDetector(
+                  onTap: () {
+                    ucOnTapEntry(context, entriesOfTheDay[diffDays][index]);
+                  },
+                  child: Stack(children: <Widget>[
+                    Container(
+                        alignment: Alignment.centerLeft,
+                        child: Text(entriesOfTheDay[diffDays][index].leftLabel,
+                            style: TextStyle(
+                                color: entriesOfTheDay[diffDays][index]
+                                    .leftLabelColor,
+                                fontSize: entriesOfTheDay[diffDays][index]
+                                    .listFontSize))),
+                    Container(
+                        alignment: Alignment.center,
+                        child: Text(
+                            entriesOfTheDay[diffDays][index].middleLabel,
+                            style: TextStyle(
+                                color: entriesOfTheDay[diffDays][index]
+                                    .middleLabelColor,
+                                fontSize: entriesOfTheDay[diffDays][index]
+                                    .listFontSize))),
+                    Row(children: <Widget>[
+                      const Spacer(),
+                      Container(
+                          alignment: Alignment.centerRight,
+                          child: Text(
+                              entriesOfTheDay[diffDays][index].unitStart,
+                              style: TextStyle(
+                                  color: entriesOfTheDay[diffDays][index]
+                                      .unitStartColor,
+                                  fontSize: entriesOfTheDay[diffDays][index]
+                                      .listFontSize))),
+                      Container(
+                          alignment: Alignment.centerRight,
+                          child: Text(entriesOfTheDay[diffDays][index].value,
+                              style: TextStyle(
+                                  color: entriesOfTheDay[diffDays][index]
+                                      .valueColor,
+                                  fontSize: entriesOfTheDay[diffDays][index]
+                                      .listFontSize))),
+                      Container(
+                          alignment: Alignment.centerRight,
+                          child: Text(entriesOfTheDay[diffDays][index].unitEnd,
+                              style: TextStyle(
+                                  color: entriesOfTheDay[diffDays][index]
+                                      .unitEndColor,
+                                  fontSize: entriesOfTheDay[diffDays][index]
+                                      .listFontSize))),
+                      Container(
+                          alignment: Alignment.centerRight,
+                          child: Text(
+                              entriesOfTheDay[diffDays][index].rightLabel,
+                              style: TextStyle(
+                                  color: entriesOfTheDay[diffDays][index]
+                                      .rightLabelColor,
+                                  fontSize: entriesOfTheDay[diffDays][index]
+                                      .listFontSize)))
+                    ])
+                  ]));
+            });
+      } else {
+        return const Text("");
+      }
+    } else {
+      return const Text("");
+    }
   }
 }
 
@@ -698,7 +718,8 @@ class UCalendarViewDart {
       DateTime month,
       int maxLinesInDay,
       List<UCEntry> ucEntries,
-      Future<UCEntry?> Function(BuildContext context, DateTime date) ucOnAddEntry,
+      Future<UCEntry?> Function(BuildContext context, DateTime? date)
+          ucOnAddEntry,
       Function(BuildContext context, UCEntry ucEntry) ucOnTapEntry,
       Function(BuildContext context, int prevYear, int prevMonth, int setYear,
               int setMonth)
