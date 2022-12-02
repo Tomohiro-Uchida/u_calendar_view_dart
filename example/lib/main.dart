@@ -117,7 +117,7 @@ class _MyAppState extends State<MyApp> {
 
   void initEntries() {
     for (int i = 0; i < 7 * 6; i++) {
-      for (int j = 0; j < 1; j++) {
+      for (int j = 0; j < 2; j++) {
         UCEntry entry = UCEntry();
         entry.applicationTag = const Uuid().v1();
         entry.date = DateTime.now().add(Duration(days: i));
