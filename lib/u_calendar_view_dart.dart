@@ -259,85 +259,6 @@ DateTime endDateInMonth(DateTime month) {
   return startDate.add(const Duration(days: 7 * 6));
 }
 
-List<UCEntry> getEntriesOfTheDay(
-    DateTime date, int max, List<UCEntry> ucEntries) {
-  List<UCEntry> retVal = List.empty(growable: true);
-  UCEntry element;
-  for (element in ucEntries) {
-    DateTime resetTime = DateTime(
-        element.date.year, element.date.month, element.date.day, 0, 0, 0, 0, 0);
-    if (resetTime == date) {
-      retVal.add(element);
-    }
-  }
-  return retVal;
-}
-/*
-class DateManager {
-  DateTime month;
-  DateTime startDate;
-  DateTime selectedDate;
-  Holiday selectedHoliday;
-
-  DateManager(
-      {required this.month,
-      required this.startDate,
-      required this.selectedDate,
-      required this.selectedHoliday});
-}
-
-class DateManagerNotifier extends StateNotifier<DateManager> {
-  DateManagerNotifier()
-      : super(DateManager(
-            month: DateTime(
-                DateTime.now().year, DateTime.now().month, 1, 0, 0, 0, 0, 0),
-            startDate: startDateInMonth(DateTime.now()),
-            selectedDate: DateTime.now(),
-            selectedHoliday: Holiday()));
-
-  DateManager get() {
-    return state;
-  }
-
-  void setMonth(DateTime month) {
-    state = DateManager(
-        month: month,
-        startDate: state.startDate,
-        selectedDate: state.selectedDate,
-        selectedHoliday: state.selectedHoliday);
-  }
-
-  void setStartDate(DateTime startDate) {
-    state = DateManager(
-        month: state.month,
-        startDate: startDate,
-        selectedDate: state.selectedDate,
-        selectedHoliday: state.selectedHoliday);
-  }
-
-  void setSelectedDate(DateTime selectedDate) {
-    state = DateManager(
-        month: state.month,
-        startDate: state.startDate,
-        selectedDate: selectedDate,
-        selectedHoliday: state.selectedHoliday);
-  }
-
-  void setSelectedHoliday(Holiday selectedHoliday) {
-    state = DateManager(
-        month: state.month,
-        startDate: state.startDate,
-        selectedDate: state.selectedDate,
-        selectedHoliday: selectedHoliday);
-  }
-}
-
-final dateManagerProvider =
-    StateNotifierProvider<DateManagerNotifier, DateManager>((ref) {
-  return DateManagerNotifier();
-});
- */
-
 class MonthNotifier extends StateNotifier<DateTime> {
   MonthNotifier()
       : super(DateTime(
@@ -414,8 +335,13 @@ class UCEntryManagerNotifier extends StateNotifier<List<UCEntry>> {
     return state;
   }
 
+  void set(List<UCEntry> ucEntries) {
+    state = ucEntries;
+  }
+
   void add(UCEntry ucEntry) {
-    state = [...state, ucEntry];
+    // state = [...state, ucEntry];
+    state.add(ucEntry);
   }
 }
 
@@ -512,10 +438,10 @@ class UCCoreTable extends ConsumerWidget {
 
 class UCMonth extends ConsumerWidget {
   int maxLinesInDay;
-  List<UCEntry> ucEntries;
   List<List<UCEntry>> entriesOfTheDay = List.empty(growable: true);
+  List<UCEntry> ucEntries;
 
-  final Future<UCEntry?> Function(BuildContext context) ucOnAddEntry;
+  final Future<UCEntry?> Function(BuildContext context, DateTime date) ucOnAddEntry;
   final Function(BuildContext context, UCEntry ucEntry) ucOnTapEntry;
   final Function(BuildContext context, int prevYear, int prevMonth, int setYear,
       int setMonth) ucOnMonthChanged;
@@ -528,7 +454,8 @@ class UCMonth extends ConsumerWidget {
       required this.ucOnTapEntry,
       required this.ucOnMonthChanged});
 
-  List<UCEntry> getEntriesOfTheDay(WidgetRef ref, DateTime date, int max) {
+  List<UCEntry> getEntriesOfTheDay(
+      DateTime date, int max, List<UCEntry> ucEntries) {
     List<UCEntry> retVal = List.empty(growable: true);
     UCEntry element;
     for (element in ucEntries) {
@@ -547,11 +474,14 @@ class UCMonth extends ConsumerWidget {
     DateTime startDate = ref.watch(startDateProvider);
     DateTime selectedDate = ref.watch(selectedDateProvider);
     Holiday selectedHoliday = ref.watch(selectedHolidayProvider);
+    List<UCEntry> ucEntries = ref.watch(ucEntryManagerProvider);
+    WidgetsBinding.instance.addPostFrameCallback(
+        (_) => ref.read(ucEntryManagerProvider.notifier).set(this.ucEntries));
     entriesOfTheDay.clear();
     for (int week = 0; week < 6; week++) {
       for (int weekday = 0; weekday < 7; weekday++) {
         DateTime date = startDate.add(Duration(days: week * 7 + weekday));
-        entriesOfTheDay.add(getEntriesOfTheDay(ref, date, maxLinesInDay));
+        entriesOfTheDay.add(getEntriesOfTheDay(date, maxLinesInDay, ucEntries));
       }
     }
     return Column(children: <Widget>[
@@ -671,7 +601,7 @@ class UCMonth extends ConsumerWidget {
                     alignment: Alignment.center,
                     child: IconButton(
                         onPressed: () {
-                          Future<UCEntry?> newEntry = ucOnAddEntry(context);
+                          Future<UCEntry?> newEntry = ucOnAddEntry(context, selectedDate);
                           newEntry.then((value) {
                             if (value != null) {
                               ref
@@ -768,7 +698,7 @@ class UCalendarViewDart {
       DateTime month,
       int maxLinesInDay,
       List<UCEntry> ucEntries,
-      Future<UCEntry?> Function(BuildContext context) ucOnAddEntry,
+      Future<UCEntry?> Function(BuildContext context, DateTime date) ucOnAddEntry,
       Function(BuildContext context, UCEntry ucEntry) ucOnTapEntry,
       Function(BuildContext context, int prevYear, int prevMonth, int setYear,
               int setMonth)

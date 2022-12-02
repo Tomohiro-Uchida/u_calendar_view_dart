@@ -11,7 +11,8 @@ void main() {
 }
 
 class ValueAddPage extends StatefulWidget {
-  const ValueAddPage({super.key});
+  DateTime date;
+  ValueAddPage(this.date, {super.key});
 
   @override
   _ValueAddPageState createState() => _ValueAddPageState();
@@ -19,6 +20,13 @@ class ValueAddPage extends StatefulWidget {
 
 class _ValueAddPageState extends State<ValueAddPage> {
   String inputText = "";
+  DateTime date = DateTime.now();
+
+  @override
+  void initState() {
+    super.initState();
+    date = widget.date;
+  }
 
   void _handleText(String input) {
     setState(() {
@@ -26,7 +34,7 @@ class _ValueAddPageState extends State<ValueAddPage> {
     });
     UCEntry ucEntry = UCEntry();
     ucEntry.applicationTag = const Uuid().v1();
-    ucEntry.date = DateTime.now();
+    ucEntry.date = date;
     ucEntry.leftLabel = "Left";
     ucEntry.leftLabelColor = Colors.amber;
     ucEntry.middleLabel = "Middle";
@@ -75,9 +83,9 @@ class _ValueAddPageState extends State<ValueAddPage> {
   }
 }
 
-Future<UCEntry?> ucOnAddEntry(BuildContext context) async {
+Future<UCEntry?> ucOnAddEntry(BuildContext context, DateTime date) async {
   return await Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => const ValueAddPage()));
+      MaterialPageRoute(builder: (context) => const ValueAddPage(date)));
 }
 
 void ucOnTapEntry(BuildContext context, UCEntry ucEntry) {
@@ -87,7 +95,12 @@ void ucOnTapEntry(BuildContext context, UCEntry ucEntry) {
 }
 
 void ucOnMonthChanged(BuildContext context, int prevYear, int prevMonth,
-    int setYear, int setMonth) {}
+    int setYear, int setMonth) {
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    content: Text("--> $setYear-$setMonth")
+  ));
+
+}
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
