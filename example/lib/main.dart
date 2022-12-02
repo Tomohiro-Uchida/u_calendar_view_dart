@@ -80,10 +80,11 @@ class _ValueAddPageState extends State<ValueAddPage> {
   }
 }
 
-Future<UCEntry?> ucOnAddEntry(BuildContext context, DateTime? date) async => date != null
-      ? Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => ValueAddPage(date)))
-      : null;
+Future<UCEntry?> ucOnAddEntry(BuildContext context, DateTime? date) async =>
+    date != null
+        ? Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => ValueAddPage(date)))
+        : null;
 
 void ucOnTapEntry(BuildContext context, UCEntry ucEntry) {
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -93,8 +94,10 @@ void ucOnTapEntry(BuildContext context, UCEntry ucEntry) {
 
 void ucOnMonthChanged(BuildContext context, int prevYear, int prevMonth,
     int setYear, int setMonth) {
-  ScaffoldMessenger.of(context)
-      .showSnackBar(SnackBar(content: Text("--> $setYear-$setMonth")));
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    content: Text("--> $setYear-$setMonth"),
+    duration: const Duration(seconds: 1),
+  ));
 }
 
 class MyApp extends StatefulWidget {
