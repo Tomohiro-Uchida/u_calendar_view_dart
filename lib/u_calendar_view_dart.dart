@@ -338,7 +338,7 @@ final selectedHolidayProvider =
   return SelectedHolidayNotifier();
 });
 
-/*
+/**/
 class UCEntryNotifier extends StateNotifier<List<UCEntry>> {
   UCEntryNotifier() : super([]);
 
@@ -359,7 +359,9 @@ final ucEntryProvider =
     StateNotifierProvider<UCEntryNotifier, List<UCEntry>>((ref) {
   return UCEntryNotifier();
 });
+/**/
 
+/*
 class UCCoreTableNotifier extends StateNotifier<List<UCCoreTable>> {
   UCCoreTableNotifier() : super([]);
 
@@ -389,8 +391,8 @@ final ucCoreTableProvider =
 class UCCoreTable extends ConsumerWidget {
   int page;
   DateTime thisMonth;
-  int maxLinesInDay;
   List<UCEntry> ucEntries;
+  int maxLinesInDay;
   List<List<UCEntry>> entriesOfTheDay = List.empty(growable: true);
   DateTime date = DateTime.now();
   int lineToWrite = 0;
@@ -419,6 +421,7 @@ class UCCoreTable extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     DateTime startDate = startDateInMonth(thisMonth);
     DateTime? selectedDate = ref.watch(selectedDateProvider);
+    // List<UCEntry> ucEntries = ref.watch(ucEntryProvider);
     JapaneseNationalHoliday japaneseNationalHoliday =
         JapaneseNationalHoliday(context);
     List<Holiday> holidays = List.empty(growable: true);
@@ -540,7 +543,7 @@ class UCMonth extends ConsumerWidget {
   }
 
   List<ConsumerWidget> makeUCCoreTable(WidgetRef ref, int defaultPage,
-      int pageMin, int pageMax, DateTime thisMonth) {
+      int pageMin, int pageMax, DateTime thisMonth, List<UCEntry> ucEntries) {
     List<UCCoreTable> ucCoreTables = List.empty(growable: true);
     // ref.read(ucCoreTableProvider.notifier).clear();
     pageMap.clear();
@@ -665,6 +668,8 @@ class UCMonth extends ConsumerWidget {
     DateTime thisMonth = ref.watch(monthProvider);
     DateTime? selectedDate = ref.watch(selectedDateProvider);
     Holiday selectedHoliday = ref.watch(selectedHolidayProvider);
+    List<UCEntry> ucEntries = ref.watch(ucEntryProvider); // "List<UCEntry> ucEntries =" is required.
+    WidgetsBinding.instance.addPostFrameCallback((_) => ref.read(ucEntryProvider.notifier).set(this.ucEntries));
     return Column(children: <Widget>[
       Stack(
         children: <Widget>[
@@ -752,7 +757,7 @@ class UCMonth extends ConsumerWidget {
               controller: PageController(initialPage: 1),
               onPageChanged: ((page) {}),
               children: makeUCCoreTable(
-                  ref, defaultPage, pageMin, pageMax, thisMonth))),
+                  ref, defaultPage, pageMin, pageMax, thisMonth, ucEntries))),
       Container(
           color: const Color.fromARGB(0xFF, 0xC0, 0xC0, 0xC0),
           child: Row(children: <Widget>[
@@ -773,9 +778,9 @@ class UCMonth extends ConsumerWidget {
                               ucOnAddEntry(context, selectedDate);
                           newEntry.then((value) {
                             if (value != null) {
-                              // ref.read(ucEntryProvider.notifier).add(value);
-                              // ucEntries = ref.refresh(ucEntryProvider);
-                              ucEntries.add(value);
+                              ref.read(ucEntryProvider.notifier).add(value);
+                              ucEntries = ref.refresh(ucEntryProvider);
+                              // ucEntries.add(value);
                             }
                           });
                         },
