@@ -7,6 +7,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'u_calendar_view_dart_platform_interface.dart';
 
 const double defaultFontSize = 14.0;
+const double fontSizeFactor = 1.0;
+double entryFontSize = defaultFontSize;
+double dayEntryHeight = defaultFontSize * fontSizeFactor;
+double dayCellHeight = dayEntryHeight * 4;
+double coreTableHeight = dayCellHeight * 6;
+Map<int, DateTime> pageMap = {};
 
 class UCEntry {
   String applicationTag = "";
@@ -99,7 +105,8 @@ class UCHoliday extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
+    return SizedBox(
+        width: 30,
         child: Text(holiday.holidayName,
             maxLines: 1,
             overflow: TextOverflow.clip,
@@ -202,6 +209,12 @@ extension DateTimeExtension on DateTime {
   }
 }
 
+int daysOfTheMonth(DateTime month) {
+  DateTime day1st = DateTime(month.year, month.month, 1, 0, 0, 0, 0, 0);
+  DateTime next1st = DateTime(day1st.year, day1st.month + 1, 1, 0, 0, 0, 0, 0);
+  return next1st.difference(day1st).inDays;
+}
+
 int normalCalcOfWeekOfMonth(int thisMonth, DateTime day) {
   int minus = DateTime.now().day - 1;
   DateTime previousMonth = day.add(Duration(days: minus));
@@ -259,6 +272,20 @@ DateTime endDateInMonth(DateTime month) {
   return startDate.add(const Duration(days: 7 * 6));
 }
 
+List<UCEntry> getEntriesOfTheDay(
+    DateTime date, int max, List<UCEntry> ucEntries) {
+  List<UCEntry> retVal = List.empty(growable: true);
+  UCEntry element;
+  for (element in ucEntries) {
+    DateTime resetTime = DateTime(
+        element.date.year, element.date.month, element.date.day, 0, 0, 0, 0, 0);
+    if (resetTime == date) {
+      retVal.add(element);
+    }
+  }
+  return retVal;
+}
+
 class MonthNotifier extends StateNotifier<DateTime> {
   MonthNotifier()
       : super(DateTime(
@@ -275,23 +302,6 @@ class MonthNotifier extends StateNotifier<DateTime> {
 
 final monthProvider = StateNotifierProvider<MonthNotifier, DateTime>((ref) {
   return MonthNotifier();
-});
-
-class StartDateNotifier extends StateNotifier<DateTime> {
-  StartDateNotifier() : super(startDateInMonth(DateTime.now()));
-
-  DateTime get() {
-    return state;
-  }
-
-  void set(DateTime startDate) {
-    state = startDate;
-  }
-}
-
-final startDateProvider =
-    StateNotifierProvider<StartDateNotifier, DateTime>((ref) {
-  return StartDateNotifier();
 });
 
 class SelectedDateNotifier extends StateNotifier<DateTime> {
@@ -328,8 +338,8 @@ final selectedHolidayProvider =
   return SelectedHolidayNotifier();
 });
 
-class UCEntryManagerNotifier extends StateNotifier<List<UCEntry>> {
-  UCEntryManagerNotifier() : super([]);
+class UCEntryNotifier extends StateNotifier<List<UCEntry>> {
+  UCEntryNotifier() : super([]);
 
   List<UCEntry> get() {
     return state;
@@ -340,24 +350,55 @@ class UCEntryManagerNotifier extends StateNotifier<List<UCEntry>> {
   }
 
   void add(UCEntry ucEntry) {
-    // state = [...state, ucEntry];
     state.add(ucEntry);
   }
 }
 
-final ucEntryManagerProvider =
-    StateNotifierProvider<UCEntryManagerNotifier, List<UCEntry>>((ref) {
-  return UCEntryManagerNotifier();
+final ucEntryProvider =
+    StateNotifierProvider<UCEntryNotifier, List<UCEntry>>((ref) {
+  return UCEntryNotifier();
+});
+
+class UCCoreTableNotifier extends StateNotifier<List<UCCoreTable>> {
+  UCCoreTableNotifier() : super([]);
+
+  List<UCCoreTable> get() {
+    return state;
+  }
+
+  void add(UCCoreTable ucCoreTable) {
+    state.add(ucCoreTable);
+  }
+
+  void remove(UCCoreTable ucCoreTable) {
+    state.remove(ucCoreTable);
+  }
+
+  void clear() {
+    state.clear();
+  }
+}
+
+final ucCoreTableProvider =
+    StateNotifierProvider<UCCoreTableNotifier, List<UCCoreTable>>((ref) {
+  return UCCoreTableNotifier();
 });
 
 class UCCoreTable extends ConsumerWidget {
+  int page;
+  DateTime thisMonth;
   int maxLinesInDay;
-  List<List<UCEntry>> entriesOfTheDay;
+  List<UCEntry> ucEntries;
+  List<List<UCEntry>> entriesOfTheDay = List.empty(growable: true);
   DateTime date = DateTime.now();
   int lineToWrite = 0;
 
   UCCoreTable(
-      {super.key, required this.maxLinesInDay, required this.entriesOfTheDay});
+      {super.key,
+      required this.page,
+      required this.thisMonth,
+      required this.maxLinesInDay,
+      required this.ucEntries});
 
   Color getSelectedColor(
       DateTime startDate, DateTime? selectedDate, int week, int weekday) {
@@ -374,7 +415,7 @@ class UCCoreTable extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    DateTime startDate = ref.watch(startDateProvider);
+    DateTime startDate = startDateInMonth(thisMonth);
     DateTime? selectedDate = ref.watch(selectedDateProvider);
     JapaneseNationalHoliday japaneseNationalHoliday =
         JapaneseNationalHoliday(context);
@@ -383,70 +424,88 @@ class UCCoreTable extends ConsumerWidget {
       for (int weekday = 0; weekday < 7; weekday++) {
         date = startDate.add(Duration(days: week * 7 + weekday));
         holidays.add(japaneseNationalHoliday.getHoliday(date));
+        entriesOfTheDay.add(getEntriesOfTheDay(date, maxLinesInDay, ucEntries));
       }
     }
-    return Column(children: <Widget>[
-      for (int week = 0; week < 6; week++) ...{
-        Row(children: <Widget>[
-          for (int weekday = 0; weekday < 7; weekday++) ...{
-            Expanded(
-                child: Container(
-                    decoration: BoxDecoration(
-                      color: getSelectedColor(
-                          startDate, selectedDate, week, weekday),
-                      border: Border.all(color: Colors.grey),
-                    ),
-                    child: GestureDetector(
-                        onTap: () {
-                          ref.read(selectedDateProvider.notifier).set(startDate
-                              .add(Duration(days: week * 7 + weekday)));
-                          ref.read(selectedHolidayProvider.notifier).set(
-                              japaneseNationalHoliday.getHoliday(selectedDate));
-                        },
-                        child: Column(children: <Widget>[
-                          Row(children: <Widget>[
-                            UCDate(
-                                startDate
-                                    .add(Duration(days: week * 7 + weekday)),
-                                holidays[week * 7 + weekday],
-                                key: UniqueKey()),
-                            UCHoliday(holidays[week * 7 + weekday],
-                                key: UniqueKey())
-                          ]),
-                          for (lineToWrite = 0;
-                              lineToWrite < maxLinesInDay &&
-                                  lineToWrite <
-                                      entriesOfTheDay[week * 7 + weekday]
-                                          .length;
-                              lineToWrite++) ...{
-                            UCDayEntry(
-                                entriesOfTheDay[week * 7 + weekday]
-                                    [lineToWrite],
-                                key: UniqueKey())
-                          },
-                          for (int lineWhite = lineToWrite;
-                              lineWhite < maxLinesInDay;
-                              lineWhite++) ...{
-                            UCDayEntry(UCEntry(), key: UniqueKey())
-                          }
-                        ]))))
+    return SizedBox(
+        height: coreTableHeight,
+        child: Column(children: <Widget>[
+          for (int week = 0; week < 6; week++) ...{
+            Row(children: <Widget>[
+              for (int weekday = 0; weekday < 7; weekday++) ...{
+                Expanded(
+                    child: Container(
+                        height: dayCellHeight,
+                        decoration: BoxDecoration(
+                          color: getSelectedColor(
+                              startDate, selectedDate, week, weekday),
+                          border: Border.all(color: Colors.grey),
+                        ),
+                        child: GestureDetector(
+                            onTap: () {
+                              ref.read(selectedDateProvider.notifier).set(
+                                  startDate
+                                      .add(Duration(days: week * 7 + weekday)));
+                              ref.read(selectedHolidayProvider.notifier).set(
+                                  japaneseNationalHoliday
+                                      .getHoliday(selectedDate));
+                            },
+                            child: Column(children: <Widget>[
+                              Row(children: <Widget>[
+                                SizedBox(
+                                  height: dayEntryHeight,
+                                  child: UCDate(
+                                      startDate.add(
+                                          Duration(days: week * 7 + weekday)),
+                                      holidays[week * 7 + weekday],
+                                      key: UniqueKey()),
+                                ),
+                                SizedBox(
+                                    height: dayEntryHeight,
+                                    child: UCHoliday(
+                                        holidays[week * 7 + weekday],
+                                        key: UniqueKey())),
+                              ]),
+                              for (lineToWrite = 0;
+                                  lineToWrite < maxLinesInDay &&
+                                      lineToWrite <
+                                          entriesOfTheDay[week * 7 + weekday]
+                                              .length;
+                                  lineToWrite++) ...{
+                                SizedBox(
+                                    height: dayEntryHeight,
+                                    child: UCDayEntry(
+                                        entriesOfTheDay[week * 7 + weekday]
+                                            [lineToWrite],
+                                        key: UniqueKey())),
+                              },
+                              for (int lineWhite = lineToWrite;
+                                  lineWhite < maxLinesInDay;
+                                  lineWhite++) ...{
+                                SizedBox(
+                                    height: dayEntryHeight,
+                                    child: UCDayEntry(UCEntry(),
+                                        key: UniqueKey())),
+                              }
+                            ]))))
+              }
+            ])
           }
-        ])
-      }
-    ]);
+        ]));
   }
 }
 
 class UCMonth extends ConsumerWidget {
   int maxLinesInDay;
-  List<List<UCEntry>> entriesOfTheDay = List.empty(growable: true);
+
+  // List<List<UCEntry>> entriesOfTheDay = List.empty(growable: true);
   List<UCEntry> ucEntries;
 
   final Future<UCEntry?> Function(BuildContext context, DateTime? date)
       ucOnAddEntry;
   final Function(BuildContext context, UCEntry ucEntry) ucOnTapEntry;
-  final Function(BuildContext context, int prevYear, int prevMonth, int setYear,
-      int setMonth) ucOnMonthChanged;
+  final Function(BuildContext context, int setYear, int setMonth)
+      ucOnMonthChanged;
 
   UCMonth(
       {super.key,
@@ -456,184 +515,57 @@ class UCMonth extends ConsumerWidget {
       required this.ucOnTapEntry,
       required this.ucOnMonthChanged});
 
-  List<UCEntry> getEntriesOfTheDay(
-      DateTime date, int max, List<UCEntry> ucEntries) {
-    List<UCEntry> retVal = List.empty(growable: true);
-    UCEntry element;
-    for (element in ucEntries) {
-      DateTime resetTime = DateTime(element.date.year, element.date.month,
-          element.date.day, 0, 0, 0, 0, 0);
-      if (resetTime == date) {
-        retVal.add(element);
+  int sumDays(DateTime thisMonth, index) {
+    int daysOfMonth = 0;
+    int sumDays = 0;
+    if (index > 0) {
+      for (int i = 0; i < index; i++) {
+        daysOfMonth = daysOfTheMonth(thisMonth);
+        sumDays += daysOfMonth;
+        thisMonth = thisMonth.add(Duration(days: daysOfMonth));
+      }
+    } else if (index < 0) {
+      for (int i = 0; i > index; i--) {
+        daysOfMonth = daysOfTheMonth(thisMonth);
+        sumDays -= daysOfMonth;
+        thisMonth = thisMonth.add(Duration(days: -daysOfMonth));
       }
     }
-    return retVal;
+    return sumDays;
   }
 
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    DateTime thisMonth = ref.watch(monthProvider);
-    DateTime startDate = ref.watch(startDateProvider);
-    DateTime? selectedDate = ref.watch(selectedDateProvider);
-    Holiday selectedHoliday = ref.watch(selectedHolidayProvider);
-    List<UCEntry> ucEntries = ref.watch(ucEntryManagerProvider);
-    WidgetsBinding.instance.addPostFrameCallback(
-        (_) => ref.read(ucEntryManagerProvider.notifier).set(this.ucEntries));
-    entriesOfTheDay.clear();
-    for (int week = 0; week < 6; week++) {
-      for (int weekday = 0; weekday < 7; weekday++) {
-        DateTime date = startDate.add(Duration(days: week * 7 + weekday));
-        entriesOfTheDay.add(getEntriesOfTheDay(date, maxLinesInDay, ucEntries));
-      }
-    }
-    return Column(children: <Widget>[
-      Stack(
-        children: <Widget>[
-          Row(children: <Widget>[
-            const Spacer(),
-            Expanded(
-                flex: 1,
-                child: IconButton(
-                  onPressed: () {
-                    DateTime previousMonth = thisMonth;
-                    DateTime newMonth = DateTime(previousMonth.year,
-                        previousMonth.month - 1, 1, 0, 0, 0, 0, 0);
-                    ucOnMonthChanged(context, previousMonth.year,
-                        previousMonth.month, newMonth.year, newMonth.month);
-                    ref.read(monthProvider.notifier).set(newMonth);
-                    ref
-                        .read(startDateProvider.notifier)
-                        .set(startDateInMonth(newMonth));
-                  },
-                  // 表示アイコン
-                  icon: const Icon(Icons.arrow_back_ios_rounded),
-                  // アイコン色
-                  color: Colors.blue,
-                )),
-            Expanded(
-                flex: 2,
-                child: GestureDetector(
-                    onTap: () {
-                      Future<DateTime?> futureNewMonth = showDatePicker(
-                        context: context,
-                        //初期値を設定
-                        initialDate: thisMonth,
-                        //選択できる日付の上限
-                        firstDate: DateTime(DateTime.now().year - 10),
-                        lastDate: DateTime(DateTime.now().year + 10),
-                      );
-                      futureNewMonth.then((value) {
-                        DateTime previousMonth = thisMonth;
-                        if (value != null) {
-                          DateTime newMonth = DateTime(
-                              value.year, value.month, 1, 0, 0, 0, 0, 0);
-                          ucOnMonthChanged(
-                              context,
-                              previousMonth.year,
-                              previousMonth.month,
-                              newMonth.year,
-                              newMonth.month);
-                          ref.read(monthProvider.notifier).set(newMonth);
-                          ref
-                              .read(startDateProvider.notifier)
-                              .set(startDateInMonth(newMonth));
-                        }
-                      });
-                    },
-                    child: Text("${thisMonth.year}-${thisMonth.month}",
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                            color: Colors.blue, fontSize: 25.0)))),
-            Expanded(
-                flex: 1,
-                child: IconButton(
-                  onPressed: () {
-                    DateTime previousMonth = thisMonth;
-                    DateTime newMonth = DateTime(previousMonth.year,
-                        previousMonth.month + 1, 1, 0, 0, 0, 0, 0);
-                    ucOnMonthChanged(context, previousMonth.year,
-                        previousMonth.month, newMonth.year, newMonth.month);
-                    ref.read(monthProvider.notifier).set(newMonth);
-                    ref
-                        .read(startDateProvider.notifier)
-                        .set(startDateInMonth(newMonth));
-                  },
-                  // 表示アイコン
-                  icon: const Icon(Icons.arrow_forward_ios_rounded),
-                  // アイコン色
-                  color: Colors.blue,
-                )),
-            const Spacer()
-          ]),
-          Container(
-              alignment: Alignment.centerRight,
-              child: IconButton(
-                onPressed: () {
-                  DateTime previousMonth = thisMonth;
-                  DateTime newMonth = DateTime(DateTime.now().year,
-                      DateTime.now().month, 1, 0, 0, 0, 0, 0);
-                  ucOnMonthChanged(context, previousMonth.year,
-                      previousMonth.month, newMonth.year, newMonth.month);
-                  ref.read(monthProvider.notifier).set(newMonth);
-                  ref
-                      .read(startDateProvider.notifier)
-                      .set(startDateInMonth(newMonth));
-                  ref.read(selectedDateProvider.notifier).set(DateTime.now());
-                },
-                icon: const Icon(Icons.calendar_today_rounded),
-                color: Colors.blue,
-              )),
-        ],
-      ),
-      WeekLabel(),
-      UCCoreTable(
+  List<ConsumerWidget> makeUCCoreTable(WidgetRef ref, int defaultPage,
+      int pageMin, int pageMax, DateTime thisMonth) {
+    ref.read(ucCoreTableProvider.notifier).clear();
+    pageMap.clear();
+    for (int page = pageMin; page <= pageMax; page++) {
+      int diffMonth = defaultPage - page;
+      DateTime pointedMonth = DateTime(
+          thisMonth.year, thisMonth.month - diffMonth, 1, 0, 0, 0, 0, 0);
+      pageMap[page] = pointedMonth;
+      ref.read(ucCoreTableProvider.notifier).add(UCCoreTable(
+          page: page,
+          thisMonth: pointedMonth,
           maxLinesInDay: maxLinesInDay,
-          entriesOfTheDay: entriesOfTheDay,
-          key: UniqueKey()),
-      Container(
-          color: const Color.fromARGB(0xFF, 0xC0, 0xC0, 0xC0),
-          child: Row(children: <Widget>[
-            Expanded(
-                child: Container(
-                    alignment: Alignment.centerLeft,
-                    child: selectedDate != null
-                        ? Text(
-                            "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}",
-                            style: const TextStyle(fontSize: 18.0))
-                        : const Text(""))),
-            Expanded(
-                child: Container(
-                    alignment: Alignment.center,
-                    child: IconButton(
-                        onPressed: () {
-                          Future<UCEntry?> newEntry =
-                              ucOnAddEntry(context, selectedDate);
-                          newEntry.then((value) {
-                            if (value != null) {
-                              ref
-                                  .read(ucEntryManagerProvider.notifier)
-                                  .add(value);
-                              ucEntries = ref.refresh(ucEntryManagerProvider);
-                            }
-                          });
-                        },
-                        icon: const Icon(Icons.add),
-                        color: Colors.blue))),
-            Expanded(
-                child: Container(
-                    alignment: Alignment.centerRight,
-                    child: Text(selectedHoliday.holidayName)))
-          ])),
-      Expanded(child: makeListView(thisMonth, startDate, selectedDate))
-    ]);
+          ucEntries: ucEntries,
+          key: UniqueKey()));
+    }
+    return ref.read(ucCoreTableProvider.notifier).get();
   }
 
-  Widget makeListView(
-      DateTime thisMonth, DateTime startDate, DateTime? selectedDate) {
+  Widget makeListView(DateTime startDate, DateTime? selectedDate) {
     if (selectedDate != null) {
+      List<List<UCEntry>> entriesOfTheDay = List.empty(growable: true);
+      for (int week = 0; week < 6; week++) {
+        for (int weekday = 0; weekday < 7; weekday++) {
+          DateTime date = startDate.add(Duration(days: week * 7 + weekday));
+          entriesOfTheDay
+              .add(getEntriesOfTheDay(date, maxLinesInDay, ucEntries));
+        }
+      }
       int diffDays = selectedDate.difference(startDate).inDays;
       int diffDaysEnd =
-          endDateInMonth(thisMonth).difference(selectedDate).inDays;
+          endDateInMonth(startDate).difference(selectedDate).inDays;
       if (diffDays >= 0 && diffDaysEnd >= 0) {
         return ListView.builder(
             itemExtent: 30.0,
@@ -707,6 +639,160 @@ class UCMonth extends ConsumerWidget {
       return const Text("");
     }
   }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    const int defaultPage = 12 * 150;
+    const int defaultOffset = 1;
+    int pageMin = defaultPage - defaultOffset;
+    int pageMax = defaultPage + defaultOffset;
+    DateTime thisMonth = ref.watch(monthProvider);
+    // DateTime startDate =
+    //    DateTime(thisMonth.year, thisMonth.month + defaultOffset, 1, 0, 0, 0, 0, 0);
+    DateTime startDate = DateTime(thisMonth.year, thisMonth.month, 1, 0, 0, 0, 0, 0);
+    DateTime? selectedDate = ref.watch(selectedDateProvider);
+    Holiday selectedHoliday = ref.watch(selectedHolidayProvider);
+    List<UCEntry> ucEntries = ref.watch(ucEntryProvider);
+    List<UCCoreTable> ucCoreTable = ref.watch(ucCoreTableProvider);
+    WidgetsBinding.instance.addPostFrameCallback(
+        (_) => ref.read(ucEntryProvider.notifier).set(this.ucEntries));
+    return Column(children: <Widget>[
+      Stack(
+        children: <Widget>[
+          Row(children: <Widget>[
+            const Spacer(),
+            Expanded(
+                flex: 1,
+                child: IconButton(
+                  onPressed: () {
+                    DateTime previousMonth = thisMonth;
+                    DateTime newMonth = DateTime(previousMonth.year,
+                        previousMonth.month - 1, 1, 0, 0, 0, 0, 0);
+                    ucOnMonthChanged(context, newMonth.year, newMonth.month);
+                    ref.read(monthProvider.notifier).set(newMonth);
+                    startDate = newMonth;
+                  },
+                  // 表示アイコン
+                  icon: const Icon(Icons.arrow_back_ios_rounded),
+                  // アイコン色
+                  color: Colors.blue,
+                )),
+            Expanded(
+                flex: 2,
+                child: GestureDetector(
+                    onTap: () {
+                      Future<DateTime?> futureNewMonth = showDatePicker(
+                        context: context,
+                        //初期値を設定
+                        initialDate: thisMonth,
+                        //選択できる日付の上限
+                        firstDate: DateTime(DateTime.now().year - 10),
+                        lastDate: DateTime(DateTime.now().year + 10),
+                      );
+                      futureNewMonth.then((value) {
+                        DateTime previousMonth = thisMonth;
+                        if (value != null) {
+                          DateTime newMonth = DateTime(
+                              value.year, value.month, 1, 0, 0, 0, 0, 0);
+                          ucOnMonthChanged(
+                              context, newMonth.year, newMonth.month);
+                          ref.read(monthProvider.notifier).set(newMonth);
+                          startDate = newMonth;
+                        }
+                      });
+                    },
+                    child: Text("${thisMonth.year}-${thisMonth.month}",
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                            color: Colors.blue, fontSize: 25.0)))),
+            Expanded(
+                flex: 1,
+                child: IconButton(
+                  onPressed: () {
+                    DateTime previousMonth = thisMonth;
+                    DateTime newMonth = DateTime(previousMonth.year,
+                        previousMonth.month + 1, 1, 0, 0, 0, 0, 0);
+                    ucOnMonthChanged(context, newMonth.year, newMonth.month);
+                    ref.read(monthProvider.notifier).set(newMonth);
+                    startDate = newMonth;
+                  },
+                  // 表示アイコン
+                  icon: const Icon(Icons.arrow_forward_ios_rounded),
+                  // アイコン色
+                  color: Colors.blue,
+                )),
+            const Spacer()
+          ]),
+          Container(
+              alignment: Alignment.centerRight,
+              child: IconButton(
+                onPressed: () {
+                  DateTime previousMonth = thisMonth;
+                  DateTime newMonth = DateTime(DateTime.now().year,
+                      DateTime.now().month, 1, 0, 0, 0, 0, 0);
+                  ucOnMonthChanged(context, newMonth.year, newMonth.month);
+                  ref.read(monthProvider.notifier).set(newMonth);
+                  startDate = newMonth;
+                  ref.read(selectedDateProvider.notifier).set(DateTime.now());
+                },
+                icon: const Icon(Icons.calendar_today_rounded),
+                color: Colors.blue,
+              )),
+        ],
+      ),
+      WeekLabel(),
+      SizedBox(
+          height: coreTableHeight,
+          child: PageView(
+              key: UniqueKey(),
+              scrollDirection: Axis.horizontal,
+              controller: PageController(initialPage: 1),
+              onPageChanged: ((page) {}),
+              children: makeUCCoreTable(
+                  ref, defaultPage, pageMin, pageMax, thisMonth))),
+      Container(
+          color: const Color.fromARGB(0xFF, 0xC0, 0xC0, 0xC0),
+          child: Row(children: <Widget>[
+            Expanded(
+                child: Container(
+                    alignment: Alignment.centerLeft,
+                    child: selectedDate != null
+                        ? Text(
+                            "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}",
+                            style: const TextStyle(fontSize: 18.0))
+                        : const Text(""))),
+            Expanded(
+                child: Container(
+                    alignment: Alignment.center,
+                    child: IconButton(
+                        onPressed: () {
+                          Future<UCEntry?> newEntry =
+                              ucOnAddEntry(context, selectedDate);
+                          newEntry.then((value) {
+                            if (value != null) {
+                              ref.read(ucEntryProvider.notifier).add(value);
+                              ucEntries = ref.refresh(ucEntryProvider);
+                            }
+                          });
+                        },
+                        icon: const Icon(Icons.add),
+                        color: Colors.blue))),
+            Expanded(
+                child: Container(
+                    alignment: Alignment.centerRight,
+                    child: Text(selectedHoliday.holidayName)))
+          ])),
+      Expanded(child: makeListView(startDate, selectedDate))
+    ]);
+  }
+}
+
+double calcMaxFontSize(List<UCEntry> ucEntries) {
+  double max = 0.0;
+  for (var element in ucEntries) {
+    if (element.tableFontSize > max) max = element.tableFontSize;
+  }
+  return max;
 }
 
 class UCalendarViewDart {
@@ -721,9 +807,12 @@ class UCalendarViewDart {
       Future<UCEntry?> Function(BuildContext context, DateTime? date)
           ucOnAddEntry,
       Function(BuildContext context, UCEntry ucEntry) ucOnTapEntry,
-      Function(BuildContext context, int prevYear, int prevMonth, int setYear,
-              int setMonth)
+      Function(BuildContext context, int setYear, int setMonth)
           ucOnMonthChanged) {
+    double entryFontSize = calcMaxFontSize(ucEntries);
+    dayEntryHeight = entryFontSize * fontSizeFactor;
+    dayCellHeight = dayEntryHeight * (maxLinesInDay + 1) * 1.2;
+    coreTableHeight = dayCellHeight * 6;
     return ProviderScope(
         child: UCMonth(
             maxLinesInDay: maxLinesInDay,

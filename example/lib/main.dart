@@ -92,8 +92,7 @@ void ucOnTapEntry(BuildContext context, UCEntry ucEntry) {
   ));
 }
 
-void ucOnMonthChanged(BuildContext context, int prevYear, int prevMonth,
-    int setYear, int setMonth) {
+void ucOnMonthChanged(BuildContext context, int setYear, int setMonth) {
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
     content: Text("--> $setYear-$setMonth"),
     duration: const Duration(seconds: 1),
