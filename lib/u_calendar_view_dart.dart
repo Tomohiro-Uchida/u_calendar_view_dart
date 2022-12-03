@@ -269,7 +269,7 @@ DateTime startDateInMonth(DateTime month) {
 
 DateTime endDateInMonth(DateTime month) {
   DateTime startDate = startDateInMonth(month);
-  return startDate.add(const Duration(days: 7 * 6));
+  return startDate.add(const Duration(days: 7 * 6 - 1));
 }
 
 List<UCEntry> getEntriesOfTheDay(
@@ -338,6 +338,7 @@ final selectedHolidayProvider =
   return SelectedHolidayNotifier();
 });
 
+/*
 class UCEntryNotifier extends StateNotifier<List<UCEntry>> {
   UCEntryNotifier() : super([]);
 
@@ -383,6 +384,7 @@ final ucCoreTableProvider =
     StateNotifierProvider<UCCoreTableNotifier, List<UCCoreTable>>((ref) {
   return UCCoreTableNotifier();
 });
+ */
 
 class UCCoreTable extends ConsumerWidget {
   int page;
@@ -443,12 +445,15 @@ class UCCoreTable extends ConsumerWidget {
                         ),
                         child: GestureDetector(
                             onTap: () {
-                              ref.read(selectedDateProvider.notifier).set(
-                                  startDate
-                                      .add(Duration(days: week * 7 + weekday)));
+                              DateTime selectedDate = startDate
+                                  .add(Duration(days: week * 7 + weekday));
+                              ref
+                                  .read(selectedDateProvider.notifier)
+                                  .set(selectedDate);
                               ref.read(selectedHolidayProvider.notifier).set(
                                   japaneseNationalHoliday
                                       .getHoliday(selectedDate));
+                              // ref.refresh(selectedHolidayProvider);
                             },
                             child: Column(children: <Widget>[
                               Row(children: <Widget>[
@@ -536,25 +541,37 @@ class UCMonth extends ConsumerWidget {
 
   List<ConsumerWidget> makeUCCoreTable(WidgetRef ref, int defaultPage,
       int pageMin, int pageMax, DateTime thisMonth) {
-    ref.read(ucCoreTableProvider.notifier).clear();
+    List<UCCoreTable> ucCoreTables = List.empty(growable: true);
+    // ref.read(ucCoreTableProvider.notifier).clear();
     pageMap.clear();
     for (int page = pageMin; page <= pageMax; page++) {
       int diffMonth = defaultPage - page;
       DateTime pointedMonth = DateTime(
           thisMonth.year, thisMonth.month - diffMonth, 1, 0, 0, 0, 0, 0);
       pageMap[page] = pointedMonth;
+      /*
       ref.read(ucCoreTableProvider.notifier).add(UCCoreTable(
           page: page,
           thisMonth: pointedMonth,
           maxLinesInDay: maxLinesInDay,
           ucEntries: ucEntries,
           key: UniqueKey()));
+       */
+      ucCoreTables.add(UCCoreTable(
+          page: page,
+          thisMonth: pointedMonth,
+          maxLinesInDay: maxLinesInDay,
+          ucEntries: ucEntries,
+          key: UniqueKey()));
     }
-    return ref.read(ucCoreTableProvider.notifier).get();
+    // return ref.read(ucCoreTableProvider.notifier).get();
+    return ucCoreTables;
   }
 
-  Widget makeListView(DateTime startDate, DateTime? selectedDate) {
+  Widget makeListView(DateTime? selectedDate) {
     if (selectedDate != null) {
+      DateTime startDate = startDateInMonth(selectedDate);
+      DateTime endDate = endDateInMonth(selectedDate);
       List<List<UCEntry>> entriesOfTheDay = List.empty(growable: true);
       for (int week = 0; week < 6; week++) {
         for (int weekday = 0; weekday < 7; weekday++) {
@@ -564,8 +581,7 @@ class UCMonth extends ConsumerWidget {
         }
       }
       int diffDays = selectedDate.difference(startDate).inDays;
-      int diffDaysEnd =
-          endDateInMonth(startDate).difference(selectedDate).inDays;
+      int diffDaysEnd = endDate.difference(selectedDate).inDays;
       if (diffDays >= 0 && diffDaysEnd >= 0) {
         return ListView.builder(
             itemExtent: 30.0,
@@ -647,15 +663,8 @@ class UCMonth extends ConsumerWidget {
     int pageMin = defaultPage - defaultOffset;
     int pageMax = defaultPage + defaultOffset;
     DateTime thisMonth = ref.watch(monthProvider);
-    // DateTime startDate =
-    //    DateTime(thisMonth.year, thisMonth.month + defaultOffset, 1, 0, 0, 0, 0, 0);
-    DateTime startDate = DateTime(thisMonth.year, thisMonth.month, 1, 0, 0, 0, 0, 0);
     DateTime? selectedDate = ref.watch(selectedDateProvider);
     Holiday selectedHoliday = ref.watch(selectedHolidayProvider);
-    List<UCEntry> ucEntries = ref.watch(ucEntryProvider);
-    List<UCCoreTable> ucCoreTable = ref.watch(ucCoreTableProvider);
-    WidgetsBinding.instance.addPostFrameCallback(
-        (_) => ref.read(ucEntryProvider.notifier).set(this.ucEntries));
     return Column(children: <Widget>[
       Stack(
         children: <Widget>[
@@ -670,7 +679,6 @@ class UCMonth extends ConsumerWidget {
                         previousMonth.month - 1, 1, 0, 0, 0, 0, 0);
                     ucOnMonthChanged(context, newMonth.year, newMonth.month);
                     ref.read(monthProvider.notifier).set(newMonth);
-                    startDate = newMonth;
                   },
                   // 表示アイコン
                   icon: const Icon(Icons.arrow_back_ios_rounded),
@@ -690,14 +698,12 @@ class UCMonth extends ConsumerWidget {
                         lastDate: DateTime(DateTime.now().year + 10),
                       );
                       futureNewMonth.then((value) {
-                        DateTime previousMonth = thisMonth;
                         if (value != null) {
                           DateTime newMonth = DateTime(
                               value.year, value.month, 1, 0, 0, 0, 0, 0);
                           ucOnMonthChanged(
                               context, newMonth.year, newMonth.month);
                           ref.read(monthProvider.notifier).set(newMonth);
-                          startDate = newMonth;
                         }
                       });
                     },
@@ -714,7 +720,6 @@ class UCMonth extends ConsumerWidget {
                         previousMonth.month + 1, 1, 0, 0, 0, 0, 0);
                     ucOnMonthChanged(context, newMonth.year, newMonth.month);
                     ref.read(monthProvider.notifier).set(newMonth);
-                    startDate = newMonth;
                   },
                   // 表示アイコン
                   icon: const Icon(Icons.arrow_forward_ios_rounded),
@@ -727,12 +732,10 @@ class UCMonth extends ConsumerWidget {
               alignment: Alignment.centerRight,
               child: IconButton(
                 onPressed: () {
-                  DateTime previousMonth = thisMonth;
                   DateTime newMonth = DateTime(DateTime.now().year,
                       DateTime.now().month, 1, 0, 0, 0, 0, 0);
                   ucOnMonthChanged(context, newMonth.year, newMonth.month);
                   ref.read(monthProvider.notifier).set(newMonth);
-                  startDate = newMonth;
                   ref.read(selectedDateProvider.notifier).set(DateTime.now());
                 },
                 icon: const Icon(Icons.calendar_today_rounded),
@@ -744,7 +747,7 @@ class UCMonth extends ConsumerWidget {
       SizedBox(
           height: coreTableHeight,
           child: PageView(
-              key: UniqueKey(),
+              // key: UniqueKey(),
               scrollDirection: Axis.horizontal,
               controller: PageController(initialPage: 1),
               onPageChanged: ((page) {}),
@@ -770,8 +773,9 @@ class UCMonth extends ConsumerWidget {
                               ucOnAddEntry(context, selectedDate);
                           newEntry.then((value) {
                             if (value != null) {
-                              ref.read(ucEntryProvider.notifier).add(value);
-                              ucEntries = ref.refresh(ucEntryProvider);
+                              // ref.read(ucEntryProvider.notifier).add(value);
+                              // ucEntries = ref.refresh(ucEntryProvider);
+                              ucEntries.add(value);
                             }
                           });
                         },
@@ -782,7 +786,7 @@ class UCMonth extends ConsumerWidget {
                     alignment: Alignment.centerRight,
                     child: Text(selectedHoliday.holidayName)))
           ])),
-      Expanded(child: makeListView(startDate, selectedDate))
+      Expanded(child: makeListView(selectedDate))
     ]);
   }
 }
