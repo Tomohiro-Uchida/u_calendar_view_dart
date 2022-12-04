@@ -1,6 +1,6 @@
 # u_calendar_view_dart
 
-UCalendarView for Dart
+CalendarView for Dart
 
 ## Getting Started
 

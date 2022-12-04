@@ -1,6 +1,7 @@
 # u_calendar_view_dart_example
 
-Demonstrates how to use the u_calendar_view_dart plugin.
+Please execute main.dart.
+You can see demonstration of u_calendar_view_dart_example. 
 
 ## Getting Started
 
