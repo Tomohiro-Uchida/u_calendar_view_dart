@@ -29,8 +29,8 @@ dependencies:
     sdk: flutter
   flutter_riverpod: ^2.1.1
   intl: ^0.17.0
-  # u_calendar_view_dart:
-  #   path: ../
+  # u_calendar_view_dart: # enable this line when debugging.
+  #   path: ../  # enable this line when debugging.
 
 dev_dependencies:
   flutter_test:
