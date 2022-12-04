@@ -1,6 +1,7 @@
 name: u_calendar_view_dart_example
 description: Demonstrates how to use the u_calendar_view_dart plugin.
 version: 0.0.1+1
+homepage: https://github.com/Tomohiro-Uchida-Flutter/u_calendar_view_dart
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -23,7 +24,11 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   uuid: ^3.0.7
-  flutter_riverpod:
+  plugin_platform_interface: ^2.0.2
+  flutter_localizations:
+    sdk: flutter
+  flutter_riverpod: ^2.1.1
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:
@@ -77,3 +82,5 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+flutter_intl:
+  enabled: true

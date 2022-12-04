@@ -1,7 +1,7 @@
 name: u_calendar_view_dart
 description: CalendarView for Dart/Flutter
-version: 0.0.1
-homepage:https://github.com/Tomohiro-Uchida-Flutter/u_calendar_view_dart:
+version: 0.0.1+1
+homepage: https://github.com/Tomohiro-Uchida-Flutter/u_calendar_view_dart
 
 environment:
   sdk: '>=2.18.4 <3.0.0'
@@ -11,9 +11,8 @@ dependencies:
   flutter:
     sdk: flutter
   plugin_platform_interface: ^2.0.2
-  flutter_localization: ^0.1.9
-  # flutter_localizations:
-  #   sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   flutter_riverpod: ^2.1.1
   intl: ^0.17.0
 
