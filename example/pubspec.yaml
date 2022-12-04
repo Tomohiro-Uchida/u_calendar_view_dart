@@ -5,7 +5,7 @@ homepage: https://github.com/Tomohiro-Uchida-Flutter/u_calendar_view_dart
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+# publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 environment:
   sdk: '>=2.18.4 <3.0.0'
@@ -29,8 +29,8 @@ dependencies:
     sdk: flutter
   flutter_riverpod: ^2.1.1
   intl: ^0.17.0
-  u_calendar_view_dart:
-    path: ../
+  # u_calendar_view_dart:
+  #   path: ../
 
 dev_dependencies:
   flutter_test:
