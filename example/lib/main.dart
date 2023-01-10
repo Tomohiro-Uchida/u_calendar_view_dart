@@ -11,14 +11,14 @@ void main() {
 }
 
 class ValueAddPage extends StatefulWidget {
-  DateTime date;
-  ValueAddPage(this.date, {super.key});
+  final DateTime date;
+  const ValueAddPage(this.date, {super.key});
 
   @override
-  _ValueAddPageState createState() => _ValueAddPageState();
+  ValueAddPageState createState() => ValueAddPageState();
 }
 
-class _ValueAddPageState extends State<ValueAddPage> {
+class ValueAddPageState extends State<ValueAddPage> {
   String inputText = "";
   DateTime date = DateTime.now();
 
@@ -103,10 +103,10 @@ class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
-  State<MyApp> createState() => _MyAppState();
+  MyAppState createState() => MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class MyAppState extends State<MyApp> {
   final _uCalendarViewDartPlugin = UCalendarViewDart();
 
   @override

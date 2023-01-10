@@ -131,50 +131,50 @@ class S {
   }
 
   /// ``
-  String get seijin_no_hi {
+  String get seijinNoHi {
     return Intl.message(
       '',
-      name: 'seijin_no_hi',
+      name: 'seijinNoHi',
       desc: '',
       args: [],
     );
   }
 
   /// ``
-  String get kenkokukinen_no_hi {
+  String get kenkokukinenNoHi {
     return Intl.message(
       '',
-      name: 'kenkokukinen_no_hi',
+      name: 'kenkokukinenNoHi',
       desc: '',
       args: [],
     );
   }
 
   /// ``
-  String get syunbun_no_hi {
+  String get syunbunNoHi {
     return Intl.message(
       '',
-      name: 'syunbun_no_hi',
+      name: 'syunbunNoHi',
       desc: '',
       args: [],
     );
   }
 
   /// ``
-  String get showa_no_hi {
+  String get showaNoHi {
     return Intl.message(
       '',
-      name: 'showa_no_hi',
+      name: 'showaNoHi',
       desc: '',
       args: [],
     );
   }
 
   /// ``
-  String get sokui_no_hi {
+  String get sokuiNoHi {
     return Intl.message(
       '',
-      name: 'sokui_no_hi',
+      name: 'sokuiNoHi',
       desc: '',
       args: [],
     );
@@ -191,110 +191,110 @@ class S {
   }
 
   /// ``
-  String get midori_no_hi {
+  String get midoriNoHi {
     return Intl.message(
       '',
-      name: 'midori_no_hi',
+      name: 'midoriNoHi',
       desc: '',
       args: [],
     );
   }
 
   /// ``
-  String get kodomo_no_hi {
+  String get kodomoNoHi {
     return Intl.message(
       '',
-      name: 'kodomo_no_hi',
+      name: 'kodomoNoHi',
       desc: '',
       args: [],
     );
   }
 
   /// ``
-  String get umi_no_hi {
+  String get umiNoHi {
     return Intl.message(
       '',
-      name: 'umi_no_hi',
+      name: 'umiNoHi',
       desc: '',
       args: [],
     );
   }
 
   /// ``
-  String get yama_no_hi {
+  String get yamaNoHi {
     return Intl.message(
       '',
-      name: 'yama_no_hi',
+      name: 'yamaNoHi',
       desc: '',
       args: [],
     );
   }
 
   /// ``
-  String get keiro_no_hi {
+  String get keiroNoHi {
     return Intl.message(
       '',
-      name: 'keiro_no_hi',
+      name: 'keiroNoHi',
       desc: '',
       args: [],
     );
   }
 
   /// ``
-  String get syubun_no_hi {
+  String get syubunNoHi {
     return Intl.message(
       '',
-      name: 'syubun_no_hi',
+      name: 'syubunNoHi',
       desc: '',
       args: [],
     );
   }
 
   /// ``
-  String get taiiku_no_hi {
+  String get taiikuNoHi {
     return Intl.message(
       '',
-      name: 'taiiku_no_hi',
+      name: 'taiikuNoHi',
       desc: '',
       args: [],
     );
   }
 
   /// ``
-  String get sport_no_hi {
+  String get sportNoHi {
     return Intl.message(
       '',
-      name: 'sport_no_hi',
+      name: 'sportNoHi',
       desc: '',
       args: [],
     );
   }
 
   /// ``
-  String get sokui_reiseiden_no_hi {
+  String get sokui_reiseidenNoHi {
     return Intl.message(
       '',
-      name: 'sokui_reiseiden_no_hi',
+      name: 'sokui_reiseidenNoHi',
       desc: '',
       args: [],
     );
   }
 
   /// ``
-  String get bunka_no_hi {
+  String get bunkaNoHi {
     return Intl.message(
       '',
-      name: 'bunka_no_hi',
+      name: 'bunkaNoHi',
       desc: '',
       args: [],
     );
   }
 
   /// ``
-  String get kinrokansya_no_hi {
+  String get kinrokansyaNoHi {
     return Intl.message(
       '',
-      name: 'kinrokansya_no_hi',
+      name: 'kinrokansyaNoHi',
       desc: '',
       args: [],
     );

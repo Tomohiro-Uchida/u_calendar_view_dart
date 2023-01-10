@@ -46,14 +46,14 @@ class JapaneseNationalHoliday {
     return holiday;
   }
 
-  Holiday getSeijin_no_hi(DateTime date) {
+  Holiday getSeijinNoHi(DateTime date) {
     Holiday holiday = Holiday();
     if ((date.year >= 2014) &&
         (date.month == DateTime.january) &&
         (getWeekOfMonth(date) == 2) &&
         (date.weekday == DateTime.monday)) {
       holiday.isHoliday = true;
-      holiday.holidayName = S.of(context).seijin_no_hi;
+      holiday.holidayName = S.of(context).seijinNoHi;
     } else {
       holiday.isHoliday = false;
       holiday.holidayName = " ";
@@ -61,13 +61,13 @@ class JapaneseNationalHoliday {
     return holiday;
   }
 
-  Holiday getKenkokukinen_no_hi(DateTime date) {
+  Holiday getKenkokukinenNoHi(DateTime date) {
     Holiday holiday = Holiday();
     if ((date.year >= 2014) &&
         (date.month == DateTime.february) &&
         (date.day == 11)) {
       holiday.isHoliday = true;
-      holiday.holidayName = S.of(context).kenkokukinen_no_hi;
+      holiday.holidayName = S.of(context).kenkokukinenNoHi;
     } else {
       holiday.isHoliday = false;
       holiday.holidayName = " ";
@@ -75,13 +75,13 @@ class JapaneseNationalHoliday {
     return holiday;
   }
 
-  Holiday getSyunbun_no_hi(DateTime date) {
+  Holiday getSyunbunNoHi(DateTime date) {
     Holiday holiday = Holiday();
     if ((date.year >= 2014) &&
         (date.month == DateTime.march) &&
         (date.day == getSyunbunbi(date))) {
       holiday.isHoliday = true;
-      holiday.holidayName = S.of(context).syunbun_no_hi;
+      holiday.holidayName = S.of(context).syunbunNoHi;
     } else {
       holiday.isHoliday = false;
       holiday.holidayName = " ";
@@ -95,13 +95,13 @@ class JapaneseNationalHoliday {
     return (20.69115 + ((year - 2000) * 0.242194) - (year - 2000) ~/ 4).toInt();
   }
 
-  Holiday getShowa_no_hi(DateTime date) {
+  Holiday getShowaNoHi(DateTime date) {
     Holiday holiday = Holiday();
     if ((date.year >= 2014) &&
         (date.month == DateTime.april) &&
         (date.day == 29)) {
       holiday.isHoliday = true;
-      holiday.holidayName = S.of(context).showa_no_hi;
+      holiday.holidayName = S.of(context).showaNoHi;
     } else {
       holiday.isHoliday = false;
       holiday.holidayName = " ";
@@ -109,13 +109,13 @@ class JapaneseNationalHoliday {
     return holiday;
   }
 
-  Holiday getSokui_no_hi(DateTime date) {
+  Holiday getSokuiNoHi(DateTime date) {
     Holiday holiday = Holiday();
     if (2019 == (date.year) && // 2018/10/22追記
         (date.month == DateTime.may) &&
         (date.day == 1)) {
       holiday.isHoliday = true;
-      holiday.holidayName = S.of(context).sokui_no_hi;
+      holiday.holidayName = S.of(context).sokuiNoHi;
     } else {
       holiday.isHoliday = false;
       holiday.holidayName = " ";
@@ -137,13 +137,13 @@ class JapaneseNationalHoliday {
     return holiday;
   }
 
-  Holiday getMidori_no_hi(DateTime date) {
+  Holiday getMidoriNoHi(DateTime date) {
     Holiday holiday = Holiday();
     if ((date.year >= 2014) &&
         (date.month == DateTime.may) &&
         (date.day == 4)) {
       holiday.isHoliday = true;
-      holiday.holidayName = S.of(context).midori_no_hi;
+      holiday.holidayName = S.of(context).midoriNoHi;
     } else {
       holiday.isHoliday = false;
       holiday.holidayName = " ";
@@ -151,13 +151,13 @@ class JapaneseNationalHoliday {
     return holiday;
   }
 
-  Holiday getKodomo_no_hi(DateTime date) {
+  Holiday getKodomoNoHi(DateTime date) {
     Holiday holiday = Holiday();
     if ((date.year >= 2014) &&
         (date.month == DateTime.may) &&
         (date.day == 5)) {
       holiday.isHoliday = true;
-      holiday.holidayName = S.of(context).kodomo_no_hi;
+      holiday.holidayName = S.of(context).kodomoNoHi;
     } else {
       holiday.isHoliday = false;
       holiday.holidayName = " ";
@@ -165,19 +165,19 @@ class JapaneseNationalHoliday {
     return holiday;
   }
 
-  Holiday getUmi_no_hi(DateTime date) {
+  Holiday getUmiNoHi(DateTime date) {
     Holiday holiday = Holiday();
     if ((date.year == 2021) && // 2020/12/04追記
         (date.month == DateTime.july) &&
         (date.day == 22)) {
       holiday.isHoliday = true;
-      holiday.holidayName = S.of(context).umi_no_hi;
+      holiday.holidayName = S.of(context).umiNoHi;
       return holiday;
     } else if ((date.year == 2020) && // 2018/10/22追記
         (date.month == DateTime.july) &&
         (date.day == 23)) {
       holiday.isHoliday = true;
-      holiday.holidayName = S.of(context).umi_no_hi;
+      holiday.holidayName = S.of(context).umiNoHi;
       return holiday;
     } else if (2014 <= date.year &&
         (date.year != 2021) && // 2020/12/4追記
@@ -186,7 +186,7 @@ class JapaneseNationalHoliday {
         (getWeekOfMonth(date) == 3) &&
         (date.weekday == DateTime.monday)) {
       holiday.isHoliday = true;
-      holiday.holidayName = S.of(context).umi_no_hi;
+      holiday.holidayName = S.of(context).umiNoHi;
       return holiday;
     } else {
       holiday.isHoliday = false;
@@ -195,19 +195,19 @@ class JapaneseNationalHoliday {
     }
   }
 
-  Holiday getYama_no_hi(DateTime date) {
+  Holiday getYamaNoHi(DateTime date) {
     Holiday holiday = Holiday();
     if ((date.year == 2021) && // 2020/12/4追記
         (date.month == DateTime.august) &&
         (date.day == 8)) {
       holiday.isHoliday = true;
-      holiday.holidayName = S.of(context).yama_no_hi;
+      holiday.holidayName = S.of(context).yamaNoHi;
       return holiday;
     } else if ((date.year == 2020) && // 2018/10/22追記
         (date.month == DateTime.august) &&
         (date.day == 10)) {
       holiday.isHoliday = true;
-      holiday.holidayName = S.of(context).yama_no_hi;
+      holiday.holidayName = S.of(context).yamaNoHi;
       return holiday;
     } else if (2014 <= date.year &&
         (date.year != 2021) && // 2020/12/4追記
@@ -215,7 +215,7 @@ class JapaneseNationalHoliday {
         (date.month == DateTime.august) &&
         (date.day == 11)) {
       holiday.isHoliday = true;
-      holiday.holidayName = S.of(context).yama_no_hi;
+      holiday.holidayName = S.of(context).yamaNoHi;
       return holiday;
     } else {
       holiday.isHoliday = false;
@@ -224,14 +224,14 @@ class JapaneseNationalHoliday {
     }
   }
 
-  Holiday getKeiro_no_hi(DateTime date) {
+  Holiday getKeiroNoHi(DateTime date) {
     Holiday holiday = Holiday();
     if ((date.year >= 2014) &&
         (date.month == DateTime.september) &&
         (getWeekOfMonth(date) == 3) &&
         (date.weekday == DateTime.monday)) {
       holiday.isHoliday = true;
-      holiday.holidayName = S.of(context).keiro_no_hi;
+      holiday.holidayName = S.of(context).keiroNoHi;
     } else {
       holiday.isHoliday = false;
       holiday.holidayName = " ";
@@ -239,13 +239,13 @@ class JapaneseNationalHoliday {
     return holiday;
   }
 
-  Holiday getSyubun_no_hi(DateTime date) {
+  Holiday getSyubunNoHi(DateTime date) {
     Holiday holiday = Holiday();
     if ((date.year >= 2014) &&
         (date.month == DateTime.september) &&
         (date.day == getSyubunbi(date))) {
       holiday.isHoliday = true;
-      holiday.holidayName = S.of(context).syubun_no_hi;
+      holiday.holidayName = S.of(context).syubunNoHi;
     } else {
       holiday.isHoliday = false;
       holiday.holidayName = " ";
@@ -259,26 +259,26 @@ class JapaneseNationalHoliday {
     return (23.09 + ((year - 2000) * 0.242194) - (year - 2000) ~/ 4).toInt();
   }
   
-  Holiday getSport_no_hi(DateTime date) {
+  Holiday getSportNoHi(DateTime date) {
     Holiday holiday = Holiday();
     if (2022 <= (date.year) && // 2020/12/4追記
         (date.month == DateTime.october) &&
         (getWeekOfMonth(date) == 2) &&
         (date.weekday == DateTime.monday)) {
       holiday.isHoliday = true;
-      holiday.holidayName = S.of(context).sport_no_hi;
+      holiday.holidayName = S.of(context).sportNoHi;
       return holiday;
     } else if ((date.year == 2021) && // 2020/12/4追記
         (date.month == DateTime.july) &&
         (date.day == 23)) {
       holiday.isHoliday = true;
-      holiday.holidayName = S.of(context).sport_no_hi;
+      holiday.holidayName = S.of(context).sportNoHi;
       return holiday;
     } else if ((date.year == 2020) && // 2018/10/22追記
         (date.month == DateTime.july) &&
         (date.day == 24)) {
       holiday.isHoliday = true;
-      holiday.holidayName = S.of(context).sport_no_hi;
+      holiday.holidayName = S.of(context).sportNoHi;
       return holiday;
     }
     if (2014 <= (date.year) &&
@@ -287,7 +287,7 @@ class JapaneseNationalHoliday {
         (getWeekOfMonth(date) == 2) &&
         (date.weekday == DateTime.monday)) {
       holiday.isHoliday = true;
-      holiday.holidayName = S.of(context).taiiku_no_hi;
+      holiday.holidayName = S.of(context).taiikuNoHi;
     } else {
       holiday.isHoliday = false;
       holiday.holidayName = " ";
@@ -295,13 +295,13 @@ class JapaneseNationalHoliday {
     return holiday;
   }
 
-  Holiday getSokui_reiseiden_no_hi(DateTime date) {
+  Holiday getSokuiReiseidenNoHi(DateTime date) {
     Holiday holiday = Holiday();
     if (2019 == (date.year) && // 2018/10/22追記
         (date.month == DateTime.october) &&
         (date.day == 22)) {
       holiday.isHoliday = true;
-      holiday.holidayName = S.of(context).sokui_reiseiden_no_hi;
+      holiday.holidayName = S.of(context).sokui_reiseidenNoHi;
     } else {
       holiday.isHoliday = false;
       holiday.holidayName = " ";
@@ -309,13 +309,13 @@ class JapaneseNationalHoliday {
     return holiday;
   }
 
-  Holiday getBunka_no_hi(DateTime date) {
+  Holiday getBunkaNoHi(DateTime date) {
     Holiday holiday = Holiday();
     if ((date.year >= 2014) &&
         (date.month == DateTime.november) &&
         (date.day == 3)) {
       holiday.isHoliday = true;
-      holiday.holidayName = S.of(context).bunka_no_hi;
+      holiday.holidayName = S.of(context).bunkaNoHi;
     } else {
       holiday.isHoliday = false;
       holiday.holidayName = " ";
@@ -323,13 +323,13 @@ class JapaneseNationalHoliday {
     return holiday;
   }
 
-  Holiday getKinrokansya_no_hi(DateTime date) {
+  Holiday getKinrokansyaNoHi(DateTime date) {
     Holiday holiday = Holiday();
     if ((date.year >= 2014) &&
         (date.month == DateTime.november) &&
         (date.day == 23)) {
       holiday.isHoliday = true;
-      holiday.holidayName = S.of(context).kinrokansya_no_hi;
+      holiday.holidayName = S.of(context).kinrokansyaNoHi;
     } else {
       holiday.isHoliday = false;
       holiday.holidayName = " ";
@@ -370,37 +370,37 @@ class JapaneseNationalHoliday {
 
     holiday = getGanjitsu(date);
     if (holiday.isHoliday) return holiday;
-    holiday = getSeijin_no_hi(date);
+    holiday = getSeijinNoHi(date);
     if (holiday.isHoliday) return holiday;
-    holiday = getKenkokukinen_no_hi(date);
+    holiday = getKenkokukinenNoHi(date);
     if (holiday.isHoliday) return holiday;
-    holiday = getSyunbun_no_hi(date);
+    holiday = getSyunbunNoHi(date);
     if (holiday.isHoliday) return holiday;
-    holiday = getShowa_no_hi(date);
+    holiday = getShowaNoHi(date);
     if (holiday.isHoliday) return holiday;
-    holiday = getSokui_no_hi(date);
+    holiday = getSokuiNoHi(date);
     if (holiday.isHoliday) return holiday;
     holiday = getKenpokinenbi(date);
     if (holiday.isHoliday) return holiday;
-    holiday = getMidori_no_hi(date);
+    holiday = getMidoriNoHi(date);
     if (holiday.isHoliday) return holiday;
-    holiday = getKodomo_no_hi(date);
+    holiday = getKodomoNoHi(date);
     if (holiday.isHoliday) return holiday;
-    holiday = getUmi_no_hi(date);
+    holiday = getUmiNoHi(date);
     if (holiday.isHoliday) return holiday;
-    holiday = getYama_no_hi(date);
+    holiday = getYamaNoHi(date);
     if (holiday.isHoliday) return holiday;
-    holiday = getKeiro_no_hi(date);
+    holiday = getKeiroNoHi(date);
     if (holiday.isHoliday) return holiday;
-    holiday = getSyubun_no_hi(date);
+    holiday = getSyubunNoHi(date);
     if (holiday.isHoliday) return holiday;
-    holiday = getSport_no_hi(date);
+    holiday = getSportNoHi(date);
     if (holiday.isHoliday) return holiday;
-    holiday = getSokui_reiseiden_no_hi(date);
+    holiday = getSokuiReiseidenNoHi(date);
     if (holiday.isHoliday) return holiday;
-    holiday = getBunka_no_hi(date);
+    holiday = getBunkaNoHi(date);
     if (holiday.isHoliday) return holiday;
-    holiday = getKinrokansya_no_hi(date);
+    holiday = getKinrokansyaNoHi(date);
     if (holiday.isHoliday) return holiday;
     holiday = getTennotanjobi(date);
     if (holiday.isHoliday) return holiday;
@@ -411,7 +411,7 @@ class JapaneseNationalHoliday {
     return holiday;
   }
 
-  Holiday getFurikae_kyujitsu(DateTime date) {
+  Holiday getFurikaeKyujitsu(DateTime date) {
     Holiday holiday;
 
     DateTime date1 = DateTime(date.year, date.month, date.day, 0, 0, 0, 0, 0);
@@ -430,7 +430,7 @@ class JapaneseNationalHoliday {
     return holiday;
   }
 
-  Holiday getKokumin_no_kyujitsu(DateTime date) {
+  Holiday getKokuminNoKyujitsu(DateTime date) {
     Holiday holiday = Holiday();
     Holiday holidayYesterday;
     Holiday holidayTomorrow;
@@ -459,7 +459,7 @@ class JapaneseNationalHoliday {
   Holiday getHoliday(DateTime? date) {
     Holiday holiday;
 
-    Locale locale = Localizations.localeOf(context);;
+    Locale locale = Localizations.localeOf(context);
     if (locale.languageCode != "ja" || date == null) {
       holiday = Holiday();
       holiday.isHoliday = false;
@@ -470,10 +470,10 @@ class JapaneseNationalHoliday {
     holiday = getRestrictHoliday(date);
     if (holiday.isHoliday) return holiday;
 
-    holiday = getFurikae_kyujitsu(date);
+    holiday = getFurikaeKyujitsu(date);
     if (holiday.isHoliday) return holiday;
 
-    holiday = getKokumin_no_kyujitsu(date);
+    holiday = getKokuminNoKyujitsu(date);
     if (holiday.isHoliday) return holiday;
 
     holiday.isHoliday = false;
