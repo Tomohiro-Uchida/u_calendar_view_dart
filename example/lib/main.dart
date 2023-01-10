@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 
-import 'package:u_calendar_view_dart/generated/l10n.dart';
 import 'package:u_calendar_view_dart/u_calendar_view_dart.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:uuid/uuid.dart';
+import 'generated/l10n.dart';
 
 void main() {
   runApp(const MyApp());
@@ -107,7 +107,7 @@ class MyApp extends StatefulWidget {
 }
 
 class MyAppState extends State<MyApp> {
-  final _uCalendarViewDartPlugin = UCalendarViewDart();
+  final uCalendarViewDartPlugin = UCalendarViewDart();
 
   @override
   void initState() {
@@ -157,7 +157,7 @@ class MyAppState extends State<MyApp> {
           appBar: AppBar(
             title: const Text('UCalendarView Sample app'),
           ),
-          body: _uCalendarViewDartPlugin.getView(DateTime.now(), 3, ucEntries,
+          body: uCalendarViewDartPlugin.getView(DateTime.now(), 3, ucEntries,
               ucOnAddEntry, ucOnTapEntry, ucOnMonthChanged)),
     );
   }
