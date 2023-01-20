@@ -1,10 +1,9 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:u_calendar_view_dart/u_calendar_view_dart.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'generated/l10n.dart';
+import 'package:u_calendar_view_dart/generated/l10n.dart';
 import 'package:uuid/uuid.dart';
 
 void main() {
@@ -114,6 +113,7 @@ class MyAppState extends State<MyApp> {
   }
 
   List<UCEntry> ucEntries = List.empty(growable: true);
+
   void initEntries() {
     for (int i = 0; i < 7 * 6; i++) {
       for (int j = 0; j < 2; j++) {
@@ -154,13 +154,7 @@ class MyAppState extends State<MyApp> {
             appBar: AppBar(
               title: const Text('UCalendarView Sample app'),
             ),
-            body: ((){
-              if (kDebugMode) {
-                //DEBUG
-                print(S.of(context));
-              }
-              return UCalendarView(
-                DateTime.now(), 3, ucEntries, ucOnAddEntry, ucOnTapEntry, ucOnMonthChanged);}())
-            ));
+            body: UCalendarView(
+                DateTime.now(), 3, ucEntries, ucOnAddEntry, ucOnTapEntry, ucOnMonthChanged)));
   }
 }

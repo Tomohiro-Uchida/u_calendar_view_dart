@@ -13,6 +13,7 @@ u_calendar_view_dart:
 import as follows:
 ```
 import 'package:u_calendar_view_dart/u_calendar_view_dart.dart';
+import 'package:u_calendar_view_dart/generated/l10n.dart';
 ```
 ### 3. Create Entries
 ```
@@ -77,7 +78,7 @@ Widget build(BuildContext context) {
           appBar: AppBar(
             title: const Text('UCalendarView Sample app'),
           ),
-        body: UCalendarView(
+          body: UCalendarView(
               DateTime.now(), 3, ucEntries, ucOnAddEntry, ucOnTapEntry, ucOnMonthChanged)));
 }
 
