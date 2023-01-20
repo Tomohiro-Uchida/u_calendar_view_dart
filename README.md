@@ -69,11 +69,15 @@ Widget build(BuildContext context) {
   return MaterialApp(
       localizationsDelegates: const [
         S.delegate,
+        UCalendarViewL10n.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate
       ],
-      supportedLocales: S.delegate.supportedLocales,
+      supportedLocales: const [
+        Locale("en"),
+        Locale("ja")
+      ],
       home: Scaffold(
           appBar: AppBar(
             title: const Text('UCalendarView Sample app'),
@@ -81,7 +85,6 @@ Widget build(BuildContext context) {
           body: UCalendarView(
               DateTime.now(), 3, ucEntries, ucOnAddEntry, ucOnTapEntry, ucOnMonthChanged)));
 }
-
 ```
 
 ## Sample App
