@@ -19,3 +19,6 @@ Bug is fixed.
 
 ## 0.0.7+7
 Bug is fixed.
+
+## 0.0.8+8
+Bug is fixed.
