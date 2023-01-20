@@ -1,6 +1,6 @@
 name: u_calendar_view_dart
 description: CalendarView for Dart/Flutter
-version: 0.0.6+6
+version: 0.0.7+7
 homepage: https://github.com/Tomohiro-Uchida-Flutter/u_calendar_view_dart
 
 environment:
@@ -26,6 +26,8 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
+  generate: false
+
   # This section identifies this Flutter project as a plugin project.
   # The 'pluginClass' specifies the class (in Java, Kotlin, Swift, Objective-C, etc.)
   # which should be registered in the plugin registry. This is required for
@@ -75,7 +77,5 @@ flutter:
   # For details regarding fonts in packages, see
   # https://flutter.dev/custom-fonts/#from-packages
 flutter_intl:
-  enabled: true
-
-generate: false
+  enabled: false
 
