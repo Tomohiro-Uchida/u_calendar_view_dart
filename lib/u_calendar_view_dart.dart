@@ -740,6 +740,7 @@ double calcMaxFontSize(List<UCEntry> ucEntries) {
   for (var element in ucEntries) {
     if (element.tableFontSize > max) max = element.tableFontSize;
   }
+  if (max == 0.0) return defaultFontSize;
   return max;
 }
 
