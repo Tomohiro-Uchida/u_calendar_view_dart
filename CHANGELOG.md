@@ -10,3 +10,6 @@ Adapt Android Studio Electric Eel.
 
 ## 0.0.4+4
 Bug is fixed.
+
+## 0.0.5+5
+Bug is fixed.
