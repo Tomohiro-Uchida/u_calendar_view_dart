@@ -38,7 +38,7 @@ class JapaneseNationalHoliday {
         (date.month == DateTime.january) &&
         (date.day == 1)) {
       holiday.isHoliday = true;
-      holiday.holidayName = S.of(context).ganjitsu;
+      holiday.holidayName = UCalendarViewL10n.of(context).ganjitsu;
     } else {
       holiday.isHoliday = false;
       holiday.holidayName = " ";
@@ -53,7 +53,7 @@ class JapaneseNationalHoliday {
         (getWeekOfMonth(date) == 2) &&
         (date.weekday == DateTime.monday)) {
       holiday.isHoliday = true;
-      holiday.holidayName = S.of(context).seijinNoHi;
+      holiday.holidayName = UCalendarViewL10n.of(context).seijinNoHi;
     } else {
       holiday.isHoliday = false;
       holiday.holidayName = " ";
@@ -67,7 +67,7 @@ class JapaneseNationalHoliday {
         (date.month == DateTime.february) &&
         (date.day == 11)) {
       holiday.isHoliday = true;
-      holiday.holidayName = S.of(context).kenkokukinenNoHi;
+      holiday.holidayName = UCalendarViewL10n.of(context).kenkokukinenNoHi;
     } else {
       holiday.isHoliday = false;
       holiday.holidayName = " ";
@@ -81,7 +81,7 @@ class JapaneseNationalHoliday {
         (date.month == DateTime.march) &&
         (date.day == getSyunbunbi(date))) {
       holiday.isHoliday = true;
-      holiday.holidayName = S.of(context).syunbunNoHi;
+      holiday.holidayName = UCalendarViewL10n.of(context).syunbunNoHi;
     } else {
       holiday.isHoliday = false;
       holiday.holidayName = " ";
@@ -101,7 +101,7 @@ class JapaneseNationalHoliday {
         (date.month == DateTime.april) &&
         (date.day == 29)) {
       holiday.isHoliday = true;
-      holiday.holidayName = S.of(context).showaNoHi;
+      holiday.holidayName = UCalendarViewL10n.of(context).showaNoHi;
     } else {
       holiday.isHoliday = false;
       holiday.holidayName = " ";
@@ -115,7 +115,7 @@ class JapaneseNationalHoliday {
         (date.month == DateTime.may) &&
         (date.day == 1)) {
       holiday.isHoliday = true;
-      holiday.holidayName = S.of(context).sokuiNoHi;
+      holiday.holidayName = UCalendarViewL10n.of(context).sokuiNoHi;
     } else {
       holiday.isHoliday = false;
       holiday.holidayName = " ";
@@ -129,7 +129,7 @@ class JapaneseNationalHoliday {
         (date.month == DateTime.may) &&
         (date.day == 3)) {
       holiday.isHoliday = true;
-      holiday.holidayName = S.of(context).kenpokinenbi;
+      holiday.holidayName = UCalendarViewL10n.of(context).kenpokinenbi;
     } else {
       holiday.isHoliday = false;
       holiday.holidayName = " ";
@@ -143,7 +143,7 @@ class JapaneseNationalHoliday {
         (date.month == DateTime.may) &&
         (date.day == 4)) {
       holiday.isHoliday = true;
-      holiday.holidayName = S.of(context).midoriNoHi;
+      holiday.holidayName = UCalendarViewL10n.of(context).midoriNoHi;
     } else {
       holiday.isHoliday = false;
       holiday.holidayName = " ";
@@ -157,7 +157,7 @@ class JapaneseNationalHoliday {
         (date.month == DateTime.may) &&
         (date.day == 5)) {
       holiday.isHoliday = true;
-      holiday.holidayName = S.of(context).kodomoNoHi;
+      holiday.holidayName = UCalendarViewL10n.of(context).kodomoNoHi;
     } else {
       holiday.isHoliday = false;
       holiday.holidayName = " ";
@@ -171,13 +171,13 @@ class JapaneseNationalHoliday {
         (date.month == DateTime.july) &&
         (date.day == 22)) {
       holiday.isHoliday = true;
-      holiday.holidayName = S.of(context).umiNoHi;
+      holiday.holidayName = UCalendarViewL10n.of(context).umiNoHi;
       return holiday;
     } else if ((date.year == 2020) && // 2018/10/22追記
         (date.month == DateTime.july) &&
         (date.day == 23)) {
       holiday.isHoliday = true;
-      holiday.holidayName = S.of(context).umiNoHi;
+      holiday.holidayName = UCalendarViewL10n.of(context).umiNoHi;
       return holiday;
     } else if (2014 <= date.year &&
         (date.year != 2021) && // 2020/12/4追記
@@ -186,7 +186,7 @@ class JapaneseNationalHoliday {
         (getWeekOfMonth(date) == 3) &&
         (date.weekday == DateTime.monday)) {
       holiday.isHoliday = true;
-      holiday.holidayName = S.of(context).umiNoHi;
+      holiday.holidayName = UCalendarViewL10n.of(context).umiNoHi;
       return holiday;
     } else {
       holiday.isHoliday = false;
@@ -201,13 +201,13 @@ class JapaneseNationalHoliday {
         (date.month == DateTime.august) &&
         (date.day == 8)) {
       holiday.isHoliday = true;
-      holiday.holidayName = S.of(context).yamaNoHi;
+      holiday.holidayName = UCalendarViewL10n.of(context).yamaNoHi;
       return holiday;
     } else if ((date.year == 2020) && // 2018/10/22追記
         (date.month == DateTime.august) &&
         (date.day == 10)) {
       holiday.isHoliday = true;
-      holiday.holidayName = S.of(context).yamaNoHi;
+      holiday.holidayName = UCalendarViewL10n.of(context).yamaNoHi;
       return holiday;
     } else if (2014 <= date.year &&
         (date.year != 2021) && // 2020/12/4追記
@@ -215,7 +215,7 @@ class JapaneseNationalHoliday {
         (date.month == DateTime.august) &&
         (date.day == 11)) {
       holiday.isHoliday = true;
-      holiday.holidayName = S.of(context).yamaNoHi;
+      holiday.holidayName = UCalendarViewL10n.of(context).yamaNoHi;
       return holiday;
     } else {
       holiday.isHoliday = false;
@@ -231,7 +231,7 @@ class JapaneseNationalHoliday {
         (getWeekOfMonth(date) == 3) &&
         (date.weekday == DateTime.monday)) {
       holiday.isHoliday = true;
-      holiday.holidayName = S.of(context).keiroNoHi;
+      holiday.holidayName = UCalendarViewL10n.of(context).keiroNoHi;
     } else {
       holiday.isHoliday = false;
       holiday.holidayName = " ";
@@ -245,7 +245,7 @@ class JapaneseNationalHoliday {
         (date.month == DateTime.september) &&
         (date.day == getSyubunbi(date))) {
       holiday.isHoliday = true;
-      holiday.holidayName = S.of(context).syubunNoHi;
+      holiday.holidayName = UCalendarViewL10n.of(context).syubunNoHi;
     } else {
       holiday.isHoliday = false;
       holiday.holidayName = " ";
@@ -266,19 +266,19 @@ class JapaneseNationalHoliday {
         (getWeekOfMonth(date) == 2) &&
         (date.weekday == DateTime.monday)) {
       holiday.isHoliday = true;
-      holiday.holidayName = S.of(context).sportsNoHi;
+      holiday.holidayName = UCalendarViewL10n.of(context).sportsNoHi;
       return holiday;
     } else if ((date.year == 2021) && // 2020/12/4追記
         (date.month == DateTime.july) &&
         (date.day == 23)) {
       holiday.isHoliday = true;
-      holiday.holidayName = S.of(context).sportsNoHi;
+      holiday.holidayName = UCalendarViewL10n.of(context).sportsNoHi;
       return holiday;
     } else if ((date.year == 2020) && // 2018/10/22追記
         (date.month == DateTime.july) &&
         (date.day == 24)) {
       holiday.isHoliday = true;
-      holiday.holidayName = S.of(context).sportsNoHi;
+      holiday.holidayName = UCalendarViewL10n.of(context).sportsNoHi;
       return holiday;
     }
     if (2014 <= (date.year) &&
@@ -287,7 +287,7 @@ class JapaneseNationalHoliday {
         (getWeekOfMonth(date) == 2) &&
         (date.weekday == DateTime.monday)) {
       holiday.isHoliday = true;
-      holiday.holidayName = S.of(context).taiikuNoHi;
+      holiday.holidayName = UCalendarViewL10n.of(context).taiikuNoHi;
     } else {
       holiday.isHoliday = false;
       holiday.holidayName = " ";
@@ -301,7 +301,7 @@ class JapaneseNationalHoliday {
         (date.month == DateTime.october) &&
         (date.day == 22)) {
       holiday.isHoliday = true;
-      holiday.holidayName = S.of(context).sokui_reiseidenNoHi;
+      holiday.holidayName = UCalendarViewL10n.of(context).sokui_reiseidenNoHi;
     } else {
       holiday.isHoliday = false;
       holiday.holidayName = " ";
@@ -315,7 +315,7 @@ class JapaneseNationalHoliday {
         (date.month == DateTime.november) &&
         (date.day == 3)) {
       holiday.isHoliday = true;
-      holiday.holidayName = S.of(context).bunkaNoHi;
+      holiday.holidayName = UCalendarViewL10n.of(context).bunkaNoHi;
     } else {
       holiday.isHoliday = false;
       holiday.holidayName = " ";
@@ -329,7 +329,7 @@ class JapaneseNationalHoliday {
         (date.month == DateTime.november) &&
         (date.day == 23)) {
       holiday.isHoliday = true;
-      holiday.holidayName = S.of(context).kinrokansyaNoHi;
+      holiday.holidayName = UCalendarViewL10n.of(context).kinrokansyaNoHi;
     } else {
       holiday.isHoliday = false;
       holiday.holidayName = " ";
@@ -343,7 +343,7 @@ class JapaneseNationalHoliday {
     if (cal20190501.compareTo(date) <= 0) {
       if ((date.month == DateTime.february) && (date.day == 23)) {
         holiday.isHoliday = true;
-        holiday.holidayName = S.of(context).tennotanjobi;
+        holiday.holidayName = UCalendarViewL10n.of(context).tennotanjobi;
       } else {
         holiday.isHoliday = false;
         holiday.holidayName = " ";
@@ -352,7 +352,7 @@ class JapaneseNationalHoliday {
     } else if (2014 <= date.year) {
       if ((date.month == DateTime.december) && (date.day == 23)) {
         holiday.isHoliday = true;
-        holiday.holidayName = S.of(context).tennotanjobi;
+        holiday.holidayName = UCalendarViewL10n.of(context).tennotanjobi;
       } else {
         holiday.isHoliday = false;
         holiday.holidayName = " ";
@@ -420,7 +420,7 @@ class JapaneseNationalHoliday {
       date1.add(const Duration(days: -1));
       holiday = getRestrictHoliday(date1);
       if (holiday.isHoliday && (date1.weekday == DateTime.sunday)) {
-        holiday.holidayName = S.of(context).furikaeKyujitsu;
+        holiday.holidayName = UCalendarViewL10n.of(context).furikaeKyujitsu;
         return holiday;
       }
     } while (holiday.isHoliday);
@@ -446,7 +446,7 @@ class JapaneseNationalHoliday {
 
     if (holidayYesterday.isHoliday && holidayTomorrow.isHoliday) {
       holiday.isHoliday = true;
-      holiday.holidayName = S.of(context).kokuminNoKyujitsu;
+      holiday.holidayName = UCalendarViewL10n.of(context).kokuminNoKyujitsu;
       return holiday;
     }
 

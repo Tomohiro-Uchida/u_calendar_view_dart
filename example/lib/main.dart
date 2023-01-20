@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:u_calendar_view_dart/generated/l10n.dart';
 import 'dart:async';
 
 import 'package:u_calendar_view_dart/u_calendar_view_dart.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:u_calendar_view_dart/generated/l10n.dart';
 import 'package:uuid/uuid.dart';
+import 'generated/l10n.dart';
 
 void main() {
   runApp(const MyApp());
@@ -145,11 +146,15 @@ class MyAppState extends State<MyApp> {
     return MaterialApp(
         localizationsDelegates: const [
           S.delegate,
+          UCalendarViewL10n.delegate,
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate
         ],
-        supportedLocales: S.delegate.supportedLocales,
+        supportedLocales: const [
+          Locale("en"),
+          Locale("ja")
+        ],
         home: Scaffold(
             appBar: AppBar(
               title: const Text('UCalendarView Sample app'),

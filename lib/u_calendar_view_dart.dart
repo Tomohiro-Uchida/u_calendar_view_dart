@@ -160,9 +160,9 @@ class UCDayEntryState extends State<UCDayEntry> {
 
 Widget setWeekLabels(BuildContext context, String label) {
   Widget retVal;
-  if (label == S.of(context).sun) {
+  if (label == UCalendarViewL10n.of(context).sun) {
     retVal = Text(label, textAlign: TextAlign.center, style: const TextStyle(color: Colors.red));
-  } else if (label == S.of(context).sat) {
+  } else if (label == UCalendarViewL10n.of(context).sat) {
     retVal = Text(label, textAlign: TextAlign.center, style: const TextStyle(color: Colors.blue));
   } else {
     retVal = Text(label, textAlign: TextAlign.center, style: const TextStyle(color: Colors.black));
@@ -176,13 +176,13 @@ class WeekLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<String> weekLabels = [
-      S.of(context).sun,
-      S.of(context).mon,
-      S.of(context).tue,
-      S.of(context).wed,
-      S.of(context).thu,
-      S.of(context).fri,
-      S.of(context).sat
+      UCalendarViewL10n.of(context).sun,
+      UCalendarViewL10n.of(context).mon,
+      UCalendarViewL10n.of(context).tue,
+      UCalendarViewL10n.of(context).wed,
+      UCalendarViewL10n.of(context).thu,
+      UCalendarViewL10n.of(context).fri,
+      UCalendarViewL10n.of(context).sat
     ];
     return Row(children: <Widget>[
       for (String label in weekLabels) ...{
