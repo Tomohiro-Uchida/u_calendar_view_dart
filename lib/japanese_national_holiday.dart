@@ -417,7 +417,7 @@ class JapaneseNationalHoliday {
     DateTime date1 = DateTime(date.year, date.month, date.day, 0, 0, 0, 0, 0);
 
     do {
-      date1.add(const Duration(days: -1));
+      date1 = date1.add(const Duration(days: -1));
       holiday = getRestrictHoliday(date1);
       if (holiday.isHoliday && (date1.weekday == DateTime.sunday)) {
         holiday.holidayName = UCalendarViewL10n.of(context).furikaeKyujitsu;

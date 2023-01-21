@@ -13,7 +13,7 @@ class UCalendarViewDart {
   }
 }
 
-const double defaultFontSize = 14.0;
+const double defaultFontSize = 12.0;
 const double fontSizeFactor = 1.0;
 double entryFontSize = defaultFontSize;
 double dayEntryHeight = defaultFontSize * fontSizeFactor;
@@ -115,7 +115,7 @@ class UCHoliday extends StatelessWidget {
         child: Text(holiday.holidayName,
             maxLines: 1,
             overflow: TextOverflow.clip,
-            style: const TextStyle(fontSize: defaultFontSize - 3.0)));
+            style: const TextStyle(fontSize: defaultFontSize - 1.0)));
   }
 }
 
