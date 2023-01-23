@@ -13,7 +13,6 @@ u_calendar_view_dart:
 import as follows:
 ```
 import 'package:u_calendar_view_dart/u_calendar_view_dart.dart';
-import 'package:u_calendar_view_dart/generated/l10n.dart';
 ```
 ### 3. Create Entries
 ```
@@ -69,7 +68,6 @@ Widget build(BuildContext context) {
   return MaterialApp(
       localizationsDelegates: const [
         S.delegate,
-        UCalendarViewL10n.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate

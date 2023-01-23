@@ -34,3 +34,6 @@ Bug is fixed.
 
 ## 0.1.0+12
 Modified internal process of localization.
+
+## 0.1.1+13
+Modified README.
