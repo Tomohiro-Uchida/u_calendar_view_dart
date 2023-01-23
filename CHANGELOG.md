@@ -31,3 +31,6 @@ Bug is fixed.
 
 ## 0.0.11+11
 Bug is fixed.
+
+## 0.1.0+12
+Modified internal process of localization.

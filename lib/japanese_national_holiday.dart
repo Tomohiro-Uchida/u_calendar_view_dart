@@ -2,7 +2,6 @@ import 'dart:core';
 
 import 'package:flutter/material.dart';
 import 'package:u_calendar_view_dart/u_calendar_view_dart.dart';
-import 'generated/l10n.dart';
 
 class Holiday {
   bool isHoliday = false;
@@ -11,8 +10,9 @@ class Holiday {
 
 class JapaneseNationalHoliday {
   BuildContext context;
+  Map<String, dynamic> lang;
 
-  JapaneseNationalHoliday(this.context);
+  JapaneseNationalHoliday(this.context, this.lang);
 
   int getWeekOfMonth(DateTime date) {
     int originalWeekOfMonth = date.weekOfMonth;
@@ -32,13 +32,13 @@ class JapaneseNationalHoliday {
     }
   }
 
-  Holiday getGanjitsu(DateTime date) {
+  Holiday getGanjitsu(DateTime date, Map<String, dynamic> lang) {
     Holiday holiday = Holiday();
     if ((date.year >= 2014) &&
         (date.month == DateTime.january) &&
         (date.day == 1)) {
       holiday.isHoliday = true;
-      holiday.holidayName = UCalendarViewL10n.of(context).ganjitsu;
+      holiday.holidayName = (lang["ganjitsu"]!=null) ? lang["ganjitsu"] : "";
     } else {
       holiday.isHoliday = false;
       holiday.holidayName = " ";
@@ -46,14 +46,14 @@ class JapaneseNationalHoliday {
     return holiday;
   }
 
-  Holiday getSeijinNoHi(DateTime date) {
+  Holiday getSeijinNoHi(DateTime date, Map<String, dynamic> lang) {
     Holiday holiday = Holiday();
     if ((date.year >= 2014) &&
         (date.month == DateTime.january) &&
         (getWeekOfMonth(date) == 2) &&
         (date.weekday == DateTime.monday)) {
       holiday.isHoliday = true;
-      holiday.holidayName = UCalendarViewL10n.of(context).seijinNoHi;
+      holiday.holidayName = (lang["seijinNoHi"]!=null) ? lang["seijinNoHi"] : "";
     } else {
       holiday.isHoliday = false;
       holiday.holidayName = " ";
@@ -61,13 +61,13 @@ class JapaneseNationalHoliday {
     return holiday;
   }
 
-  Holiday getKenkokukinenNoHi(DateTime date) {
+  Holiday getKenkokukinenNoHi(DateTime date, Map<String, dynamic> lang) {
     Holiday holiday = Holiday();
     if ((date.year >= 2014) &&
         (date.month == DateTime.february) &&
         (date.day == 11)) {
       holiday.isHoliday = true;
-      holiday.holidayName = UCalendarViewL10n.of(context).kenkokukinenNoHi;
+      holiday.holidayName = (lang["kenkokukinenNoHi"]!=null) ? lang["kenkokukinenNoHi"] : "";
     } else {
       holiday.isHoliday = false;
       holiday.holidayName = " ";
@@ -75,13 +75,13 @@ class JapaneseNationalHoliday {
     return holiday;
   }
 
-  Holiday getSyunbunNoHi(DateTime date) {
+  Holiday getSyunbunNoHi(DateTime date, Map<String, dynamic> lang) {
     Holiday holiday = Holiday();
     if ((date.year >= 2014) &&
         (date.month == DateTime.march) &&
         (date.day == getSyunbunbi(date))) {
       holiday.isHoliday = true;
-      holiday.holidayName = UCalendarViewL10n.of(context).syunbunNoHi;
+      holiday.holidayName = (lang["syunbunNoHi"]!=null) ? lang["syunbunNoHi"] : "";
     } else {
       holiday.isHoliday = false;
       holiday.holidayName = " ";
@@ -95,13 +95,13 @@ class JapaneseNationalHoliday {
     return (20.69115 + ((year - 2000) * 0.242194) - (year - 2000) ~/ 4).toInt();
   }
 
-  Holiday getShowaNoHi(DateTime date) {
+  Holiday getShowaNoHi(DateTime date, Map<String, dynamic> lang) {
     Holiday holiday = Holiday();
     if ((date.year >= 2014) &&
         (date.month == DateTime.april) &&
         (date.day == 29)) {
       holiday.isHoliday = true;
-      holiday.holidayName = UCalendarViewL10n.of(context).showaNoHi;
+      holiday.holidayName = (lang["showaNoHi"]!=null) ? lang["showaNoHi"] : "";
     } else {
       holiday.isHoliday = false;
       holiday.holidayName = " ";
@@ -109,13 +109,13 @@ class JapaneseNationalHoliday {
     return holiday;
   }
 
-  Holiday getSokuiNoHi(DateTime date) {
+  Holiday getSokuiNoHi(DateTime date, Map<String, dynamic> lang) {
     Holiday holiday = Holiday();
     if (2019 == (date.year) && // 2018/10/22追記
         (date.month == DateTime.may) &&
         (date.day == 1)) {
       holiday.isHoliday = true;
-      holiday.holidayName = UCalendarViewL10n.of(context).sokuiNoHi;
+      holiday.holidayName = (lang["sokuiNoHi"]!=null) ? lang["sokuiNoHi"] : "";
     } else {
       holiday.isHoliday = false;
       holiday.holidayName = " ";
@@ -123,13 +123,13 @@ class JapaneseNationalHoliday {
     return holiday;
   }
 
-  Holiday getKenpokinenbi(DateTime date) {
+  Holiday getKenpokinenbi(DateTime date, Map<String, dynamic> lang) {
     Holiday holiday = Holiday();
     if ((date.year >= 2014) &&
         (date.month == DateTime.may) &&
         (date.day == 3)) {
       holiday.isHoliday = true;
-      holiday.holidayName = UCalendarViewL10n.of(context).kenpokinenbi;
+      holiday.holidayName = (lang["kenpokinenbi"]!=null) ? lang["kenpokinenbi"] : "";
     } else {
       holiday.isHoliday = false;
       holiday.holidayName = " ";
@@ -137,13 +137,13 @@ class JapaneseNationalHoliday {
     return holiday;
   }
 
-  Holiday getMidoriNoHi(DateTime date) {
+  Holiday getMidoriNoHi(DateTime date, Map<String, dynamic> lang) {
     Holiday holiday = Holiday();
     if ((date.year >= 2014) &&
         (date.month == DateTime.may) &&
         (date.day == 4)) {
       holiday.isHoliday = true;
-      holiday.holidayName = UCalendarViewL10n.of(context).midoriNoHi;
+      holiday.holidayName = (lang["midoriNoHi"]!=null) ? lang["midoriNoHi"] : "";
     } else {
       holiday.isHoliday = false;
       holiday.holidayName = " ";
@@ -151,13 +151,13 @@ class JapaneseNationalHoliday {
     return holiday;
   }
 
-  Holiday getKodomoNoHi(DateTime date) {
+  Holiday getKodomoNoHi(DateTime date, Map<String, dynamic> lang) {
     Holiday holiday = Holiday();
     if ((date.year >= 2014) &&
         (date.month == DateTime.may) &&
         (date.day == 5)) {
       holiday.isHoliday = true;
-      holiday.holidayName = UCalendarViewL10n.of(context).kodomoNoHi;
+      holiday.holidayName = (lang["kodomoNoHi"]!=null) ? lang["kodomoNoHi"] : "";
     } else {
       holiday.isHoliday = false;
       holiday.holidayName = " ";
@@ -165,19 +165,19 @@ class JapaneseNationalHoliday {
     return holiday;
   }
 
-  Holiday getUmiNoHi(DateTime date) {
+  Holiday getUmiNoHi(DateTime date, Map<String, dynamic> lang) {
     Holiday holiday = Holiday();
     if ((date.year == 2021) && // 2020/12/04追記
         (date.month == DateTime.july) &&
         (date.day == 22)) {
       holiday.isHoliday = true;
-      holiday.holidayName = UCalendarViewL10n.of(context).umiNoHi;
+      holiday.holidayName = (lang["umiNoHi"]!=null) ? lang["umiNoHi"] : "";
       return holiday;
     } else if ((date.year == 2020) && // 2018/10/22追記
         (date.month == DateTime.july) &&
         (date.day == 23)) {
       holiday.isHoliday = true;
-      holiday.holidayName = UCalendarViewL10n.of(context).umiNoHi;
+      holiday.holidayName = (lang["umiNoHi"]!=null) ? lang["umiNoHi"] : "";
       return holiday;
     } else if (2014 <= date.year &&
         (date.year != 2021) && // 2020/12/4追記
@@ -186,7 +186,7 @@ class JapaneseNationalHoliday {
         (getWeekOfMonth(date) == 3) &&
         (date.weekday == DateTime.monday)) {
       holiday.isHoliday = true;
-      holiday.holidayName = UCalendarViewL10n.of(context).umiNoHi;
+      holiday.holidayName = (lang["umiNoHi"]!=null) ? lang["umiNoHi"] : "";
       return holiday;
     } else {
       holiday.isHoliday = false;
@@ -195,19 +195,19 @@ class JapaneseNationalHoliday {
     }
   }
 
-  Holiday getYamaNoHi(DateTime date) {
+  Holiday getYamaNoHi(DateTime date, Map<String, dynamic> lang) {
     Holiday holiday = Holiday();
     if ((date.year == 2021) && // 2020/12/4追記
         (date.month == DateTime.august) &&
         (date.day == 8)) {
       holiday.isHoliday = true;
-      holiday.holidayName = UCalendarViewL10n.of(context).yamaNoHi;
+      holiday.holidayName = (lang["yamaNoHi"]!=null) ? lang["yamaNoHi"] : "";
       return holiday;
     } else if ((date.year == 2020) && // 2018/10/22追記
         (date.month == DateTime.august) &&
         (date.day == 10)) {
       holiday.isHoliday = true;
-      holiday.holidayName = UCalendarViewL10n.of(context).yamaNoHi;
+      holiday.holidayName = (lang["yamaNoHi"]!=null) ? lang["yamaNoHi"] : "";
       return holiday;
     } else if (2014 <= date.year &&
         (date.year != 2021) && // 2020/12/4追記
@@ -215,7 +215,7 @@ class JapaneseNationalHoliday {
         (date.month == DateTime.august) &&
         (date.day == 11)) {
       holiday.isHoliday = true;
-      holiday.holidayName = UCalendarViewL10n.of(context).yamaNoHi;
+      holiday.holidayName = (lang["yamaNoHi"]!=null) ? lang["yamaNoHi"] : "";
       return holiday;
     } else {
       holiday.isHoliday = false;
@@ -224,14 +224,14 @@ class JapaneseNationalHoliday {
     }
   }
 
-  Holiday getKeiroNoHi(DateTime date) {
+  Holiday getKeiroNoHi(DateTime date, Map<String, dynamic> lang) {
     Holiday holiday = Holiday();
     if ((date.year >= 2014) &&
         (date.month == DateTime.september) &&
         (getWeekOfMonth(date) == 3) &&
         (date.weekday == DateTime.monday)) {
       holiday.isHoliday = true;
-      holiday.holidayName = UCalendarViewL10n.of(context).keiroNoHi;
+      holiday.holidayName = (lang["keiroNoHi"]!=null) ? lang["keiroNoHi"] : "";
     } else {
       holiday.isHoliday = false;
       holiday.holidayName = " ";
@@ -239,13 +239,13 @@ class JapaneseNationalHoliday {
     return holiday;
   }
 
-  Holiday getSyubunNoHi(DateTime date) {
+  Holiday getSyubunNoHi(DateTime date, Map<String, dynamic> lang) {
     Holiday holiday = Holiday();
     if ((date.year >= 2014) &&
         (date.month == DateTime.september) &&
         (date.day == getSyubunbi(date))) {
       holiday.isHoliday = true;
-      holiday.holidayName = UCalendarViewL10n.of(context).syubunNoHi;
+      holiday.holidayName = (lang["syubunNoHi"]!=null) ? lang["syubunNoHi"] : "";
     } else {
       holiday.isHoliday = false;
       holiday.holidayName = " ";
@@ -259,26 +259,26 @@ class JapaneseNationalHoliday {
     return (23.09 + ((year - 2000) * 0.242194) - (year - 2000) ~/ 4).toInt();
   }
   
-  Holiday getSportNoHi(DateTime date) {
+  Holiday getSportNoHi(DateTime date, Map<String, dynamic> lang) {
     Holiday holiday = Holiday();
     if (2022 <= (date.year) && // 2020/12/4追記
         (date.month == DateTime.october) &&
         (getWeekOfMonth(date) == 2) &&
         (date.weekday == DateTime.monday)) {
       holiday.isHoliday = true;
-      holiday.holidayName = UCalendarViewL10n.of(context).sportsNoHi;
+      holiday.holidayName = (lang["sportsNoHi"]!=null) ? lang["sportsNoHi"] : "";
       return holiday;
     } else if ((date.year == 2021) && // 2020/12/4追記
         (date.month == DateTime.july) &&
         (date.day == 23)) {
       holiday.isHoliday = true;
-      holiday.holidayName = UCalendarViewL10n.of(context).sportsNoHi;
+      holiday.holidayName = (lang["sportsNoHi"]!=null) ? lang["sportsNoHi"] : "";
       return holiday;
     } else if ((date.year == 2020) && // 2018/10/22追記
         (date.month == DateTime.july) &&
         (date.day == 24)) {
       holiday.isHoliday = true;
-      holiday.holidayName = UCalendarViewL10n.of(context).sportsNoHi;
+      holiday.holidayName = (lang["sportsNoHi"]!=null) ? lang["sportsNoHi"] : "";
       return holiday;
     }
     if (2014 <= (date.year) &&
@@ -287,7 +287,7 @@ class JapaneseNationalHoliday {
         (getWeekOfMonth(date) == 2) &&
         (date.weekday == DateTime.monday)) {
       holiday.isHoliday = true;
-      holiday.holidayName = UCalendarViewL10n.of(context).taiikuNoHi;
+      holiday.holidayName = (lang["taiikuNoHi"]!=null) ? lang["taiikuNoHi"] : "";
     } else {
       holiday.isHoliday = false;
       holiday.holidayName = " ";
@@ -295,13 +295,13 @@ class JapaneseNationalHoliday {
     return holiday;
   }
 
-  Holiday getSokuiReiseidenNoHi(DateTime date) {
+  Holiday getSokuiReiseidenNoHi(DateTime date, Map<String, dynamic> lang) {
     Holiday holiday = Holiday();
     if (2019 == (date.year) && // 2018/10/22追記
         (date.month == DateTime.october) &&
         (date.day == 22)) {
       holiday.isHoliday = true;
-      holiday.holidayName = UCalendarViewL10n.of(context).sokui_reiseidenNoHi;
+      holiday.holidayName = (lang["sokuiReiseidenNoHi"]!=null) ? lang["sokuiReiseidenNoHi"] : "";
     } else {
       holiday.isHoliday = false;
       holiday.holidayName = " ";
@@ -309,13 +309,13 @@ class JapaneseNationalHoliday {
     return holiday;
   }
 
-  Holiday getBunkaNoHi(DateTime date) {
+  Holiday getBunkaNoHi(DateTime date, Map<String, dynamic> lang) {
     Holiday holiday = Holiday();
     if ((date.year >= 2014) &&
         (date.month == DateTime.november) &&
         (date.day == 3)) {
       holiday.isHoliday = true;
-      holiday.holidayName = UCalendarViewL10n.of(context).bunkaNoHi;
+      holiday.holidayName = (lang["bunkaNoHi"]!=null) ? lang["bunkaNoHi"] : "";
     } else {
       holiday.isHoliday = false;
       holiday.holidayName = " ";
@@ -323,13 +323,13 @@ class JapaneseNationalHoliday {
     return holiday;
   }
 
-  Holiday getKinrokansyaNoHi(DateTime date) {
+  Holiday getKinrokansyaNoHi(DateTime date, Map<String, dynamic> lang) {
     Holiday holiday = Holiday();
     if ((date.year >= 2014) &&
         (date.month == DateTime.november) &&
         (date.day == 23)) {
       holiday.isHoliday = true;
-      holiday.holidayName = UCalendarViewL10n.of(context).kinrokansyaNoHi;
+      holiday.holidayName = (lang["kinrokansyaNoHi"]!=null) ? lang["kinrokansyaNoHi"] : "";
     } else {
       holiday.isHoliday = false;
       holiday.holidayName = " ";
@@ -337,13 +337,13 @@ class JapaneseNationalHoliday {
     return holiday;
   }
 
-  Holiday getTennotanjobi(DateTime date) {
+  Holiday getTennotanjobi(DateTime date, Map<String, dynamic> lang) {
     Holiday holiday = Holiday();
     DateTime cal20190501 = DateTime(2019, 5, 1, 0, 0, 0, 0, 0);
     if (cal20190501.compareTo(date) <= 0) {
       if ((date.month == DateTime.february) && (date.day == 23)) {
         holiday.isHoliday = true;
-        holiday.holidayName = UCalendarViewL10n.of(context).tennotanjobi;
+        holiday.holidayName = (lang["tennotanjobi"]!=null) ? lang["tennotanjobi"] : "";
       } else {
         holiday.isHoliday = false;
         holiday.holidayName = " ";
@@ -352,7 +352,7 @@ class JapaneseNationalHoliday {
     } else if (2014 <= date.year) {
       if ((date.month == DateTime.december) && (date.day == 23)) {
         holiday.isHoliday = true;
-        holiday.holidayName = UCalendarViewL10n.of(context).tennotanjobi;
+        holiday.holidayName = (lang["tennotanjobi"]!=null) ? lang["tennotanjobi"] : "";
       } else {
         holiday.isHoliday = false;
         holiday.holidayName = " ";
@@ -365,44 +365,44 @@ class JapaneseNationalHoliday {
     }
   }
 
-  Holiday getRestrictHoliday(DateTime date) {
+  Holiday getRestrictHoliday(DateTime date, Map<String, dynamic> lang) {
     Holiday holiday;
 
-    holiday = getGanjitsu(date);
+    holiday = getGanjitsu(date, lang);
     if (holiday.isHoliday) return holiday;
-    holiday = getSeijinNoHi(date);
+    holiday = getSeijinNoHi(date, lang);
     if (holiday.isHoliday) return holiday;
-    holiday = getKenkokukinenNoHi(date);
+    holiday = getKenkokukinenNoHi(date, lang);
     if (holiday.isHoliday) return holiday;
-    holiday = getSyunbunNoHi(date);
+    holiday = getSyunbunNoHi(date, lang);
     if (holiday.isHoliday) return holiday;
-    holiday = getShowaNoHi(date);
+    holiday = getShowaNoHi(date, lang);
     if (holiday.isHoliday) return holiday;
-    holiday = getSokuiNoHi(date);
+    holiday = getSokuiNoHi(date, lang);
     if (holiday.isHoliday) return holiday;
-    holiday = getKenpokinenbi(date);
+    holiday = getKenpokinenbi(date, lang);
     if (holiday.isHoliday) return holiday;
-    holiday = getMidoriNoHi(date);
+    holiday = getMidoriNoHi(date, lang);
     if (holiday.isHoliday) return holiday;
-    holiday = getKodomoNoHi(date);
+    holiday = getKodomoNoHi(date, lang);
     if (holiday.isHoliday) return holiday;
-    holiday = getUmiNoHi(date);
+    holiday = getUmiNoHi(date, lang);
     if (holiday.isHoliday) return holiday;
-    holiday = getYamaNoHi(date);
+    holiday = getYamaNoHi(date, lang);
     if (holiday.isHoliday) return holiday;
-    holiday = getKeiroNoHi(date);
+    holiday = getKeiroNoHi(date, lang);
     if (holiday.isHoliday) return holiday;
-    holiday = getSyubunNoHi(date);
+    holiday = getSyubunNoHi(date, lang);
     if (holiday.isHoliday) return holiday;
-    holiday = getSportNoHi(date);
+    holiday = getSportNoHi(date, lang);
     if (holiday.isHoliday) return holiday;
-    holiday = getSokuiReiseidenNoHi(date);
+    holiday = getSokuiReiseidenNoHi(date, lang);
     if (holiday.isHoliday) return holiday;
-    holiday = getBunkaNoHi(date);
+    holiday = getBunkaNoHi(date, lang);
     if (holiday.isHoliday) return holiday;
-    holiday = getKinrokansyaNoHi(date);
+    holiday = getKinrokansyaNoHi(date, lang);
     if (holiday.isHoliday) return holiday;
-    holiday = getTennotanjobi(date);
+    holiday = getTennotanjobi(date, lang);
     if (holiday.isHoliday) return holiday;
 
     holiday.isHoliday = false;
@@ -411,16 +411,16 @@ class JapaneseNationalHoliday {
     return holiday;
   }
 
-  Holiday getFurikaeKyujitsu(DateTime date) {
+  Holiday getFurikaeKyujitsu(DateTime date, Map<String, dynamic> lang) {
     Holiday holiday;
 
     DateTime date1 = DateTime(date.year, date.month, date.day, 0, 0, 0, 0, 0);
 
     do {
       date1 = date1.add(const Duration(days: -1));
-      holiday = getRestrictHoliday(date1);
+      holiday = getRestrictHoliday(date1, lang);
       if (holiday.isHoliday && (date1.weekday == DateTime.sunday)) {
-        holiday.holidayName = UCalendarViewL10n.of(context).furikaeKyujitsu;
+        holiday.holidayName = (lang["furikaeKyujitsu"]!=null) ? lang["furikaeKyujitsu"] : "";
         return holiday;
       }
     } while (holiday.isHoliday);
@@ -430,7 +430,7 @@ class JapaneseNationalHoliday {
     return holiday;
   }
 
-  Holiday getKokuminNoKyujitsu(DateTime date) {
+  Holiday getKokuminNoKyujitsu(DateTime date, Map<String, dynamic> lang) {
     Holiday holiday = Holiday();
     Holiday holidayYesterday;
     Holiday holidayTomorrow;
@@ -441,12 +441,12 @@ class JapaneseNationalHoliday {
     DateTime dateTomorrow =
         DateTime(date.year, date.month, date.day + 1, 0, 0, 0, 0, 0);
 
-    holidayYesterday = getRestrictHoliday(dateYesterday);
-    holidayTomorrow = getRestrictHoliday(dateTomorrow);
+    holidayYesterday = getRestrictHoliday(dateYesterday, lang);
+    holidayTomorrow = getRestrictHoliday(dateTomorrow, lang);
 
     if (holidayYesterday.isHoliday && holidayTomorrow.isHoliday) {
       holiday.isHoliday = true;
-      holiday.holidayName = UCalendarViewL10n.of(context).kokuminNoKyujitsu;
+      holiday.holidayName = (lang["kokuminNoKyujitsu"]!=null) ? lang["kokuminNoKyujitsu"] : "";
       return holiday;
     }
 
@@ -456,7 +456,7 @@ class JapaneseNationalHoliday {
     return holiday;
   }
 
-  Holiday getHoliday(DateTime? date) {
+  Holiday getHoliday(DateTime? date, Map<String, dynamic> lang) {
     Holiday holiday;
 
     Locale locale = Localizations.localeOf(context);
@@ -467,13 +467,13 @@ class JapaneseNationalHoliday {
       return holiday;
     }
 
-    holiday = getRestrictHoliday(date);
+    holiday = getRestrictHoliday(date, lang);
     if (holiday.isHoliday) return holiday;
 
-    holiday = getFurikaeKyujitsu(date);
+    holiday = getFurikaeKyujitsu(date, lang);
     if (holiday.isHoliday) return holiday;
 
-    holiday = getKokuminNoKyujitsu(date);
+    holiday = getKokuminNoKyujitsu(date, lang);
     if (holiday.isHoliday) return holiday;
 
     holiday.isHoliday = false;

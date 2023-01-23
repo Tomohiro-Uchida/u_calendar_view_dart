@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:u_calendar_view_dart/u_calendar_view_dart.dart';
-import 'package:u_calendar_view_dart/generated/l10n.dart';
 import 'generated/l10n.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:uuid/uuid.dart';
@@ -145,7 +144,6 @@ class MyAppState extends State<MyApp> {
     return MaterialApp(
         localizationsDelegates: const [
           S.delegate,
-          UCalendarViewL10n.delegate,
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate
