@@ -40,3 +40,6 @@ Modified README.
 
 ## 0.1.2+14
 Bug is fixed.
+
+## 0.1.3+15
+Bug is fixed.

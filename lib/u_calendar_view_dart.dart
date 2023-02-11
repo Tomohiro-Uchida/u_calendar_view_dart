@@ -780,27 +780,20 @@ class UCCalendarViewState extends State<UCalendarView> {
   Function(BuildContext context, int setYear, int setMonth)? ucOnMonthChanged;
   Map<String, dynamic> lang = {};
 
-  /*
   @override
   void initState() {
     month = widget.month;
     maxLinesInDay = widget.maxLinesInDay;
-    ucEntries = widget.ucEntries;
+    // ucEntries = widget.ucEntries;
     ucOnAddEntry = widget.ucOnAddEntry;
     ucOnTapEntry = widget.ucOnTapEntry;
     ucOnMonthChanged = widget.ucOnMonthChanged;
     super.initState();
   }
-   */
 
   @override
   Widget build(BuildContext context) {
-    month = widget.month;
-    maxLinesInDay = widget.maxLinesInDay;
     ucEntries = widget.ucEntries;
-    ucOnAddEntry = widget.ucOnAddEntry;
-    ucOnTapEntry = widget.ucOnTapEntry;
-    ucOnMonthChanged = widget.ucOnMonthChanged;
 
     loadAssetAsync() async {
       if (assets.isEmpty) {
