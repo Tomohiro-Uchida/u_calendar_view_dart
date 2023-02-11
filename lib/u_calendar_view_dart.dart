@@ -15,6 +15,7 @@ class UCalendarViewDart {
 const double defaultFontSize = 14.0;
 const double fontSizeFactor = 1.0;
 double entryFontSize = defaultFontSize;
+double dateHeight = defaultFontSize * fontSizeFactor;
 double dayEntryHeight = defaultFontSize * fontSizeFactor;
 double dayCellHeight = dayEntryHeight * 4;
 double coreTableHeight = dayCellHeight * 6;
@@ -425,13 +426,13 @@ class UCCoreTable extends ConsumerWidget {
                             child: Column(children: <Widget>[
                               Row(children: <Widget>[
                                 SizedBox(
-                                  height: dayEntryHeight,
+                                  height: dateHeight,
                                   child: UCDate(startDate.add(Duration(days: week * 7 + weekday)),
                                       holidays[week * 7 + weekday],
                                       key: UniqueKey()),
                                 ),
                                 SizedBox(
-                                    height: dayEntryHeight,
+                                    height: dateHeight,
                                     child:
                                         UCHoliday(holidays[week * 7 + weekday], key: UniqueKey())),
                               ]),
