@@ -699,8 +699,11 @@ class UCMonth extends ConsumerWidget {
               scrollDirection: Axis.horizontal,
               controller: PageController(initialPage: 1),
               onPageChanged: ((page) {
-                DateTime month = pageMap[page + pageMin]!;
-                ref.read(monthProvider.notifier).set(month);
+                DateTime newMonth = pageMap[page + pageMin]!;
+                if (ucOnMonthChanged != null) {
+                  ucOnMonthChanged!(context, newMonth.year, newMonth.month);
+                }
+                ref.read(monthProvider.notifier).set(newMonth);
               }),
               children: makeUCCoreTable(defaultPage, pageMin, pageMax, thisMonth, ucEntries))),
       Container(
@@ -777,6 +780,7 @@ class UCCalendarViewState extends State<UCalendarView> {
   Function(BuildContext context, int setYear, int setMonth)? ucOnMonthChanged;
   Map<String, dynamic> lang = {};
 
+  /*
   @override
   void initState() {
     month = widget.month;
@@ -787,19 +791,26 @@ class UCCalendarViewState extends State<UCalendarView> {
     ucOnMonthChanged = widget.ucOnMonthChanged;
     super.initState();
   }
+   */
 
   @override
   Widget build(BuildContext context) {
+    month = widget.month;
+    maxLinesInDay = widget.maxLinesInDay;
+    ucEntries = widget.ucEntries;
+    ucOnAddEntry = widget.ucOnAddEntry;
+    ucOnTapEntry = widget.ucOnTapEntry;
+    ucOnMonthChanged = widget.ucOnMonthChanged;
 
     loadAssetAsync() async {
       if (assets.isEmpty) {
         Locale locale = Localizations.localeOf(context);
         if (locale.languageCode == "ja") {
-          assets = await rootBundle.loadString(
-              'packages/u_calendar_view_dart/assets/intl_ja.json', cache: true);
+          assets = await rootBundle.loadString('packages/u_calendar_view_dart/assets/intl_ja.json',
+              cache: true);
         } else {
-          assets = await rootBundle.loadString(
-              'packages/u_calendar_view_dart/assets/intl_en.json', cache: true);
+          assets = await rootBundle.loadString('packages/u_calendar_view_dart/assets/intl_en.json',
+              cache: true);
         }
         setState(() {
           lang = jsonDecode(assets);

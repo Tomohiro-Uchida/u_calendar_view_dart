@@ -37,3 +37,6 @@ Modified internal process of localization.
 
 ## 0.1.1+13
 Modified README.
+
+## 0.1.2+14
+Bug is fixed.
