@@ -113,7 +113,7 @@ class UCHoliday extends StatelessWidget {
         child: Text(holiday.holidayName,
             maxLines: 1,
             overflow: TextOverflow.clip,
-            style: const TextStyle(fontSize: defaultFontSize - 1.0)));
+            style: const TextStyle(fontSize: defaultFontSize - 2.0)));
   }
 }
 
