@@ -82,15 +82,15 @@ class UCDateState extends State<UCDate> {
     if (holiday.isHoliday || date.weekday == DateTime.sunday) {
       retVal = Text('${date.day}',
           textAlign: TextAlign.start,
-          style: const TextStyle(color: Colors.red, fontSize: defaultFontSize));
+          style: const TextStyle(color: Colors.red, fontSize: defaultFontSize+2));
     } else if (date.weekday == DateTime.saturday) {
       retVal = Text('${date.day}',
           textAlign: TextAlign.start,
-          style: const TextStyle(color: Colors.blue, fontSize: defaultFontSize));
+          style: const TextStyle(color: Colors.blue, fontSize: defaultFontSize+2));
     } else {
       retVal = Text('${date.day}',
           textAlign: TextAlign.start,
-          style: const TextStyle(color: Colors.black, fontSize: defaultFontSize));
+          style: const TextStyle(color: Colors.black, fontSize: defaultFontSize+2));
     }
     return retVal;
   }
