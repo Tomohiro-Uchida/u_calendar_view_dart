@@ -24,7 +24,15 @@ String assets = "";
 
 class UCEntry {
   String applicationTag = "";
-  DateTime date = DateTime(2022, 1, 1, 0, 0, 0, 0, 0);
+  DateTime date = DateTime(
+      2022,
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0);
   String leftLabel = "";
   Color leftLabelColor = const Color(0xFF000000);
   String middleLabel = "";
@@ -58,7 +66,15 @@ class UCDate extends StatefulWidget {
 }
 
 class UCDateState extends State<UCDate> {
-  DateTime date = DateTime(2022, 1, 1, 0, 0, 0, 0, 0);
+  DateTime date = DateTime(
+      2022,
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0);
   Holiday holiday = Holiday();
 
   @override
@@ -111,10 +127,13 @@ class UCHoliday extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
         width: 30,
-        child: Text(holiday.holidayName,
-            maxLines: 1,
-            overflow: TextOverflow.clip,
-            style: const TextStyle(fontSize: defaultFontSize - 3.0)));
+        child: Container(
+            alignment: Alignment.topLeft,
+            child: Text(holiday.holidayName,
+                maxLines: 1,
+                overflow: TextOverflow.clip,
+                style: const TextStyle(fontSize: defaultFontSize - 4.0))
+    ));
   }
 }
 
@@ -215,15 +234,43 @@ extension DateTimeExtension on DateTime {
 }
 
 int daysOfTheMonth(DateTime month) {
-  DateTime day1st = DateTime(month.year, month.month, 1, 0, 0, 0, 0, 0);
-  DateTime next1st = DateTime(day1st.year, day1st.month + 1, 1, 0, 0, 0, 0, 0);
-  return next1st.difference(day1st).inDays;
+  DateTime day1st = DateTime(
+      month.year,
+      month.month,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0);
+  DateTime next1st = DateTime(
+      day1st.year,
+      day1st.month + 1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0);
+  return next1st
+      .difference(day1st)
+      .inDays;
 }
 
 int normalCalcOfWeekOfMonth(int thisMonth, DateTime day) {
-  int minus = DateTime.now().day - 1;
+  int minus = DateTime
+      .now()
+      .day - 1;
   DateTime previousMonth = day.add(Duration(days: minus));
-  DateTime day1st = DateTime(previousMonth.year, previousMonth.month, 1, 0, 0, 0, 0, 0);
+  DateTime day1st = DateTime(
+      previousMonth.year,
+      previousMonth.month,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0);
   DateTime lastDay = DateTime(day1st.year, day1st.month + 1, 1).add(const Duration(days: -1));
   int weekOfLastDay = lastDay.weekOfMonth;
   int weekOfDay = day.weekOfMonth;
@@ -266,7 +313,15 @@ int getWeekOfMonth(int thisMonth, DateTime day) {
 }
 
 DateTime startDateInMonth(DateTime month) {
-  DateTime startDate = DateTime(month.year, month.month, 1, 0, 0, 0, 0, 0);
+  DateTime startDate = DateTime(
+      month.year,
+      month.month,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0);
   return startDate.add(Duration(days: -(startDate.weekday % 7)));
 }
 
@@ -280,7 +335,15 @@ List<UCEntry> getEntriesOfTheDay(DateTime date, int max, List<UCEntry> ucEntries
   UCEntry element;
   for (element in ucEntries) {
     DateTime resetTime =
-        DateTime(element.date.year, element.date.month, element.date.day, 0, 0, 0, 0, 0);
+    DateTime(
+        element.date.year,
+        element.date.month,
+        element.date.day,
+        0,
+        0,
+        0,
+        0,
+        0);
     if (resetTime == date) {
       retVal.add(element);
     }
@@ -289,7 +352,19 @@ List<UCEntry> getEntriesOfTheDay(DateTime date, int max, List<UCEntry> ucEntries
 }
 
 class MonthNotifier extends StateNotifier<DateTime> {
-  MonthNotifier() : super(DateTime(DateTime.now().year, DateTime.now().month, 1, 0, 0, 0, 0, 0));
+  MonthNotifier() : super(DateTime(
+      DateTime
+          .now()
+          .year,
+      DateTime
+          .now()
+          .month,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0));
 
   DateTime get() {
     return state;
@@ -367,13 +442,12 @@ class UCCoreTable extends ConsumerWidget {
   DateTime date = DateTime.now();
   int lineToWrite = 0;
 
-  UCCoreTable(
-      {super.key,
-      required this.lang,
-      required this.page,
-      required this.thisMonth,
-      required this.maxLinesInDay,
-      required this.ucEntries});
+  UCCoreTable({super.key,
+    required this.lang,
+    required this.page,
+    required this.thisMonth,
+    required this.maxLinesInDay,
+    required this.ucEntries});
 
   Color getSelectedColor(DateTime startDate, DateTime? selectedDate, int week, int weekday) {
     DateTime pointedDate = startDate.add(Duration(days: week * 7 + weekday));
@@ -417,7 +491,7 @@ class UCCoreTable extends ConsumerWidget {
                         child: GestureDetector(
                             onTap: () {
                               DateTime selectedDate =
-                                  startDate.add(Duration(days: week * 7 + weekday));
+                              startDate.add(Duration(days: week * 7 + weekday));
                               ref.read(selectedDateProvider.notifier).set(selectedDate);
                               ref
                                   .read(selectedHolidayProvider.notifier)
@@ -434,12 +508,12 @@ class UCCoreTable extends ConsumerWidget {
                                 SizedBox(
                                     height: dateHeight,
                                     child:
-                                        UCHoliday(holidays[week * 7 + weekday], key: UniqueKey())),
+                                    UCHoliday(holidays[week * 7 + weekday], key: UniqueKey())),
                               ]),
                               for (lineToWrite = 0;
-                                  lineToWrite < maxLinesInDay &&
-                                      lineToWrite < entriesOfTheDay[week * 7 + weekday].length;
-                                  lineToWrite++) ...{
+                              lineToWrite < maxLinesInDay &&
+                                  lineToWrite < entriesOfTheDay[week * 7 + weekday].length;
+                              lineToWrite++) ...{
                                 SizedBox(
                                     height: dayEntryHeight,
                                     child: UCDayEntry(
@@ -447,8 +521,8 @@ class UCCoreTable extends ConsumerWidget {
                                         key: UniqueKey())),
                               },
                               for (int lineWhite = lineToWrite;
-                                  lineWhite < maxLinesInDay;
-                                  lineWhite++) ...{
+                              lineWhite < maxLinesInDay;
+                              lineWhite++) ...{
                                 SizedBox(
                                     height: dayEntryHeight,
                                     child: UCDayEntry(UCEntry(), key: UniqueKey())),
@@ -472,14 +546,13 @@ class UCMonth extends ConsumerWidget {
   final Function(BuildContext context, UCEntry ucEntry)? ucOnTapEntry;
   final Function(BuildContext context, int setYear, int setMonth)? ucOnMonthChanged;
 
-  UCMonth(
-      {super.key,
-      required this.lang,
-      required this.maxLinesInDay,
-      required this.ucEntries,
-      required this.ucOnAddEntry,
-      required this.ucOnTapEntry,
-      required this.ucOnMonthChanged});
+  UCMonth({super.key,
+    required this.lang,
+    required this.maxLinesInDay,
+    required this.ucEntries,
+    required this.ucOnAddEntry,
+    required this.ucOnTapEntry,
+    required this.ucOnMonthChanged});
 
   int sumDays(DateTime thisMonth, index) {
     int daysOfMonth = 0;
@@ -502,14 +575,22 @@ class UCMonth extends ConsumerWidget {
 
   List<UCCoreTable> ucCoreTables = List.empty(growable: true);
 
-  List<ConsumerWidget> makeUCCoreTable(
-      int defaultPage, int pageMin, int pageMax, DateTime thisMonth, List<UCEntry> ucEntries) {
+  List<ConsumerWidget> makeUCCoreTable(int defaultPage, int pageMin, int pageMax,
+      DateTime thisMonth, List<UCEntry> ucEntries) {
     pageMap.clear();
     ucCoreTables.clear();
     for (int page = pageMin; page <= pageMax; page++) {
       int diffMonth = defaultPage - page;
       DateTime pointedMonth =
-          DateTime(thisMonth.year, thisMonth.month - diffMonth, 1, 0, 0, 0, 0, 0);
+      DateTime(
+          thisMonth.year,
+          thisMonth.month - diffMonth,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0);
       pageMap[page] = pointedMonth;
       ucCoreTables.add(UCCoreTable(
           lang: lang,
@@ -533,8 +614,12 @@ class UCMonth extends ConsumerWidget {
           entriesOfTheDay.add(getEntriesOfTheDay(date, maxLinesInDay, ucEntries));
         }
       }
-      int diffDays = selectedDate.difference(startDate).inDays;
-      int diffDaysEnd = endDate.difference(selectedDate).inDays;
+      int diffDays = selectedDate
+          .difference(startDate)
+          .inDays;
+      int diffDaysEnd = endDate
+          .difference(selectedDate)
+          .inDays;
       if (diffDays >= 0 && diffDaysEnd >= 0) {
         return ListView.builder(
             itemExtent: 30.0,
@@ -606,7 +691,7 @@ class UCMonth extends ConsumerWidget {
     DateTime? selectedDate = ref.watch(selectedDateProvider);
     Holiday selectedHoliday = ref.watch(selectedHolidayProvider);
     List<UCEntry> ucEntries =
-        ref.watch(ucEntryProvider); // "List<UCEntry> ucEntries =" is required.
+    ref.watch(ucEntryProvider); // "List<UCEntry> ucEntries =" is required.
     WidgetsBinding.instance
         .addPostFrameCallback((_) => ref.read(ucEntryProvider.notifier).set(this.ucEntries));
     return Column(children: <Widget>[
@@ -620,7 +705,15 @@ class UCMonth extends ConsumerWidget {
                   onPressed: () {
                     DateTime previousMonth = thisMonth;
                     DateTime newMonth =
-                        DateTime(previousMonth.year, previousMonth.month - 1, 1, 0, 0, 0, 0, 0);
+                    DateTime(
+                        previousMonth.year,
+                        previousMonth.month - 1,
+                        1,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0);
                     if (ucOnMonthChanged != null) {
                       ucOnMonthChanged!(context, newMonth.year, newMonth.month);
                     }
@@ -640,12 +733,24 @@ class UCMonth extends ConsumerWidget {
                         //初期値を設定
                         initialDate: thisMonth,
                         //選択できる日付の上限
-                        firstDate: DateTime(DateTime.now().year - 10),
-                        lastDate: DateTime(DateTime.now().year + 10),
+                        firstDate: DateTime(DateTime
+                            .now()
+                            .year - 10),
+                        lastDate: DateTime(DateTime
+                            .now()
+                            .year + 10),
                       );
                       futureNewMonth.then((value) {
                         if (value != null) {
-                          DateTime newMonth = DateTime(value.year, value.month, 1, 0, 0, 0, 0, 0);
+                          DateTime newMonth = DateTime(
+                              value.year,
+                              value.month,
+                              1,
+                              0,
+                              0,
+                              0,
+                              0,
+                              0);
                           if (ucOnMonthChanged != null) {
                             ucOnMonthChanged!(context, newMonth.year, newMonth.month);
                           }
@@ -662,7 +767,15 @@ class UCMonth extends ConsumerWidget {
                   onPressed: () {
                     DateTime previousMonth = thisMonth;
                     DateTime newMonth =
-                        DateTime(previousMonth.year, previousMonth.month + 1, 1, 0, 0, 0, 0, 0);
+                    DateTime(
+                        previousMonth.year,
+                        previousMonth.month + 1,
+                        1,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0);
                     if (ucOnMonthChanged != null) {
                       ucOnMonthChanged!(context, newMonth.year, newMonth.month);
                     }
@@ -680,7 +793,19 @@ class UCMonth extends ConsumerWidget {
               child: IconButton(
                 onPressed: () {
                   DateTime newMonth =
-                      DateTime(DateTime.now().year, DateTime.now().month, 1, 0, 0, 0, 0, 0);
+                  DateTime(
+                      DateTime
+                          .now()
+                          .year,
+                      DateTime
+                          .now()
+                          .month,
+                      1,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0);
                   if (ucOnMonthChanged != null) {
                     ucOnMonthChanged!(context, newMonth.year, newMonth.month);
                   }
@@ -716,7 +841,7 @@ class UCMonth extends ConsumerWidget {
                     alignment: Alignment.centerLeft,
                     child: selectedDate != null
                         ? Text("${selectedDate.year}-${selectedDate.month}-${selectedDate.day}",
-                            style: const TextStyle(fontSize: 18.0))
+                        style: const TextStyle(fontSize: 18.0))
                         : const Text(""))),
             if (ucOnAddEntry != null) ...{
               Expanded(

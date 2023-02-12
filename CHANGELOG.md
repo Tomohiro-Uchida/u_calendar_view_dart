@@ -55,3 +55,6 @@ Bug is fixed.
 
 ## 0.1.7+19
 Bug is fixed.
+
+## 0.1.8+20
+Bug is fixed.

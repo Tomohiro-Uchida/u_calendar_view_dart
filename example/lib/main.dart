@@ -156,7 +156,11 @@ class MyAppState extends State<MyApp> {
             appBar: AppBar(
               title: const Text('UCalendarView Sample app'),
             ),
-            body: UCalendarView(
-                DateTime.now(), 3, ucEntries, ucOnAddEntry, ucOnTapEntry, ucOnMonthChanged)));
+            body: Column(children: [
+              Container(height: 40, color: Colors.grey),
+              Expanded(child: UCalendarView(
+                  DateTime.now(), 3, ucEntries, ucOnAddEntry, ucOnTapEntry, ucOnMonthChanged)),
+              Container(height: 60, color: Colors.grey)
+            ])));
   }
 }
