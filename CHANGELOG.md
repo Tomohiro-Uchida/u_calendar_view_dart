@@ -58,3 +58,6 @@ Bug is fixed.
 
 ## 0.1.8+20
 Bug is fixed.
+
+## 0.2.8+21
+Support Android Studio Flamingo AGP 8.0.0
