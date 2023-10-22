@@ -812,7 +812,7 @@ class UCMonth extends ConsumerWidget {
                   ref.read(monthProvider.notifier).set(newMonth);
                   ref.read(selectedDateProvider.notifier).set(DateTime.now());
                 },
-                icon: const Icon(Icons.calendar_today_rounded),
+                icon: const Icon(Icons.today_rounded),
                 color: Colors.blue,
               )),
         ],

@@ -8,8 +8,8 @@ homepage: https://github.com/Tomohiro-Uchida-Flutter/u_calendar_view_dart
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 environment:
-  sdk: '>=2.18.6 <3.0.0'
-  flutter: ^3.3.10
+  sdk: ^2.18.6
+  flutter: ^3.13.8
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -22,7 +22,7 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  intl: ^0.17.0
+  intl:
   uuid:
 
   u_calendar_view_dart:
