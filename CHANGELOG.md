@@ -62,3 +62,8 @@ Bug is fixed.
 ## 0.2.1+22
 Support Android Studio Flamingo AGP 8.0.0
 
+## 0.2.2+23
+Today icon was changed.
+
+## 0.2.3+24
+Today icon was changed.
