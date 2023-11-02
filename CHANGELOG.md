@@ -70,3 +70,6 @@ Today icon was changed.
 
 ## 0.2.4+25
 Performance is improved.
+
+## 0.2.5+26
+Performance is improved.

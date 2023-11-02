@@ -23,6 +23,7 @@ double dayCellHeight = dayEntryHeight * 4;
 double coreTableHeight = dayCellHeight * 6;
 Map<int, DateTime> pageMap = {};
 String assets = "";
+bool enableDebug = false;
 
 class UCEntry {
   String applicationTag = "";
@@ -147,14 +148,21 @@ class UCDayEntryState extends State<UCDayEntry> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      alignment: dayEntry.tableAlignment,
-      width: double.infinity,
-      // color: Colors.blue,
-      child: Text(dayEntry.value,
-              maxLines: 1,
-              style: TextStyle(fontSize: dayEntry.tableFontSize, color: dayEntry.valueColor))
-    );
+    if (enableDebug) {
+      return Container(
+          alignment: dayEntry.tableAlignment,
+          width: double.infinity,
+          color: Colors.blue,
+          child: Text(dayEntry.value,
+              maxLines: 1, style: TextStyle(fontSize: dayEntry.tableFontSize, color: dayEntry.valueColor)));
+    } else {
+      return Container(
+          alignment: dayEntry.tableAlignment,
+          width: double.infinity,
+          // color: Colors.blue,
+          child: Text(dayEntry.value,
+              maxLines: 1, style: TextStyle(fontSize: dayEntry.tableFontSize, color: dayEntry.valueColor)));
+    }
   }
 }
 
@@ -746,9 +754,10 @@ class UCalendarView extends StatefulWidget {
   final Future<UCEntry?> Function(BuildContext context, DateTime? date)? ucOnAddEntry;
   final Function(BuildContext context, UCEntry ucEntry)? ucOnTapEntry;
   final Function(BuildContext context, int setYear, int setMonth)? ucOnMonthChanged;
+  final bool enableDebug;
 
-  const UCalendarView(
-      this.month, this.maxLinesInDay, this.ucEntries, this.ucOnAddEntry, this.ucOnTapEntry, this.ucOnMonthChanged,
+  const UCalendarView(this.month, this.maxLinesInDay, this.ucEntries, this.ucOnAddEntry, this.ucOnTapEntry,
+      this.ucOnMonthChanged, this.enableDebug,
       {super.key});
 
   @override
@@ -772,6 +781,7 @@ class UCCalendarViewState extends State<UCalendarView> {
     ucOnAddEntry = widget.ucOnAddEntry;
     ucOnTapEntry = widget.ucOnTapEntry;
     ucOnMonthChanged = widget.ucOnMonthChanged;
+    enableDebug = widget.enableDebug;
     super.initState();
   }
 
