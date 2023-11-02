@@ -1,6 +1,6 @@
 name: u_calendar_view_dart_example
 description: Demonstrates how to use the u_calendar_view_dart plugin.
-version: 0.1.8+20
+version: 0.1.9+21
 homepage: https://github.com/Tomohiro-Uchida-Flutter/u_calendar_view_dart
 
 # The following line prevents the package from being accidentally published to
