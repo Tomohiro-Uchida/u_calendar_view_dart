@@ -63,6 +63,8 @@ void ucOnMonthChanged(BuildContext context, int setYear, int setMonth) {
 ### 5. Set entries and callback functions
 Call UCalendarView()
 ```
+bool debug = false;
+
 @override
 Widget build(BuildContext context) {
   return MaterialApp(
@@ -81,7 +83,7 @@ Widget build(BuildContext context) {
             title: const Text('UCalendarView Sample app'),
           ),
           body: UCalendarView(
-              DateTime.now(), 3, ucEntries, ucOnAddEntry, ucOnTapEntry, ucOnMonthChanged)));
+              DateTime.now(), 3, ucEntries, ucOnAddEntry, ucOnTapEntry, ucOnMonthChanged, debug)));
 }
 ```
 
