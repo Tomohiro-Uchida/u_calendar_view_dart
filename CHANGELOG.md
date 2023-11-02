@@ -76,3 +76,6 @@ Performance is improved.
 
 ## 0.2.6+27
 Performance is improved.
+
+## 0.2.7+28
+Performance is improved.

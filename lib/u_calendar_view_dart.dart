@@ -6,13 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:u_calendar_view_dart/japanese_national_holiday.dart';
 
-import 'u_calendar_view_dart_platform_interface.dart';
-
-class UCalendarViewDart {
-  Future<String?> getPlatformVersion() {
-    return UCalendarViewDartPlatform.instance.getPlatformVersion();
-  }
-}
+class UCalendarViewDart {}
 
 const double defaultFontSize = 14.0;
 const double fontSizeFactor = 1.0;
@@ -23,7 +17,6 @@ double dayCellHeight = dayEntryHeight * 4;
 double coreTableHeight = dayCellHeight * 6;
 Map<int, DateTime> pageMap = {};
 String assets = "";
-bool enableDebug = false;
 
 class UCEntry {
   String applicationTag = "";
@@ -148,21 +141,10 @@ class UCDayEntryState extends State<UCDayEntry> {
 
   @override
   Widget build(BuildContext context) {
-    if (enableDebug) {
-      return Container(
-          alignment: dayEntry.tableAlignment,
-          width: double.infinity,
-          color: Colors.blue,
-          child: Text(dayEntry.value,
-              maxLines: 1, style: TextStyle(fontSize: dayEntry.tableFontSize, color: dayEntry.valueColor)));
-    } else {
-      return Container(
-          alignment: dayEntry.tableAlignment,
-          width: double.infinity,
-          // color: Colors.blue,
-          child: Text(dayEntry.value,
-              maxLines: 1, style: TextStyle(fontSize: dayEntry.tableFontSize, color: dayEntry.valueColor)));
-    }
+    return Container(
+        alignment: dayEntry.tableAlignment,
+        child: Text(dayEntry.value,
+            maxLines: 1, style: TextStyle(fontSize: dayEntry.tableFontSize, color: dayEntry.valueColor)));
   }
 }
 
@@ -390,7 +372,7 @@ class UCCoreTable extends ConsumerWidget {
         selectedDate.day == pointedDate.day) {
       return const Color(0xffb2ebf2);
     } else {
-      return const Color(0x00ffffff);
+      return const Color(0xffffffff);
     }
   }
 
@@ -398,7 +380,6 @@ class UCCoreTable extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     DateTime startDate = startDateInMonth(thisMonth);
     DateTime? selectedDate = ref.watch(selectedDateProvider);
-    // List<UCEntry> ucEntries = ref.watch(ucEntryProvider);
     JapaneseNationalHoliday japaneseNationalHoliday = JapaneseNationalHoliday(context, lang);
     List<Holiday> holidays = List.empty(growable: true);
     for (int week = 0; week < 6; week++) {
@@ -415,20 +396,21 @@ class UCCoreTable extends ConsumerWidget {
             Row(children: <Widget>[
               for (int weekday = 0; weekday < 7; weekday++) ...{
                 Expanded(
-                    child: Container(
-                        height: dayCellHeight,
-                        decoration: BoxDecoration(
-                          color: getSelectedColor(startDate, selectedDate, week, weekday),
-                          border: Border.all(color: Colors.grey),
-                        ),
-                        child: GestureDetector(
-                            onTap: () {
-                              DateTime selectedDate = startDate.add(Duration(days: week * 7 + weekday));
-                              ref.read(selectedDateProvider.notifier).set(selectedDate);
-                              ref
-                                  .read(selectedHolidayProvider.notifier)
-                                  .set(japaneseNationalHoliday.getHoliday(selectedDate, lang));
-                            },
+                    child: GestureDetector(
+                        onTap: () {
+                          DateTime selectedDate = startDate.add(Duration(days: week * 7 + weekday));
+                          ref.read(selectedDateProvider.notifier).set(selectedDate);
+                          ref
+                              .read(selectedHolidayProvider.notifier)
+                              .set(japaneseNationalHoliday.getHoliday(selectedDate, lang));
+                        },
+                        child: Container(
+                            height: dayCellHeight,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: getSelectedColor(startDate, selectedDate, week, weekday),
+                              border: Border.all(color: Colors.grey),
+                            ),
                             child: Column(children: <Widget>[
                               Row(children: <Widget>[
                                 SizedBox(
@@ -447,11 +429,15 @@ class UCCoreTable extends ConsumerWidget {
                                   lineToWrite++) ...{
                                 SizedBox(
                                     height: dayEntryHeight,
+                                    width: double.infinity,
                                     child:
                                         UCDayEntry(entriesOfTheDay[week * 7 + weekday][lineToWrite], key: UniqueKey())),
                               },
                               for (int lineWhite = lineToWrite; lineWhite < maxLinesInDay; lineWhite++) ...{
-                                SizedBox(height: dayEntryHeight, child: UCDayEntry(UCEntry(), key: UniqueKey())),
+                                SizedBox(
+                                    height: dayEntryHeight,
+                                    width: double.infinity,
+                                    child: UCDayEntry(UCEntry(), key: UniqueKey())),
                               }
                             ]))))
               }
@@ -754,10 +740,9 @@ class UCalendarView extends StatefulWidget {
   final Future<UCEntry?> Function(BuildContext context, DateTime? date)? ucOnAddEntry;
   final Function(BuildContext context, UCEntry ucEntry)? ucOnTapEntry;
   final Function(BuildContext context, int setYear, int setMonth)? ucOnMonthChanged;
-  final bool enableDebug;
 
-  const UCalendarView(this.month, this.maxLinesInDay, this.ucEntries, this.ucOnAddEntry, this.ucOnTapEntry,
-      this.ucOnMonthChanged, this.enableDebug,
+  const UCalendarView(
+      this.month, this.maxLinesInDay, this.ucEntries, this.ucOnAddEntry, this.ucOnTapEntry, this.ucOnMonthChanged,
       {super.key});
 
   @override
@@ -781,7 +766,6 @@ class UCCalendarViewState extends State<UCalendarView> {
     ucOnAddEntry = widget.ucOnAddEntry;
     ucOnTapEntry = widget.ucOnTapEntry;
     ucOnMonthChanged = widget.ucOnMonthChanged;
-    enableDebug = widget.enableDebug;
     super.initState();
   }
 

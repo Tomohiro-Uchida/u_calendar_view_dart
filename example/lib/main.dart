@@ -159,7 +159,7 @@ class MyAppState extends State<MyApp> {
             body: Column(children: [
               Container(height: 40, color: Colors.grey),
               Expanded(child: UCalendarView(
-                  DateTime.now(), 3, ucEntries, ucOnAddEntry, ucOnTapEntry, ucOnMonthChanged, false)),
+                  DateTime.now(), 3, ucEntries, ucOnAddEntry, ucOnTapEntry, ucOnMonthChanged)),
               Container(height: 60, color: Colors.grey)
             ])));
   }
