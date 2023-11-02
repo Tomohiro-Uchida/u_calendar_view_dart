@@ -149,9 +149,11 @@ class UCDayEntryState extends State<UCDayEntry> {
   Widget build(BuildContext context) {
     return Container(
       alignment: dayEntry.tableAlignment,
-      child: Row(children: [Expanded(
-          child: Text(dayEntry.value,
-              maxLines: 1, style: TextStyle(fontSize: dayEntry.tableFontSize, color: dayEntry.valueColor)))])
+      width: double.infinity,
+      // color: Colors.blue,
+      child: Text(dayEntry.value,
+              maxLines: 1,
+              style: TextStyle(fontSize: dayEntry.tableFontSize, color: dayEntry.valueColor))
     );
   }
 }
