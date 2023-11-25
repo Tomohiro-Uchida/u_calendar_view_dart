@@ -88,3 +88,6 @@ Bugs were fixed.
 
 ## 0.3.1+31
 Bugs were fixed.
+
+## 0.3.2+32
+Bugs were fixed.
