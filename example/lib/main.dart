@@ -131,7 +131,7 @@ class MyAppState extends State<MyApp> {
         entry.unitEndColor = Colors.red;
         entry.rightLabel = "Right";
         entry.rightLabelColor = Colors.yellow;
-        entry.tableFontSize = 14.0;
+        entry.tableFontSize = 12.0;
         entry.listFontSize = 18.0;
         entry.tableAlignment = Alignment.centerRight;
         ucEntries.add(entry);

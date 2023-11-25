@@ -78,13 +78,13 @@ class UCDateState extends State<UCDate> {
     Widget retVal;
     if (holiday.isHoliday || date.weekday == DateTime.sunday) {
       retVal = Text('${date.day}',
-          textAlign: TextAlign.start, style: const TextStyle(color: Colors.red, fontSize: defaultFontSize));
+          textAlign: TextAlign.start, style: TextStyle(color: Colors.red, fontSize: entryFontSize));
     } else if (date.weekday == DateTime.saturday) {
       retVal = Text('${date.day}',
-          textAlign: TextAlign.start, style: const TextStyle(color: Colors.blue, fontSize: defaultFontSize));
+          textAlign: TextAlign.start, style: TextStyle(color: Colors.blue, fontSize: entryFontSize));
     } else {
       retVal = Text('${date.day}',
-          textAlign: TextAlign.start, style: const TextStyle(color: Colors.black, fontSize: defaultFontSize));
+          textAlign: TextAlign.start, style: TextStyle(color: Colors.black, fontSize: entryFontSize));
     }
     return retVal;
   }
@@ -789,7 +789,7 @@ class UCCalendarViewState extends State<UCalendarView> {
 
     entryFontSize = calcMaxFontSize(ucEntries);
     dayEntryHeight = entryFontSize * fontSizeFactor;
-    dateHeight = dayEntryHeight;
+    dateHeight = entryFontSize * fontSizeFactor;
     dayCellHeight = dayEntryHeight * (maxLinesInDay + 1) * 1.1;
     coreTableHeight = dayCellHeight * 6;
     loadAssetAsync();
