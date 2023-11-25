@@ -80,5 +80,8 @@ Performance is improved.
 ## 0.2.7+28
 Performance is improved.
 
-## 0.2.7+28
+## 0.2.8+29
 Flutter 3.16.0 wis adapted.
+
+## 0.3.0+30
+Bugs were fixed.

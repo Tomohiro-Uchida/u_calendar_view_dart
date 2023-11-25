@@ -9,10 +9,10 @@ import 'package:u_calendar_view_dart/japanese_national_holiday.dart';
 class UCalendarViewDart {}
 
 const double defaultFontSize = 14.0;
-const double fontSizeFactor = 1.0;
+const double fontSizeFactor = 1.1;
 double entryFontSize = defaultFontSize;
-double dateHeight = defaultFontSize * fontSizeFactor;
-double dayEntryHeight = defaultFontSize * fontSizeFactor;
+double dateHeight = entryFontSize * fontSizeFactor;
+double dayEntryHeight = entryFontSize * fontSizeFactor;
 double dayCellHeight = dayEntryHeight * 4;
 double coreTableHeight = dayCellHeight * 6;
 Map<int, DateTime> pageMap = {};
@@ -107,7 +107,7 @@ class UCHoliday extends StatelessWidget {
         child: Container(
             alignment: Alignment.topLeft,
             child: Text(holiday.holidayName,
-                maxLines: 1, overflow: TextOverflow.clip, style: const TextStyle(fontSize: defaultFontSize - 4.0))));
+                maxLines: 1, overflow: TextOverflow.clip, style: TextStyle(fontSize: entryFontSize - 2.0))));
   }
 }
 
@@ -787,9 +787,9 @@ class UCCalendarViewState extends State<UCalendarView> {
       }
     }
 
-    double entryFontSize = calcMaxFontSize(ucEntries);
+    entryFontSize = calcMaxFontSize(ucEntries);
     dayEntryHeight = entryFontSize * fontSizeFactor;
-    dayCellHeight = dayEntryHeight * (maxLinesInDay + 1) * 1.2;
+    dayCellHeight = dayEntryHeight * (maxLinesInDay + 1) * 1.1;
     coreTableHeight = dayCellHeight * 6;
     loadAssetAsync();
     return ProviderScope(
