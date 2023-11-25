@@ -155,12 +155,12 @@ class MyAppState extends State<MyApp> {
         home: Scaffold(
             appBar: AppBar(
               title: const Text('UCalendarView Sample app'),
+              backgroundColor: Colors.blue,
+              foregroundColor: Colors.white,
             ),
             body: Column(children: [
-              Container(height: 40, color: Colors.grey),
               Expanded(child: UCalendarView(
                   DateTime.now(), 3, ucEntries, ucOnAddEntry, ucOnTapEntry, ucOnMonthChanged)),
-              Container(height: 60, color: Colors.grey)
             ])));
   }
 }

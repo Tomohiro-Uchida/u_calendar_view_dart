@@ -79,3 +79,6 @@ Performance is improved.
 
 ## 0.2.7+28
 Performance is improved.
+
+## 0.2.7+28
+Flutter 3.16.0 wis adapted.
