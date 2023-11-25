@@ -85,3 +85,6 @@ Flutter 3.16.0 wis adapted.
 
 ## 0.3.0+30
 Bugs were fixed.
+
+## 0.3.1+31
+Bugs were fixed.

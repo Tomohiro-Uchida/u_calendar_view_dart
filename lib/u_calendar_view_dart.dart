@@ -789,6 +789,7 @@ class UCCalendarViewState extends State<UCalendarView> {
 
     entryFontSize = calcMaxFontSize(ucEntries);
     dayEntryHeight = entryFontSize * fontSizeFactor;
+    dateHeight = dayEntryHeight;
     dayCellHeight = dayEntryHeight * (maxLinesInDay + 1) * 1.1;
     coreTableHeight = dayCellHeight * 6;
     loadAssetAsync();
