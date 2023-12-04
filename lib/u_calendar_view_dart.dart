@@ -77,8 +77,8 @@ class UCDateState extends State<UCDate> {
   Widget setDateAndWeekOfMonth(DateTime date, Holiday holiday) {
     Widget retVal;
     if (holiday.isHoliday || date.weekday == DateTime.sunday) {
-      retVal = Text('${date.day}',
-          textAlign: TextAlign.start, style: TextStyle(color: Colors.red, fontSize: entryFontSize));
+      retVal =
+          Text('${date.day}', textAlign: TextAlign.start, style: TextStyle(color: Colors.red, fontSize: entryFontSize));
     } else if (date.weekday == DateTime.saturday) {
       retVal = Text('${date.day}',
           textAlign: TextAlign.start, style: TextStyle(color: Colors.blue, fontSize: entryFontSize));
@@ -758,6 +758,20 @@ class UCCalendarViewState extends State<UCalendarView> {
   Function(BuildContext context, int setYear, int setMonth)? ucOnMonthChanged;
   Map<String, dynamic> lang = {};
 
+  Future<void> loadAssetAsync() async {
+    if (assets.isEmpty) {
+      Locale locale = Localizations.localeOf(context);
+      if (locale.languageCode == "ja") {
+        assets = await rootBundle.loadString('packages/u_calendar_view_dart/assets/intl_ja.json', cache: true);
+      } else {
+        assets = await rootBundle.loadString('packages/u_calendar_view_dart/assets/intl_en.json', cache: true);
+      }
+    }
+    setState(() {
+      lang = jsonDecode(assets);
+    });
+  }
+
   @override
   void initState() {
     month = widget.month;
@@ -772,21 +786,6 @@ class UCCalendarViewState extends State<UCalendarView> {
   @override
   Widget build(BuildContext context) {
     ucEntries = widget.ucEntries;
-
-    loadAssetAsync() async {
-      if (assets.isEmpty) {
-        Locale locale = Localizations.localeOf(context);
-        if (locale.languageCode == "ja") {
-          assets = await rootBundle.loadString('packages/u_calendar_view_dart/assets/intl_ja.json', cache: true);
-        } else {
-          assets = await rootBundle.loadString('packages/u_calendar_view_dart/assets/intl_en.json', cache: true);
-        }
-        setState(() {
-          lang = jsonDecode(assets);
-        });
-      }
-    }
-
     entryFontSize = calcMaxFontSize(ucEntries);
     dayEntryHeight = entryFontSize * fontSizeFactor;
     dateHeight = entryFontSize * fontSizeFactor;
