@@ -112,3 +112,6 @@ Bugs were fixed.
 
 ## 0.3.9+39
 Bugs were fixed.
+
+## 0.3.10+40
+Bugs were fixed.
