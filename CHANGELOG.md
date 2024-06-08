@@ -115,3 +115,7 @@ Bugs were fixed.
 
 ## 0.3.10+40
 Bugs were fixed.
+
+## 0.4.0+41
+Changed internal process.
+Bugs were fixed.

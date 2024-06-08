@@ -8,15 +8,32 @@ import 'package:u_calendar_view_dart/japanese_national_holiday.dart';
 
 class UCalendarViewDart {}
 
-const double defaultFontSize = 10.0;
+double defaultWindowHeight = 852; // iPhone 15
+double windowFactorHeight = 1.0;
+const double defaultFontSize = 14.0;
 const double fontSizeFactor = 1.1;
-double entryFontSize = defaultFontSize;
+const int defaultMaxLinesInDay = 3;
+double entryFontSize = defaultFontSize * windowFactorHeight;
 double dateHeight = entryFontSize * fontSizeFactor;
 double dayEntryHeight = entryFontSize * fontSizeFactor;
-double dayCellHeight = dayEntryHeight * 4;
+double dayCellHeight = dayEntryHeight * (4 + 1) * fontSizeFactor;
 double coreTableHeight = dayCellHeight * 6;
 Map<int, DateTime> pageMap = {};
 String assets = "";
+
+double calcMaxFontSize(List<UCEntry> ucEntries) {
+  double max = 0.0;
+  for (var element in ucEntries) {
+    if (element.tableFontSize > max) max = element.tableFontSize;
+  }
+  if (max == 0.0) return defaultFontSize;
+  return max;
+}
+
+double getWindowHeightFactor(BuildContext context) {
+  double heightFactor = MediaQuery.of(context).size.height / defaultWindowHeight;
+  return heightFactor;
+}
 
 class UCEntry {
   String applicationTag = "";
@@ -39,7 +56,7 @@ class UCEntry {
 }
 
 class EntryList {
-  int maxLinesInDay = 3;
+  int maxLinesInDay = defaultMaxLinesInDay;
   List<UCEntry> entries = List.empty(growable: true);
 }
 
@@ -724,15 +741,6 @@ class UCMonth extends ConsumerWidget {
   }
 }
 
-double calcMaxFontSize(List<UCEntry> ucEntries) {
-  double max = 0.0;
-  for (var element in ucEntries) {
-    if (element.tableFontSize > max) max = element.tableFontSize;
-  }
-  if (max == 0.0) return defaultFontSize;
-  return max;
-}
-
 class UCalendarView extends StatefulWidget {
   final DateTime month;
   final int maxLinesInDay;
@@ -751,7 +759,7 @@ class UCalendarView extends StatefulWidget {
 
 class UCCalendarViewState extends State<UCalendarView> {
   DateTime month = DateTime.now();
-  int maxLinesInDay = 3;
+  int maxLinesInDay = defaultMaxLinesInDay;
   List<UCEntry> ucEntries = [];
   Future<UCEntry?> Function(BuildContext context, DateTime? date)? ucOnAddEntry;
   Function(BuildContext context, UCEntry ucEntry)? ucOnTapEntry;
@@ -785,11 +793,12 @@ class UCCalendarViewState extends State<UCalendarView> {
 
   @override
   Widget build(BuildContext context) {
+    windowFactorHeight = getWindowHeightFactor(context);
     ucEntries = widget.ucEntries;
-    entryFontSize = calcMaxFontSize(ucEntries);
+    entryFontSize = calcMaxFontSize(ucEntries) * windowFactorHeight;
     dayEntryHeight = entryFontSize * fontSizeFactor;
     dateHeight = entryFontSize * fontSizeFactor;
-    dayCellHeight = dayEntryHeight * (maxLinesInDay + 1) * 1.1;
+    dayCellHeight = dayEntryHeight * (maxLinesInDay + 1) * fontSizeFactor;
     coreTableHeight = dayCellHeight * 6;
     loadAssetAsync();
     return ProviderScope(
