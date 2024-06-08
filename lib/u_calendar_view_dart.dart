@@ -8,7 +8,7 @@ import 'package:u_calendar_view_dart/japanese_national_holiday.dart';
 
 class UCalendarViewDart {}
 
-const double defaultFontSize = 14.0;
+const double defaultFontSize = 12.0;
 const double fontSizeFactor = 1.2;
 double entryFontSize = defaultFontSize;
 double dateHeight = entryFontSize * fontSizeFactor;
