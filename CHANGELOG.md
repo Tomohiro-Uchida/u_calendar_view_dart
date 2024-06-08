@@ -100,3 +100,6 @@ Bugs were fixed.
 
 ## 0.3.5+35
 Bugs were fixed.
+
+## 0.3.6+36
+Bugs were fixed.
