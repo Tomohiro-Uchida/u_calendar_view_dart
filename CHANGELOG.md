@@ -103,3 +103,6 @@ Bugs were fixed.
 
 ## 0.3.6+36
 Bugs were fixed.
+
+## 0.3.7+37
+Bugs were fixed.
