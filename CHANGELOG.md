@@ -123,3 +123,7 @@ Bugs were fixed.
 ## 0.4.1+42
 Changed internal process.
 Bugs were fixed.
+
+## 0.4.2+43
+Changed internal process.
+Bugs were fixed.
