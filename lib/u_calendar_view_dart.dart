@@ -10,13 +10,13 @@ class UCalendarViewDart {}
 
 double defaultWindowHeight = 852; // iPhone 15
 double windowFactorHeight = 1.0;
-const double defaultFontSize = 14.0;
-const double fontSizeFactor = 1.1;
+const double defaultFontSize = 12.0;
+const double fontSizeFactor = 1.2;
 const int defaultMaxLinesInDay = 3;
 double entryFontSize = defaultFontSize * windowFactorHeight;
 double dateHeight = entryFontSize * fontSizeFactor;
 double dayEntryHeight = entryFontSize * fontSizeFactor;
-double dayCellHeight = dayEntryHeight * (4 + 1) * fontSizeFactor;
+double dayCellHeight = dayEntryHeight * (3 + 1) * fontSizeFactor;
 double coreTableHeight = dayCellHeight * 6;
 Map<int, DateTime> pageMap = {};
 String assets = "";
@@ -50,7 +50,8 @@ class UCEntry {
   Color unitEndColor = const Color(0xFF000000);
   String rightLabel = "";
   Color rightLabelColor = const Color(0xFF000000);
-  double tableFontSize = 14.0;
+  // double tableFontSize = 14.0;
+  double tableFontSize = defaultFontSize;
   double listFontSize = 18.0;
   Alignment tableAlignment = Alignment.centerLeft;
 }
@@ -124,7 +125,7 @@ class UCHoliday extends StatelessWidget {
         child: Container(
             alignment: Alignment.topLeft,
             child: Text(holiday.holidayName,
-                maxLines: 1, overflow: TextOverflow.clip, style: TextStyle(fontSize: entryFontSize - 2.0))));
+                maxLines: 1, overflow: TextOverflow.clip, style: TextStyle(fontSize: entryFontSize))));
   }
 }
 
@@ -161,7 +162,7 @@ class UCDayEntryState extends State<UCDayEntry> {
     return Container(
         alignment: dayEntry.tableAlignment,
         child: Text(dayEntry.value,
-            maxLines: 1, style: TextStyle(fontSize: dayEntry.tableFontSize, color: dayEntry.valueColor)));
+            maxLines: 1, style: TextStyle(fontSize: entryFontSize, color: dayEntry.valueColor)));
   }
 }
 
