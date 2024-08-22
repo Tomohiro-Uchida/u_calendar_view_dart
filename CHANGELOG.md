@@ -127,3 +127,6 @@ Bugs were fixed.
 ## 0.4.2+43
 Changed internal process.
 Bugs were fixed.
+
+## 0.5.0+44
+Dark theme is supported.

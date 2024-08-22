@@ -152,6 +152,8 @@ class MyAppState extends State<MyApp> {
           Locale("en"),
           Locale("ja")
         ],
+        theme: ThemeData.light(),
+        darkTheme: ThemeData.dark(),
         home: Scaffold(
             appBar: AppBar(
               title: const Text('UCalendarView Sample app'),

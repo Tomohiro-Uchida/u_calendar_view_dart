@@ -50,6 +50,7 @@ class UCEntry {
   Color unitEndColor = const Color(0xFF000000);
   String rightLabel = "";
   Color rightLabelColor = const Color(0xFF000000);
+
   // double tableFontSize = 14.0;
   double tableFontSize = defaultFontSize;
   double listFontSize = 18.0;
@@ -102,7 +103,7 @@ class UCDateState extends State<UCDate> {
           textAlign: TextAlign.start, style: TextStyle(color: Colors.blue, fontSize: entryFontSize));
     } else {
       retVal = Text('${date.day}',
-          textAlign: TextAlign.start, style: TextStyle(color: Colors.black, fontSize: entryFontSize));
+          textAlign: TextAlign.start, style: TextStyle(fontSize: entryFontSize));
     }
     return retVal;
   }
@@ -161,8 +162,8 @@ class UCDayEntryState extends State<UCDayEntry> {
   Widget build(BuildContext context) {
     return Container(
         alignment: dayEntry.tableAlignment,
-        child: Text(dayEntry.value,
-            maxLines: 1, style: TextStyle(fontSize: entryFontSize, color: dayEntry.valueColor)));
+        child:
+            Text(dayEntry.value, maxLines: 1, style: TextStyle(fontSize: entryFontSize, color: dayEntry.valueColor)));
   }
 }
 
@@ -174,7 +175,7 @@ Widget setWeekLabels(BuildContext context, String? label, Map<String, dynamic> l
     } else if (label == lang["sat"]) {
       retVal = Text(label, textAlign: TextAlign.center, style: const TextStyle(color: Colors.blue));
     } else {
-      retVal = Text(label, textAlign: TextAlign.center, style: const TextStyle(color: Colors.black));
+      retVal = Text(label, textAlign: TextAlign.center);
     }
   }
   return retVal;
@@ -390,7 +391,7 @@ class UCCoreTable extends ConsumerWidget {
         selectedDate.day == pointedDate.day) {
       return const Color(0xffb2ebf2);
     } else {
-      return const Color(0xffffffff);
+      return const Color(0x00ffffff);
     }
   }
 
