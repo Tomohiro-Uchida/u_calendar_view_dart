@@ -707,7 +707,7 @@ class UCMonth extends ConsumerWidget {
               children: makeUCCoreTable(defaultPage, pageMin, pageMax, thisMonth, ucEntries))),
       Container(
           height: 40,
-          color: const Color.fromARGB(0xFF, 0xC0, 0xC0, 0xC0),
+          color: Colors.grey,
           child: Row(children: [
             Expanded(
                 child: Container(

@@ -130,3 +130,9 @@ Bugs were fixed.
 
 ## 0.5.0+44
 Dark theme is supported.
+
+## 0.5.1+45
+Bugs were fixed.
+
+## 0.5.2+46
+Bugs were fixed.
