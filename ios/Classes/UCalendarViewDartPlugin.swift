@@ -1,0 +1,1 @@
+../u_calendar_view_dart/Sources/u_calendar_view_dart/UCalendarViewDartPlugin.swift

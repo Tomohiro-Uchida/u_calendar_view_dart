@@ -41,6 +41,7 @@ flutter:
         pluginClass: UCalendarViewDartPlugin
       ios:
         pluginClass: UCalendarViewDartPlugin
+        swiftPackageManifest: u_calendar_view_dart/Package.swift
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:

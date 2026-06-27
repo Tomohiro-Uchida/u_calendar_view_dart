@@ -1,10 +1,11 @@
 import Flutter
 import UIKit
 
-public class SwiftUCalendarViewDartPlugin: NSObject, FlutterPlugin {
+@objc(UCalendarViewDartPlugin)
+public class UCalendarViewDartPlugin: NSObject, FlutterPlugin {
   public static func register(with registrar: FlutterPluginRegistrar) {
     let channel = FlutterMethodChannel(name: "u_calendar_view_dart", binaryMessenger: registrar.messenger())
-    let instance = SwiftUCalendarViewDartPlugin()
+    let instance = UCalendarViewDartPlugin()
     registrar.addMethodCallDelegate(instance, channel: channel)
   }
 

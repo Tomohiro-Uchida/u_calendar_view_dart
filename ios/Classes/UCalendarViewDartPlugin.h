@@ -1,4 +1,1 @@
-#import <Flutter/Flutter.h>
-
-@interface UCalendarViewDartPlugin : NSObject<FlutterPlugin>
-@end
+../u_calendar_view_dart/Legacy/UCalendarViewDartPlugin.h
