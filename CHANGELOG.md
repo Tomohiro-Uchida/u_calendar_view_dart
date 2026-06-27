@@ -137,6 +137,6 @@ Bugs were fixed.
 ## 0.5.2+46
 Bugs were fixed.
 
-## 0.6.0+46
+## 0.6.0+47
 Swift Package Manager is supported.
 
