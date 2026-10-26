@@ -140,3 +140,6 @@ Bugs were fixed.
 ## 0.6.0+47
 Swift Package Manager is supported.
 
+## 0.8.0+49
+Swift Package Manager is supported.
+
