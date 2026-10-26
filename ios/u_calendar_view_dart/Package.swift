@@ -4,7 +4,7 @@ import PackageDescription
 let package = Package(
     name: "u_calendar_view_dart",
     platforms: [
-        .iOS(.v12)
+        .iOS("13.0")
     ],
     products: [
         .library(name: "u-calendar-view-dart", targets: ["u_calendar_view_dart"])
@@ -18,11 +18,9 @@ let package = Package(
             dependencies: [
                 .product(name: "FlutterFramework", package: "FlutterFramework")
             ],
-            path: "Sources/u_calendar_view_dart",
             resources: [
-                .process("Assets")
-            ],
-            publicHeadersPath: "."
+                .process("PrivacyInfo.xcprivacy")
+            ]
         )
     ]
 )

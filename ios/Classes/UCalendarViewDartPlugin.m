@@ -1,1 +1,0 @@
-../u_calendar_view_dart/Legacy/UCalendarViewDartPlugin.m

@@ -1,6 +1,6 @@
 name: u_calendar_view_dart
 description: CalendarView for Dart/Flutter
-version: 0.6.0+47
+version: 0.7.0+48
 homepage: https://github.com/Tomohiro-Uchida-Flutter/u_calendar_view_dart
 
 environment:
@@ -10,8 +10,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  plugin_platform_interface: '^2.1.8'
-  flutter_riverpod: '^2.5.1'
+  plugin_platform_interface:
+  flutter_riverpod:
 
 dev_dependencies:
   flutter_test:
@@ -41,7 +41,6 @@ flutter:
         pluginClass: UCalendarViewDartPlugin
       ios:
         pluginClass: UCalendarViewDartPlugin
-        swiftPackageManifest: u_calendar_view_dart/Package.swift
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:

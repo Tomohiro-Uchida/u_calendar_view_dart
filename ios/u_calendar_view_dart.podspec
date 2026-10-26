@@ -5,18 +5,20 @@
 Pod::Spec.new do |s|
   s.name             = 'u_calendar_view_dart'
   s.version          = '0.0.1'
-  s.summary          = 'UCalendatView Dart'
+  s.summary          = 'CalendarView for Dart/Flutter'
   s.description      = <<-DESC
-UCalendatView Dart
+CalendarView for Dart/Flutter
                        DESC
-  s.homepage         = 'http://example.com'
+  s.homepage         = 'https://github.com/Tomohiro-Uchida/u_calendar_view_dart'
   s.license          = { :file => '../LICENSE' }
-  s.author           = { 'Your Company' => 'email@example.com' }
+  s.author           = { 'Tomohiro Uchida' => 'uchida001tmhr@indigosoftwareinc.com' }
   s.source           = { :path => '.' }
-  s.source_files = 'Classes/**/*'
-  s.public_header_files = 'Classes/**/*.h'
+  s.source_files     = 'u_calendar_view_dart/Sources/u_calendar_view_dart/**/*'
+  s.resource_bundles = {
+    'u_calendar_view_dart_privacy' => ['u_calendar_view_dart/Sources/u_calendar_view_dart/PrivacyInfo.xcprivacy']
+  }
   s.dependency 'Flutter'
-  s.platform = :ios, '9.0'
+  s.platform         = :ios, '13.0'
 
   # Flutter.framework does not contain a i386 slice.
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }
